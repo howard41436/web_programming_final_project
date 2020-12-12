@@ -1,13 +1,22 @@
 import express from "express";
 import cors from "cors";
 import Debug from "debug";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 import accountingRoutes from "./routes/accounting";
-// import mongoose from 'mongoose';
 
-// require('dotenv').config();
+dotenv.config();
+
 const debug = Debug("MyApp");
-
 const app = express();
+const port = process.env.PORT || 4000;
+const dboptions = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  auto_reconnect: true,
+  useUnifiedTopology: true,
+  poolSize: 10,
+};
 
 app.use(cors());
 app.use(express.json());
@@ -22,16 +31,16 @@ app.use((_req, res, next) => {
   next();
 });
 
-const port = process.env.PORT || 4000;
-// const dboptions = {
-//   useNewUrlParser: true,
-//   useCreateIndex: true,
-//   auto_reconnect: true,
-//   useUnifiedTopology: true,
-//   poolSize: 10,
-// };
-
-// mongoose.connect(process.env.MONGO_URL, dboptions);
+if (!process.env.MONGO_URL) {
+  debug("Error: missing MONGO_URL.");
+  process.exit(1);
+}
+mongoose.connect(process.env.MONGO_URL, dboptions).catch((err) => {
+  debug("Error connecting MongoDB:\n%O", err);
+});
+mongoose.connection.on("error", (err) => {
+  debug("Error emmited from MongoDB:\n%O", err);
+});
 
 app.use("/", accountingRoutes);
 
