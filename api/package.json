@@ -12,6 +12,7 @@
   "scripts": {
     "server": "nodemon"
   },
+  "type": "module",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
