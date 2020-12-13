@@ -3,11 +3,12 @@ import cors from "cors";
 import Debug from "debug";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import accountingRoutes from "./routes/accounting";
 
 dotenv.config();
 
-const debug = Debug("MyApp");
+const debug = Debug("server");
 const app = express();
 const port = process.env.PORT || 4000;
 const dboptions = {
@@ -19,7 +20,8 @@ const dboptions = {
 };
 
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use((_req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header(
@@ -42,9 +44,10 @@ mongoose.connection.on("error", (err) => {
   debug("Error emmited from MongoDB:\n%O", err);
 });
 
-app.use("/", accountingRoutes);
+app.use("/api", accountingRoutes);
 
 app.listen(port, () => {
   debug(`Server is up on port ${port}.`);
+  debug(new Date("2020-13-1"));
   // console.log(`Server is up on port ${port}.`);
 });
