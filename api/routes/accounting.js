@@ -11,28 +11,63 @@ router.get("/hello", (_req, res) => {
 
 router.post("/newRecord", async (req, res) => {
   const record = req.body;
-  debug("Received new record:\n%O", record);
-  res.status(200).send();
+  const pairId = parseInt(record.pairId, 10);
+  debug("Received new record for pairId %d:\n%O", pairId, record);
+  if (Number.isNaN(pairId)) {
+    debug("Error: Invalid pairId.");
+    res.status(403).send();
+    return;
+  }
+  try {
+    await Record.create(record);
+    debug("Record succesfully created.");
+    res.status(200).send();
+  } catch (err) {
+    debug("Error:\n%O", err);
+    res.status(403).send();
+  }
 });
 
-router.get("/allRecords", async (_req, res) => {
+router.get("/allRecords", async (req, res) => {
+  let { pairId } = req.query;
+  pairId = parseInt(pairId, 10);
+  debug(`All records for pairId ${pairId} requested:`);
+  if (Number.isNaN(pairId)) {
+    debug("Error: Invalid pairId.");
+    res.status(403).send();
+    return;
+  }
   try {
-    const allRecords = await Record.find({ pairId: 0 })
-      .sort({ date: 1 })
-      .exec();
+    const allRecords = await Record.find({ pairId }).sort({ date: 1 }).exec();
+    debug(`There are ${allRecords.length} results.`);
     res.status(200).json(allRecords);
   } catch (err) {
+    debug("Error:\n%O", err);
     res.status(403).send();
   }
 });
 
 router.get("/monthlyRecords", async (req, res) => {
-  let { year, month } = req.query;
+  let { year, month, pairId } = req.query;
+  pairId = parseInt(pairId, 10);
+  year = parseInt(year, 10);
+  month = parseInt(month, 10);
+  debug(
+    `Monthly records of ${year}/${month + 1} for pairId ${pairId} requested:`
+  );
+  if (Number.isNaN(pairId)) {
+    debug("Error: Invalid pairId.");
+    res.status(403).send();
+    return;
+  }
+  if (Number.isNaN(year) || !(month >= 0 && month < 12)) {
+    debug("Error: Invalid date.");
+    res.status(403).send();
+    return;
+  }
   try {
-    year = parseInt(year, 10);
-    month = parseInt(month, 10);
     const monthlyRecords = await Record.find({
-      pairId: 0,
+      pairId,
       date: {
         $gte: new Date(year, month, 1),
         $lt: new Date(year, month + 1, 1),
@@ -40,9 +75,10 @@ router.get("/monthlyRecords", async (req, res) => {
     })
       .sort({ date: 1 })
       .exec();
+    debug(`There are ${monthlyRecords.length} results.`);
     res.status(200).json(monthlyRecords);
   } catch (err) {
-    debug(err);
+    debug("Error:\n%O", err);
     res.status(403).send();
   }
 });

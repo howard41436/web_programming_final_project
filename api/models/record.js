@@ -13,6 +13,7 @@ const RecordSchema = new Schema(
       type: String,
       required: true,
     },
+    // `owner = -1` indicates owned by the couple
     owner: {
       type: Number,
       min: -1,
@@ -24,7 +25,10 @@ const RecordSchema = new Schema(
       min: 0,
       required: true,
     },
-    name: String,
+    name: {
+      type: String,
+      required: true,
+    },
     date: {
       type: Date,
       required: true,
@@ -34,20 +38,44 @@ const RecordSchema = new Schema(
       user0: {
         type: Number,
         min: 0,
+        required: [
+          function required() {
+            return this.category !== "Income";
+          },
+          '"paid" field is required if this record is an expense rather than an income',
+        ],
       },
       user1: {
         type: Number,
         min: 0,
+        required: [
+          function required() {
+            return this.category !== "Income";
+          },
+          '"paid" field is required if this record is an expense rather than an income',
+        ],
       },
     },
     owed: {
       user0: {
         type: Number,
         min: 0,
+        required: [
+          function required() {
+            return this.category !== "Income";
+          },
+          '"owed" field is required if this record is an expense rather than an income',
+        ],
       },
       user1: {
         type: Number,
         min: 0,
+        required: [
+          function required() {
+            return this.category !== "Income";
+          },
+          '"owed" field is required if this record is an expense rather than an income',
+        ],
       },
     },
   },

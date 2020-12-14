@@ -48,6 +48,4 @@ app.use("/api", accountingRoutes);
 
 app.listen(port, () => {
   debug(`Server is up on port ${port}.`);
-  debug(new Date("2020-13-1"));
-  // console.log(`Server is up on port ${port}.`);
 });
