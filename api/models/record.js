@@ -24,6 +24,18 @@ const RecordSchema = new Schema(
       type: Number,
       min: 0,
       required: true,
+      validate: {
+        validator(v) {
+          if (this.category === "Income") {
+            return true;
+          }
+          return (
+            this.paid.user0 + this.paid.user1 === v &&
+            this.owed.user0 + this.owed.user1 === v
+          );
+        },
+        message: "paid and owed price should both add up to total price",
+      },
     },
     name: {
       type: String,
@@ -79,7 +91,7 @@ const RecordSchema = new Schema(
       },
     },
   },
-  { collection: "record" }
+  { timestamps: true, collection: "record" }
 );
 RecordSchema.index({ pairId: 1, date: 1 });
 
