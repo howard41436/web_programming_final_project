@@ -55,7 +55,7 @@ async function main() {
       },
       {
         pairId: 0,
-        category: "transport",
+        category: "transportation",
         owner: 0,
         price: 140,
         name: "taxi back home",
