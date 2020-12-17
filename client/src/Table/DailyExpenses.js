@@ -24,8 +24,9 @@ export default function DailyExpenses(props) {
 
   const renderRow = (exp) => {
     return (
-      <tr>
-        <td style={{ "text-transform": "capitalize" }}>
+      // eslint-disable-next-line dot-notation
+      <tr key={exp["_id"]}>
+        <td style={{ textTransform: "capitalize" }}>
           <span className="icon-big text-center icon-warning">
             <i className={cardInfo[exp.category].bigIcon} />
           </span>{" "}
@@ -39,7 +40,7 @@ export default function DailyExpenses(props) {
             />
           </div>
         </td>
-        <td style={{ "text-transform": "capitalize" }}>{exp.name}</td>
+        <td style={{ textTransform: "capitalize" }}>{exp.name}</td>
         <td className="text-right">$ {commaNumber(exp.price)}</td>
       </tr>
     );
