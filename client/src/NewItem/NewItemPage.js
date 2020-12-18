@@ -2,10 +2,13 @@
 import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import NewItemCard from "./NewItemCard";
 
-export default function NewItemPage() {
+export default function NewItemPage(props) {
+  const { pairId } = props;
+
   useEffect(() => {
-    document.title = "Tables | App's name";
+    document.title = "New Item | App's name";
   }, []);
 
   return (
@@ -13,6 +16,7 @@ export default function NewItemPage() {
       <Sidebar active="newitem" />
       <div className="main-panel">
         <Navbar active="newitem" />
+        <NewItemCard pairId={pairId} />
       </div>
     </div>
   );

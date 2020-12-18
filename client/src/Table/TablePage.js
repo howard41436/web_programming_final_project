@@ -47,7 +47,8 @@ export default function TablePage(props) {
       .get(`${SERVER_URL}api/allRecords`, { params: { pairId } })
       .then((res) => {
         let total = 0;
-        setExpenses(res.data);
+
+        if (res.status === 200) setExpenses(res.data);
 
         res.data.forEach((exp) => {
           setCardInfo((info) => {

@@ -11,7 +11,11 @@ function App() {
     <Switch>
       <Route exact path="/" component={() => <TablePage pairId={pairId} />} />
       <Route exact path="/charts" component={ChartPage} />
-      <Route exact path="/newitems" component={NewItemPage} />
+      <Route
+        exact
+        path="/newitems"
+        component={() => <NewItemPage pairId={pairId} />}
+      />
     </Switch>
   );
 }
