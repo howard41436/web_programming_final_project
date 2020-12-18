@@ -2,7 +2,7 @@ import React from "react";
 import { BASENAME } from "../constants";
 
 export default function DailyExpenses(props) {
-  const { cardInfo, expenses } = props;
+  const { cardInfo, display, expenses } = props;
   const reverseExp = expenses.map((exp) => exp).reverse();
 
   const ownerIcon = {
@@ -65,7 +65,13 @@ export default function DailyExpenses(props) {
                   <th className="text-right">Amount</th>
                 </tr>
               </thead>
-              <tbody>{reverseExp.map((exp) => renderRow(exp))}</tbody>
+              <tbody>
+                {reverseExp.map(
+                  (exp) =>
+                    (exp.owner === display || display === null) &&
+                    renderRow(exp)
+                )}
+              </tbody>
             </table>
           </div>
         </div>

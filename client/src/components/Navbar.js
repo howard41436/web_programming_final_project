@@ -1,36 +1,45 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function Navbar(props) {
-  const { active } = props;
+export default function Navbar() {
+  const { pathname } = useLocation();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+    <nav
+      className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent"
+      style={{ zIndex: 99999 }}
+    >
       <div className="container-fluid">
-        {active === "table" && (
-          <div className="navbar-wrapper">
-            <div className="navbar-toggle">
-              <button type="button" className="navbar-toggler">
-                <span className="navbar-toggler-bar bar1" />
-                <span className="navbar-toggler-bar bar2" />
-                <span className="navbar-toggler-bar bar3" />
-              </button>
-            </div>
-            <a className="navbar-brand" href="#">
-              Our Expenses
-            </a>
-            <Link to="/newitems">
-              <button
-                className="btn btn-outline-success btn-round btn-icon"
-                style={{ margin: "1px 1px" }}
-                type="button"
-              >
-                <i className="nc-icon nc-simple-add" />
-              </button>
-            </Link>
+        <div className="navbar-wrapper">
+          <div className="navbar-toggle">
+            <button type="button" className="navbar-toggler">
+              <span className="navbar-toggler-bar bar1" />
+              <span className="navbar-toggler-bar bar2" />
+              <span className="navbar-toggler-bar bar3" />
+            </button>
           </div>
-        )}
+          {pathname === "/" && (
+            <>
+              <a
+                className="navbar-brand"
+                href="#"
+                style={{ marginRight: "1rem" }}
+              >
+                Our Expenses
+              </a>
+              <Link to="/newitems">
+                <button
+                  className="btn btn-outline-success btn-round btn-icon"
+                  style={{ margin: "1px 1px" }}
+                  type="button"
+                >
+                  <i className="nc-icon nc-simple-add" />
+                </button>
+              </Link>
+            </>
+          )}
+        </div>
         <button
           className="navbar-toggler"
           type="button"

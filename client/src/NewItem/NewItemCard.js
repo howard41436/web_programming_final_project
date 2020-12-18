@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { useImmer } from "use-immer";
 import axios from "axios";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import { BASENAME, SERVER_URL } from "../constants";
 
 const IconRadio = styled.input.attrs(() => ({
@@ -32,8 +34,8 @@ const IconRadio = styled.input.attrs(() => ({
   }
 `;
 
-export default function NewItemCard(props) {
-  const { pairId } = props;
+export default function NewItemCard() {
+  const { pairId } = useSelector(selectUser);
   const categoryList = ["food", "transportation", "groceries", "education"];
 
   const history = useHistory();
@@ -52,7 +54,8 @@ export default function NewItemCard(props) {
     if (key2) {
       setNewExpense((exp) => {
         const tmp = parseInt(event.target.value, 10);
-        exp[key1][key2] = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
+        exp[key1][key2] =
+          Number.isNaN(tmp) || tmp < 0 ? 0 : tmp > exp.price ? exp.price : tmp;
 
         if (key2 === "user0") exp[key1].user1 = exp.price - exp[key1].user0;
         else exp[key1].user0 = exp.price - exp[key1].user1;
@@ -79,14 +82,22 @@ export default function NewItemCard(props) {
   };
 
   const handleSubmit = () => {
-    axios
-      .post(`${SERVER_URL}api/newRecord`, {
-        ...newExpense,
-        date: new Date().toISOString(),
-      })
-      .then((res) => {
-        if (res.status === 200) history.push("/");
-      });
+    const flag = !(
+      newExpense.owner === -2 ||
+      newExpense.price === 0 ||
+      newExpense.name === ""
+    );
+
+    if (flag) {
+      axios
+        .post(`${SERVER_URL}api/newRecord`, {
+          ...newExpense,
+          date: new Date().toISOString(),
+        })
+        .then((res) => {
+          if (res.status === 200) history.push("/");
+        });
+    }
   };
 
   return (
@@ -110,7 +121,11 @@ export default function NewItemCard(props) {
                         style={{ textTransform: "capitalize" }}
                       >
                         {categoryList.map((cat) => (
-                          <option key={cat} value={cat}>
+                          <option
+                            key={cat}
+                            style={{ textTransform: "capitalize" }}
+                            value={cat}
+                          >
                             {cat}
                           </option>
                         ))}

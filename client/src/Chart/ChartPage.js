@@ -10,9 +10,9 @@ export default function ChartPage() {
 
   return (
     <div className="wrapper">
-      <Sidebar active="chart" />
+      <Sidebar />
       <div className="main-panel">
-        <Navbar active="chart" />
+        <Navbar />
       </div>
     </div>
   );

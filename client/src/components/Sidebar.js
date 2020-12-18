@@ -1,10 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { Link, useLocation } from "react-router-dom";
 import { BASENAME } from "../constants";
 
+const IconButton = styled.a`
+  opacity: ${({ selected }) => (selected ? 1 : 0.7)} !important;
+
+  img {
+    margin-right: 5px;
+  }
+`;
+
 export default function Sidebar(props) {
-  const { active } = props;
+  const { display = null, setDisplay = null } = props;
+  const { pathname } = useLocation();
+
+  const handleSetDisplay = (type) => () => {
+    setDisplay((dis) => (dis === type ? null : type));
+  };
 
   return (
     <div className="sidebar" data-color="white" data-active-color="danger">
@@ -18,36 +32,48 @@ export default function Sidebar(props) {
       </div>
       <div className="sidebar-wrapper">
         <ul className="nav">
-          <li className={active === "table" ? "active" : null}>
+          <li className={pathname === "/" ? "active" : null}>
             <Link to="/">
               <i className="nc-icon nc-money-coins" />
               <p>Our Expenses</p>
             </Link>
           </li>
-          <li className={active === "chart" ? "active" : null}>
+          <li className={pathname === "/charts" ? "active" : null}>
             <Link to="/charts">
               <i className="nc-icon nc-chart-bar-32" />
               <p>Chart</p>
             </Link>
           </li>
         </ul>
-        {active === "table" && (
+        {pathname === "/" && (
           <ul className="nav logo-list">
             <p className="nav-link">Display Option:</p>
             <li>
-              <a href="#">
+              <IconButton
+                onClick={handleSetDisplay(0)}
+                selected={display === 0}
+              >
                 <img src={`${BASENAME}img/boy.png`} alt="boy" />
-              </a>
+                TOM
+              </IconButton>
             </li>
             <li>
-              <a href="#">
+              <IconButton
+                onClick={handleSetDisplay(1)}
+                selected={display === 1}
+              >
                 <img src={`${BASENAME}img/girl.png`} alt="girl" />
-              </a>
+                AMY
+              </IconButton>
             </li>
             <li>
-              <a href="#">
+              <IconButton
+                onClick={handleSetDisplay(-1)}
+                selected={display === -1}
+              >
                 <img src={`${BASENAME}img/both.png`} alt="both" />
-              </a>
+                BOTH
+              </IconButton>
             </li>
           </ul>
         )}

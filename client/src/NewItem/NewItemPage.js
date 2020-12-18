@@ -13,9 +13,9 @@ export default function NewItemPage(props) {
 
   return (
     <div className="wrapper">
-      <Sidebar active="newitem" />
+      <Sidebar />
       <div className="main-panel">
-        <Navbar active="newitem" />
+        <Navbar />
         <NewItemCard pairId={pairId} />
       </div>
     </div>
