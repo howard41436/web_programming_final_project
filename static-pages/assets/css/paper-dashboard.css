@@ -4220,9 +4220,125 @@ License - nucleoapp.com/license/
 }
 
 .logo-list {
+  display: inline !important
+  margin-right: 10px !important;
+}
+.logo-list > a > img {
+  max-width: 4%
+}
+.logo-list li {
+  display: inline !important
+}
+
+.modal {
+  padding: 20px;
+  max-width: 50vw;
+
+}
+
+.modal-content h2 {
+  font-size: 3em;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  margin-bottom: 30px;
+}
+
+.modal-content p.item-intro {
+  font-size: 16px;
+  font-style: italic;
+  margin: 20px 0 30px;
+  font-family:   'Droid Serif', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Microsoft JhengHei';
+}
+
+.modal-content ul.list-inline {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.modal-content img {
+  margin-bottom: 30px;
+}
+
+.modal-content button {
+  cursor: pointer;
+}
+
+.close-modal {
+  position: absolute;
+  text-align: right;
+  top: 25px;
+  right: 25px;
+  width: 75px;
+  height: 75px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.close-modal:hover {
+  opacity: 0.3;
+}
+
+.close-modal .lr {
+  z-index: 1051;
+  width: 1px;
+  height: 75px;
+  margin-left: 35px;
+}
+
+.close-modal .lr .rl {
+  z-index: 1052;
+  width: 1px;
+  height: 75px;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+}
+.icon-set {
+  font-size: large;
+}
+
+.icon-set > .fa-trash-alt{
+  color: #eb6532 !important;
+}
+
+.selected {
+  background-color: #f4f3ef
+}
+
+.sidebar-footer {
+  position: absolute !important;
+  width: 100% !important;
+  bottom: 0 !important;
+  display: inline !important;
+
+}
+
+.sidebar-footer > a {
+  flex-grow: 1;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  position: relative;
+}
+
+.sidebar-footer > a .notification {
+  position: absolute;
+  top: 0;
+}
+
+.menu {
+  position: absolute;
+  text-align: right;
   display: inline;
+  font-size: small;
+  padding-right: 20px;
 }
-.logo-list img {
-  max-width: 15%
-}
+
 /*# sourceMappingURL=paper-dashboard.css.map */
+

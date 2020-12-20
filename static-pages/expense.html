@@ -55,21 +55,22 @@
             </a>
           </li>
         </ul>
-        <div>
+        <!-- <span class="sidebar-footer">
           <ul class="nav logo-list">
-          <p class="nav-link">Display Option:</p>
-          <li>
-            <a href="javascript:;"><img src="assets/img/boy.png"></a>
-          </li>
-          <li>
-            <a href="javascript:;"><img src="assets/img/girl.png"></a>
-          </li>
-          <li>
-            <a href="javascript:;"><img src="assets/img/both1.png"></a>
-          </li>
-        </ul>
-        </div>
+            <p class="nav-link">Display Option:</p>
+            <li>
+              <a href="javascript:;"><img src="assets/img/boy.png"></a>
+            </li>
+            <li>
+              <a href="javascript:;"><img src="assets/img/girl.png"></a>
+            </li>
+            <li>
+              <a href="javascript:;"><img src="assets/img/both1.png"></a>
+            </li>
+          </ul>
+        </span> -->
       </div>
+      
     </div>
 
     <!-- new item -->
@@ -191,37 +192,30 @@
       <div class="content">
         <div class="row">
           <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Categories of Expenses</h5>
-                <!-- <p class="card-category">choose month for more information</p> -->
-              </div>
-              <div class="card-body ">
-                <canvas id="chartEmail"></canvas>
-              </div>
-              <div class="card-footer ">
-                <div class="legend">
-                  <i class="fa fa-circle text-primary"></i> Opened
-                  <i class="fa fa-circle text-warning"></i> Read
-                  <i class="fa fa-circle text-danger"></i> Deleted
-                  <i class="fa fa-circle text-gray"></i> Unopened
-                </div>
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar"></i> Choose a Month
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Budget Used</h4>
+                <h4 class="card-title">All Budget Used 
+                  <span style="font-size: smaller">29 / 30</span>
+                  <span class="menu">
+                    <span class="logo-list">
+                      <a href="javascript:;" class="active"><img src="assets/img/boy.png"></a>
+                      <a href="javascript:;"><img src="assets/img/girl.png"></a>
+                    </span>
+                    <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 10px;">
+                      <i class="fas fa-list"></i>
+                      <span class="d-lg-none d-md-block">Choose Category</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="chooseBudgeType">
+                      <a class="dropdown-item" href="#">Food</a>
+                      <a class="dropdown-item" href="#">Transportation</a>
+                      <a class="dropdown-item" href="#">Others</a>
+                    </div>
+                  </span>
+                </h4>
+                
               </div>
               <div class="card-body">
-                <canvas id="chartEmail" width="400" height="100"></canvas>
+                <canvas id="myBudget" width="400" height="50"></canvas>
                 
               </div>
             </div>
@@ -231,12 +225,29 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title" style="display: inline">Monthly Expenses </h4>
+                <h4 class="card-title" style="display: inline">Monthly Expenses 
                 <a data-toggle="modal" data-target="#newItem">
                   <btn class="btn btn-outline-success btn-round btn-icon" style="margin: 1px 1px">
                     <i class="nc-icon nc-simple-add"></i>
                   </btn>
                 </a>
+                <span class="menu">
+                  <span class="logo-list">
+                    <a href="javascript:;"><img src="assets/img/boy.png"></a>
+                    <a href="javascript:;"><img src="assets/img/girl.png"></a>
+                    <a href="javascript:;"><img src="assets/img/both1.png"></a>
+                  </span>
+                  <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 10px;">
+                    <i class="fas fa-list"></i>
+                    <span class="d-lg-none d-md-block">Choose Category</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="chooseBudgeType">
+                    <a class="dropdown-item" href="#">Food</a>
+                    <a class="dropdown-item" href="#">Transportation</a>
+                    <a class="dropdown-item" href="#">Others</a>
+                  </div>
+                </span>
+                </h4>
               </div>
               
               <div class="card-body">
@@ -334,7 +345,7 @@
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-      demo.initChartsPages();
+      demo.initExpensePages();
     });
   </script>
 </body>

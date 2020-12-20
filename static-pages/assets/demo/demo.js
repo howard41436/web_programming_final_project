@@ -93,7 +93,74 @@ demo = {
     });
 
   },
+  initExpensePages: function() {
+  // '#e3e3e3',
+  // '#4acccd',
+  // '#ef8157',
+  // '#fcc468',
+  // '#6bd098'
+  
+  var ctx = document.getElementById("myBudget");
+    var myChart = new Chart(ctx, {
+      type: 'horizontalBar',
+      data: {
+        labels: ["Total Budget", "Total Expenses"],
+        datasets: [{
+            label: 'Budget',
+            data: [30, 0],
+            backgroundColor: '#e3e3e3',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Food',
+            data: [0, 19],
+            backgroundColor: '#4acccd',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Transportation',
+            data: [0, 3],
+            backgroundColor: '#ef8157',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Education',
+            data: [0, 2],
+            backgroundColor: '#fcc468',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Others',
+            data: [0, 5],
+            backgroundColor: '#6bd098',
+            borderColor: 'transparent',
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            stacked: true,
+            gridLines: {
+              display: false
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            gridLines: {
+              display: false
+            }
+          }]
 
+        }
+      }
+    });
+  },
   initChartsPages: function() {
     chartColor = "#FFFFFF";
 
