@@ -3,11 +3,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useImmer } from "use-immer";
-import axios from "axios";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
-import { BASENAME, SERVER_URL } from "../constants";
+import { BASENAME, INSTANCE } from "../constants";
 
 const IconRadio = styled.input.attrs(() => ({
   type: "radio",
@@ -89,14 +88,12 @@ export default function NewItemCard() {
     );
 
     if (flag) {
-      axios
-        .post(`${SERVER_URL}api/newRecord`, {
-          ...newExpense,
-          date: new Date().toISOString(),
-        })
-        .then((res) => {
-          if (res.status === 200) history.push("/");
-        });
+      INSTANCE.post("/api/newRecord", {
+        ...newExpense,
+        date: new Date().toISOString(),
+      }).then((res) => {
+        if (res.status === 200) history.push("/");
+      });
     }
   };
 
