@@ -1,5 +1,6 @@
 import express from "express";
 import Debug from "debug";
+import mongoose from "mongoose";
 import Record from "../models/record";
 
 const debug = Debug("accounting");
@@ -19,9 +20,37 @@ router.post("/newRecord", async (req, res) => {
     return;
   }
   try {
-    await Record.create(record);
+    const doc = await Record.create(record);
     debug("Record succesfully created.");
-    res.status(200).send();
+    res.status(200).json(doc);
+  } catch (err) {
+    debug("Error:\n%O", err);
+    res.status(403).send();
+  }
+});
+
+router.post("/editRecord", async (req, res) => {
+  const record = req.body;
+  const pairId = parseInt(record.pairId, 10);
+  let { _id } = req.query;
+  _id = mongoose.Types.ObjectId(_id);
+  debug("Edit record %O for pairId %d:\n%O", _id, pairId, record);
+  if (Number.isNaN(pairId)) {
+    debug("Error: Invalid pairId.");
+    res.status(403).send();
+    return;
+  }
+  try {
+    const doc = await Record.findOneAndReplace({ _id, pairId }, record, {
+      new: true,
+    });
+    if (doc === null) {
+      debug("Error: Cannot find record with _id %O", _id);
+      res.status(403).send();
+    } else {
+      debug("Record succesfully edited.");
+      res.status(200).json(doc);
+    }
   } catch (err) {
     debug("Error:\n%O", err);
     res.status(403).send();

@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import { useImmer } from "use-immer";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 
@@ -10,7 +9,7 @@ import Navbar from "../components/Navbar";
 import TableCard from "./TableCard";
 import DailyExpenses from "./DailyExpenses";
 
-import { SERVER_URL } from "../constants";
+import { INSTANCE } from "../constants";
 
 export default function TablePage() {
   const { pairId } = useSelector(selectUser);
@@ -46,36 +45,34 @@ export default function TablePage() {
 
   useEffect(() => {
     document.title = "Tables | App's name";
-    axios
-      .get(`${SERVER_URL}api/allRecords`, { params: { pairId } })
-      .then((res) => {
-        let total = 0;
-        if (res.status === 200) setExpenses(res.data);
+    INSTANCE.get("/api/allRecords", { params: { pairId } }).then((res) => {
+      let total = 0;
+      if (res.status === 200) setExpenses(res.data);
 
-        const tmpTitle = {};
-        Object.keys(cardInfo).forEach((key) => {
-          tmpTitle[key] = 0;
-        });
-
-        res.data.forEach((exp) => {
-          if (display === exp.owner || display === null) {
-            tmpTitle[exp.category] += exp.price;
-            total += exp.price;
-          }
-        });
-
-        Object.keys(cardInfo).forEach((key) => {
-          setCardInfo((info) => {
-            info[key].title = tmpTitle[key];
-            info[key].stats =
-              total > 0
-                ? `${Math.round((tmpTitle[key] / total) * 10000) / 100}%`
-                : "0%";
-          });
-        });
-
-        setReady(true);
+      const tmpTitle = {};
+      Object.keys(cardInfo).forEach((key) => {
+        tmpTitle[key] = 0;
       });
+
+      res.data.forEach((exp) => {
+        if (display === exp.owner || display === null) {
+          tmpTitle[exp.category] += exp.price;
+          total += exp.price;
+        }
+      });
+
+      Object.keys(cardInfo).forEach((key) => {
+        setCardInfo((info) => {
+          info[key].title = tmpTitle[key];
+          info[key].stats =
+            total > 0
+              ? `${Math.round((tmpTitle[key] / total) * 10000) / 100}%`
+              : "0%";
+        });
+      });
+
+      setReady(true);
+    });
   }, [display]);
 
   return (
