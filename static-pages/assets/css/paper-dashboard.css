@@ -4236,33 +4236,9 @@ License - nucleoapp.com/license/
 
 }
 
-.modal-content h2 {
-  font-size: 3em;
-  margin-bottom: 15px;
-}
-
-.modal-content p {
-  margin-bottom: 30px;
-}
-
-.modal-content p.item-intro {
-  font-size: 16px;
-  font-style: italic;
-  margin: 20px 0 30px;
-  font-family:   'Droid Serif', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Microsoft JhengHei';
-}
-
-.modal-content ul.list-inline {
-  margin-top: 0;
-  margin-bottom: 30px;
-}
-
-.modal-content img {
-  margin-bottom: 30px;
-}
-
-.modal-content button {
-  cursor: pointer;
+.modal-content {
+  background-color: unset !important; 
+  border: unset !important; 
 }
 
 .close-modal {
@@ -4294,7 +4270,6 @@ License - nucleoapp.com/license/
 }
 
 .center {
-  position: absolute;
   left: 50%;
   top: 60%;
   transform: translate(-50%, -50%);
