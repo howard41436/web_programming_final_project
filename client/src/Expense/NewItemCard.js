@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useImmer } from "use-immer";
@@ -23,13 +22,14 @@ const IconRadio = styled.input.attrs(() => ({
     background: ${({ checked }) =>
       checked ? "rgba(81, 203, 206, 0.6)" : "transparent"};
     border-radius: 5px;
-    padding: ${({ checked }) => (checked ? "3px" : 0)};
+    max-width: 8%;
+    padding: ${({ checked }) => (checked ? "1px" : 0)};
   }
 
   &:hover + label img {
     background: ${({ checked }) =>
       checked ? "rgba(81, 203, 206, 0.6)" : "rgba(81, 203, 206, 0.2)"};
-    padding: 5px;
+    padding: 2px;
   }
 `;
 
@@ -98,12 +98,21 @@ export default function NewItemCard() {
   };
 
   return (
-    <div className="content">
-      <div className="row">
+    <div className="content modal fade center" id="newItem">
+      <div className="row modal-dialog modal-content" role="document">
         <div className="col-md-12">
           <div className="card card-user">
             <div className="card-header">
               <h5 className="card-title">Add Expenses</h5>
+            </div>
+            <div
+              className="close-modal"
+              style={{ height: "auto", width: "auto" }}
+            >
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a data-dismiss="modal">
+                <i className="fas fa-times" />
+              </a>
             </div>
             <div className="card-body">
               <form>
@@ -146,6 +155,7 @@ export default function NewItemCard() {
                     <div className="form-group">
                       <label>Member</label>
                       <span className="logo-list">
+                        {" "}
                         <IconRadio
                           id="radio_boy"
                           checked={newExpense.owner === 0}
@@ -154,7 +164,7 @@ export default function NewItemCard() {
                         />
                         <label htmlFor="radio_boy">
                           <img src={`${BASENAME}img/boy.png`} alt="boy" />
-                        </label>
+                        </label>{" "}
                         <IconRadio
                           id="radio_girl"
                           checked={newExpense.owner === 1}
@@ -163,7 +173,7 @@ export default function NewItemCard() {
                         />
                         <label htmlFor="radio_girl">
                           <img src={`${BASENAME}img/girl.png`} alt="girl" />
-                        </label>
+                        </label>{" "}
                         <IconRadio
                           id="radio_both"
                           checked={newExpense.owner === -1}

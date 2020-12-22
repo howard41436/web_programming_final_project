@@ -3,9 +3,9 @@ import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, selectUser } from "./redux/userSlice";
 
-import TablePage from "./Table/TablePage";
+import ExpensePage from "./Expense/ExpensePage";
+import SettlePage from "./Settle/SettlePage";
 import ChartPage from "./Chart/ChartPage";
-import NewItemPage from "./NewItem/NewItemPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,9 +24,9 @@ function App() {
 
   return ready ? (
     <Switch>
-      <Route exact path="/" component={TablePage} />
+      <Route exact path="/" component={ExpensePage} />
+      <Route exact path="/settles" component={SettlePage} />
       <Route exact path="/charts" component={ChartPage} />
-      <Route exact path="/newitems" component={NewItemPage} />
     </Switch>
   ) : (
     <></>

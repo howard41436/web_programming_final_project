@@ -1,43 +1,31 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const { pathname } = useLocation();
 
+  const handleSetSearch = () => {};
+
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent"
-      style={{ zIndex: 99999 }}
-    >
+    <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
       <div className="container-fluid">
         <div className="navbar-wrapper">
           <div className="navbar-toggle">
-            <button type="button" className="navbar-toggler">
+            <button
+              type="button"
+              className="navbar-toggler"
+              style={{ position: "relative", zIndex: 99999 }}
+            >
               <span className="navbar-toggler-bar bar1" />
               <span className="navbar-toggler-bar bar2" />
               <span className="navbar-toggler-bar bar3" />
             </button>
           </div>
           {pathname === "/" && (
-            <>
-              <a
-                className="navbar-brand"
-                href="#"
-                style={{ marginRight: "1rem" }}
-              >
-                Our Expenses
-              </a>
-              <Link to="/newitems">
-                <button
-                  className="btn btn-outline-success btn-round btn-icon"
-                  style={{ margin: "1px 1px" }}
-                  type="button"
-                >
-                  <i className="nc-icon nc-simple-add" />
-                </button>
-              </Link>
-            </>
+            <a className="navbar-brand" style={{ marginRight: "1rem" }}>
+              Our Expenses
+            </a>
           )}
         </div>
         <button
@@ -64,7 +52,7 @@ export default function Navbar() {
                 value=""
                 className="form-control"
                 placeholder="Search..."
-                onChange={() => {}}
+                onChange={handleSetSearch}
               />
               <div className="input-group-append">
                 <div className="input-group-text">
@@ -75,7 +63,7 @@ export default function Navbar() {
           </form>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link btn-rotate" href="#">
+              <a className="nav-link btn-rotate">
                 <i className="nc-icon nc-single-02" />
                 <p>
                   <span className="d-lg-none d-md-block">Account</span>
