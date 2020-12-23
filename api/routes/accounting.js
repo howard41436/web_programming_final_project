@@ -57,6 +57,31 @@ router.post("/editRecord", async (req, res) => {
   }
 });
 
+router.post("/deleteRecord", async (req, res) => {
+  let { pairId, _id } = req.query;
+  pairId = parseInt(pairId, 10);
+  _id = mongoose.Types.ObjectId(_id);
+  debug("Delete record %O for pairId %d.", _id, pairId);
+  if (Number.isNaN(pairId)) {
+    debug("Error: Invalid pairId.");
+    res.status(403).send();
+    return;
+  }
+  try {
+    const doc = await Record.deleteOne({ _id, pairId }).exec();
+    if (doc.deletedCount === 1) {
+      debug("Record succesfully deleted.");
+      res.status(200).send();
+    } else {
+      debug("Error: Cannot find record with _id %O", _id);
+      res.status(403).send();
+    }
+  } catch (err) {
+    debug("Error:\n%O", err);
+    res.status(403).send();
+  }
+});
+
 router.get("/allRecords", async (req, res) => {
   let { pairId } = req.query;
   pairId = parseInt(pairId, 10);
