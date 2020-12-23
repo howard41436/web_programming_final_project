@@ -55,26 +55,11 @@
             </a>
           </li>
         </ul>
-        <!-- <div>
-          <ul class="nav logo-list">
-            <p class="nav-link">Display Option:</p>
-            <li>
-              <a href="javascript:;"><img src="assets/img/boy.png"></a>
-            </li>
-            <li>
-              <a href="javascript:;"><img src="assets/img/girl.png"></a>
-            </li>
-            <li>
-              <a href="javascript:;"><img src="assets/img/both1.png"></a>
-            </li>
-          </ul>
-        </div> -->
       </div>
     </div>
-
     <!-- new item -->
-    <div class="content modal fade center" id="newItem" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="row modal-dialog">
+    <div class="content modal fade center" id="newItem">
+      <div class="row modal-dialog modal-content" role="document">
         <div class="col-md-12">
           <div class="card card-user">
             <div class="card-header">
@@ -142,6 +127,7 @@
         </div>
       </div>
     </div>
+
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -190,15 +176,92 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
+          <div class="col-md-4">
+            <div class="card card-stats">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-7 col-md-5">
+                    <div class="text-center">
+                      <a href="javascript:;"><img src="assets/img/girl.png"></a>
+                    </div>
+                  </div>
+                  <div class="col-5 col-md-6">
+                    <div class="numbers">
+                      <p class="card-category">Unpaid Debt</p>
+                      <p class="card-title">$310<p>
+                    </div>
+                    <br>
+                    <div class="numbers">
+                      <p class="card-category">History Debt</p>
+                      <p class="card-title">$3000<p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                  <i class="fa fa-refresh"></i>
+                  Update Now
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-stats">
+              <!-- <div class="card-header">
+                <h5 class="card-title" style="text-align: center">Amy owes Tom $210</h5>
+              </div> -->
+              <div class="card-body ">
+                <canvas id="chartDebt"></canvas>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                  <i class="fa fa-clock-o"></i>
+                  In the last hour
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-stats">
+              <div class="card-body ">
+                <div class="row">
+                  <div class="col-7 col-md-5">
+                    <div class="text-center">
+                      <a href="javascript:;"><img src="assets/img/boy.png"></a>
+                    </div>
+                  </div>
+                  <div class="col-5 col-md-6">
+                    <div class="numbers">
+                      <p class="card-category">Unpaid Debt</p>
+                      <p class="card-title">$100<p>
+                    </div>
+                    <br>
+                    <div class="numbers">
+                      <p class="card-category">History Debt</p>
+                      <p class="card-title">$2000<p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                  <i class="fa fa-clock-o"></i>
+                  In the last hour
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title" style="display: inline">Monthly Expenses </h4>
-                <a data-toggle="modal" data-target="#newItem">
-                  <btn class="btn btn-outline-success btn-round btn-icon" style="margin: 1px 1px">
-                    <i class="nc-icon nc-simple-add"></i>
-                  </btn>
-                </a>
+                <h4 class="card-title">Debt Details</h4>
               </div>
               
               <div class="card-body">
@@ -218,13 +281,19 @@
                       <th>
                         Descriptions
                       </th>
-                      <th class="text-right">
-                        Amount
+                      <th>
+                        Creditor
                       </th>
+                      <th class="text-right">
+                        Owed
+                      </th>
+                      <th></th>
                     </thead>
                     <tbody>
                       <tr class="selected">
-                        <td class="icon-set"><a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i></td>
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i>
+                        </td>
                         <td>
                           <span>Oct. 11</span>
                         </td>
@@ -242,9 +311,15 @@
                         <td>
                           Oud-Turnhout
                         </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/boy.png">
+                          </div>
+                        </td>
                         <td class="text-right">
                           $36,738
                         </td>
+                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
                       </tr>
                       <tr>
                         <td class="icon-set"><a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i></td>
@@ -265,9 +340,44 @@
                         <td>
                           Sinaai-Waas
                         </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/girl.png">
+                          </div>
+                        </td>
                         <td class="text-right">
                           $23,789
                         </td>
+                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
+                      </tr>
+                      <tr class="archived">
+                        <td class="icon-set"><a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i></td>
+                        <td>
+                          Oct. 11
+                        </td>
+                        <td>
+                          <span class="text-center icon-warning">
+                            <i class="nc-icon nc-bus-front-12 text-success"></i>
+                          </span>
+                          Transportation
+                        </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/boy.png">
+                          </div>
+                        </td>
+                        <td>
+                          Sinaai-Waas
+                        </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/girl.png">
+                          </div>
+                        </td>
+                        <td class="text-right">
+                          $23,789
+                        </td>
+                        <td class="text-right"><button class="btn btn-primary">Been Settled</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -296,7 +406,8 @@
   <script>
     $(document).ready(function() {
       // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-      demo.initChartsPages();
+      demo.initSettlePages();
+      demo.showNotification('bottom','left');
     });
   </script>
 </body>

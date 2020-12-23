@@ -351,6 +351,75 @@ demo = {
     });
   },
 
+  initSettlePages: function() {
+    chartColor = "#FFFFFF";
+
+    ctx = document.getElementById('chartDebt').getContext("2d");
+
+    myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["Amy", "Tom"],
+        datasets: [{
+          label: "Debt",
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          backgroundColor: [
+            '#fcc468',
+            '#4acccd'
+          ],
+          borderWidth: 0,
+          data: [310, 100]
+        }]
+      },
+
+      options: {
+
+        legend: {
+          display: true
+        },
+
+        pieceLabel: {
+          render: 'percentage',
+          fontColor: ['white'],
+          precision: 2
+        },
+
+        tooltips: {
+          enabled: true
+        },
+
+        scales: {
+          yAxes: [{
+
+            ticks: {
+              display: false
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "transparent",
+              color: 'rgba(255,255,255,0.05)'
+            }
+
+          }],
+
+          xAxes: [{
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(255,255,255,0.1)',
+              zeroLineColor: "transparent"
+            },
+            ticks: {
+              display: false,
+            }
+          }]
+        },
+      }
+    });
+
+  },
+
   initGoogleMaps: function() {
     var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
     var mapOptions = {
@@ -460,7 +529,7 @@ demo = {
 
     $.notify({
       icon: "nc-icon nc-bell-55",
-      message: "Welcome to <b>Paper Dashboard</b> - a beautiful bootstrap dashboard for every web developer."
+      message: "Amy owes Tom $210"
 
     }, {
       type: color,

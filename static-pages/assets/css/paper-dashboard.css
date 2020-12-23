@@ -4282,9 +4282,18 @@ License - nucleoapp.com/license/
   color: #eb6532 !important;
 }
 
+
+/* table style */
+
 .selected {
   background-color: #f4f3ef
 }
+
+.archived {
+  opacity: 30%;
+}
+
+/* table style end */
 
 .sidebar-footer {
   position: absolute !important;
