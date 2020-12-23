@@ -4324,5 +4324,26 @@ License - nucleoapp.com/license/
   padding-right: 20px;
 }
 
+.login-panel {
+  background-color: #f4f3ef;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.login-panel > .card {
+  width: 30vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-panel > .card > .card-header {
+  text-align: center;
+}
+.login-panel > .card > .card-body h5 {
+  text-align: left;
+}
 /*# sourceMappingURL=paper-dashboard.css.map */
 
