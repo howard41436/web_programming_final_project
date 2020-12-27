@@ -3,12 +3,8 @@ import Debug from "debug";
 import mongoose from "mongoose";
 import Record from "../models/record";
 
-const debug = Debug("accounting");
+const debug = Debug("api:accounting");
 const router = express.Router();
-
-router.get("/hello", (_req, res) => {
-  res.status(200).send("Hello");
-});
 
 router.post("/newRecord", async (req, res) => {
   const record = req.body;
@@ -136,4 +132,5 @@ router.get("/monthlyRecords", async (req, res) => {
     res.status(403).send();
   }
 });
+
 export default router;

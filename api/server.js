@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import accountingRoutes from "./routes/accounting";
+import settleUpRoutes from "./routes/settleUp";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 app.use("/api", accountingRoutes);
+app.use("/api", settleUpRoutes);
 
 app.listen(port, () => {
   debug(`Server is up on port ${port}.`);
