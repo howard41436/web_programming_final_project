@@ -1,14 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useImmer } from "use-immer";
 import { HorizontalBar } from "react-chartjs-2";
-import ReactTooltip from "react-tooltip";
+import BaseCard from "../components/BaseCard";
+import BaseChart from "../components/BaseChart";
 
-const IconFilter = styled.a`
-  opacity: ${({ selected }) => (selected ? "1" : "0.4")};
-`;
-
-const TooltipRow = styled.div`
+const TooltipsRow = styled.div`
   align-items: center;
   display: flex;
 `;
@@ -23,19 +20,165 @@ const ColorBox = styled.span`
 `;
 
 export default function ExpenseCard(props) {
-  const { categoryInfo, display, setDisplay } = props;
-  const handleSetDisplay = (owner) => () => {
-    setDisplay((dis) => {
-      dis[owner] = !dis[owner];
-    });
-  };
+  const { categoryInfo, expenses } = props;
 
-  const [total, setTotal] = useImmer(0);
+  const commaNumber = (num) =>
+    String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  const capitalize = (word) => word.replace(/^./, word[0].toUpperCase());
+  const deCapitalize = (word) => word.replace(/^./, word[0].toLowerCase());
+
+  // Temporary fake data
+  const [budget, setBudget] = useImmer({
+    food: {
+      user0: 350,
+      user1: 250,
+      total: 600,
+    },
+    transportation: {
+      user0: 250,
+      user1: 300,
+      total: 550,
+    },
+    education: {
+      user0: 150,
+      user1: 150,
+      total: 300,
+    },
+    others: {
+      user0: 300,
+      user1: 250,
+      total: 550,
+    },
+    all: {
+      user0: 1050,
+      user1: 950,
+      total: 2000,
+    },
+  });
+
+  const [filterDisplay, setFilterDisplay] = useImmer({
+    0: true, // Boy
+    1: false, // Girl
+  });
+
+  const [legendDisplay, setLegendDisplay] = useImmer(
+    Object.keys(categoryInfo).reduce(
+      (obj, cur) => ({ ...obj, [cur]: true }),
+      {}
+    )
+  );
+
   const [data, setData] = useImmer({
     labels: ["Total Budget", "Total Expenses"],
-    datasets: [],
+    datasets: [
+      {
+        label: capitalize("budget"),
+        data: [budget.all.total, 0],
+        backgroundColor: "#e3e3e3",
+        borderColor: "transparent",
+        borderWidth: 2,
+        hidden: budget.all.total === 0,
+      },
+      ...Object.entries(categoryInfo).map(([label, info]) => ({
+        label: capitalize(label),
+        data: [0, 0],
+        backgroundColor: info.color,
+        borderColor: "transparent",
+        borderWidth: 2,
+        hidden: false,
+      })),
+    ],
   });
-  const [tooltip, setTooltip] = useImmer({
+
+  const [total, setTotal] = useState(0);
+
+  const renderData = () => {
+    const newDataset = data.datasets
+      .map((d, index, all) => {
+        // if (index === 0 && budget.all.total === 0) return null;
+        // if (index !== 0 && d.data[0] + d.data[1] === 0) return null;
+
+        if (all[0].hidden || budget.all.total === 0) {
+          return {
+            ...d,
+            data: [d.data[1]],
+          };
+        }
+        if (index === 0) return { ...d, data: [budget.all.total, 0] };
+        return d;
+      })
+      .filter((d) => d);
+
+    const expensesHidden =
+      newDataset.length > 1
+        ? newDataset.slice(1).reduce((a, b) => {
+            return { hidden: a.hidden && b.hidden };
+          }).hidden
+        : true;
+
+    const newLabels = [];
+    if (!data.datasets[0].hidden) newLabels.push("Total Budget");
+    if (!expensesHidden) newLabels.push("Total Expenses");
+
+    const newData = {
+      ...data,
+      labels: newLabels,
+      datasets: newDataset,
+    };
+    return JSON.parse(JSON.stringify(newData));
+  };
+
+  // Init / Filter / Selector
+  useEffect(() => {
+    setBudget((bud) => {
+      bud.all.user0 = 0;
+      bud.all.user1 = 0;
+
+      Object.keys(categoryInfo).forEach((info) => {
+        bud[info].total = filterDisplay["0"] ? bud[info].user0 : 0;
+        bud[info].total += filterDisplay["1"] ? bud[info].user1 : 0;
+
+        bud.all.user0 += legendDisplay[info] && bud[info].user0;
+        bud.all.user1 += legendDisplay[info] && bud[info].user1;
+      });
+
+      bud.all.total = filterDisplay["0"] ? bud.all.user0 : 0;
+      bud.all.total += filterDisplay["1"] ? bud.all.user1 : 0;
+    });
+
+    setData((d) => {
+      d.datasets = d.datasets.map((dd) => ({ ...dd, data: [0, 0] }));
+
+      let t = 0;
+      expenses.forEach((exp) => {
+        const filtered =
+          (filterDisplay["0"] ? exp.owed.user0 : 0) +
+          (filterDisplay["1"] ? exp.owed.user1 : 0);
+        const { index } = categoryInfo[exp.category];
+
+        d.datasets[index].data[1] += filtered;
+        t += legendDisplay[exp.category] && filtered;
+      });
+
+      setTotal(t);
+    });
+  }, [expenses, filterDisplay, legendDisplay]);
+
+  // Legends
+  const legendOption = {
+    onClick: (_, item) => {
+      setLegendDisplay((dis) => {
+        dis[deCapitalize(item.text)] = item.hidden;
+      });
+      setData((d) => {
+        d.datasets[item.datasetIndex].hidden = !item.hidden;
+      });
+    },
+  };
+
+  // Tooltips
+  const [tooltips, setTooltips] = useImmer({
     title: "",
     content: Array.from(
       { length: Object.keys(categoryInfo).length },
@@ -43,161 +186,87 @@ export default function ExpenseCard(props) {
     ),
   });
 
-  const backgroundColors = [
-    "#e3e3e3",
-    "#fbc658",
-    "#6bd098",
-    "#51bcda",
-    "#a3a3a3",
-  ];
-
-  const commaNumber = (num) =>
-    String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-  const capitalize = (word) => word.replace(/^./, word[0].toUpperCase());
-
-  useEffect(() => {
-    setTotal((t) => {
-      t = 0;
-      setData((d) => {
-        d.datasets = [];
-        Object.entries(categoryInfo).forEach(([label, value], index) => {
-          d.datasets.push({
-            label: capitalize(label),
-            data: [
-              label === "budget" ? value.price : 0,
-              label === "budget" ? 0 : value.price,
-            ],
-            backgroundColor: backgroundColors[index],
-            borderColor: "transparent",
-            borderWidth: 2,
-            hidden: false,
-          });
-
-          t += label === "budget" ? 0 : value.price;
+  const tooltipsOption = {
+    custom: ({ opacity }) => {
+      if (opacity === 0)
+        setTooltips((tip) => {
+          tip.title = "";
         });
+    },
+    filter: (tips) => {
+      setTooltips((tip) => {
+        tip.title = tips.yLabel;
       });
-      return t;
-    });
-  }, [categoryInfo]);
-
-  const options = {
-    legend: {
-      onClick: (_, item) => {
-        setData((d) => {
-          d.datasets[item.datasetIndex].hidden = !item.hidden;
-        });
-      },
-    },
-    scales: {
-      yAxes: [
-        {
-          stacked: true,
-          gridLines: {
-            display: false,
-          },
-        },
-      ],
-      xAxes: [
-        {
-          stacked: true,
-          gridLines: {
-            display: false,
-          },
-        },
-      ],
-    },
-    tooltips: {
-      custom: ({ opacity }) => {
-        if (opacity === 0)
-          setTooltip((tip) => {
-            tip.title = "";
-          });
-      },
-      filter: (tips) => {
-        setTooltip((tip) => {
-          tip.title = tips.yLabel;
-        });
-        return false;
-      },
+      return false;
     },
   };
 
   useEffect(() => {
-    setTooltip((tip) => {
-      tip.content = Object.entries(categoryInfo).map(
-        ([label, value], index) => {
-          if (tip.title === "") return null;
-          if (tip.title === "Total Budget" && label !== "budget") return null;
-          if (tip.title === "Total Expenses" && label === "budget") return null;
-          if (value.price === 0) return null;
+    setTooltips((tip) => {
+      tip.content = data.datasets.map(({ label, data: d, backgroundColor }) => {
+        if (tip.title === "") return null;
+        if (tip.title === "Total Budget" && label !== "Budget") return null;
+        if (tip.title === "Total Expenses" && label === "Budget") return null;
+        if (d[0] + d[1] === 0 && label !== "Budget") return null;
+        if (budget.all.total === 0 && label === "Budget") return null;
 
-          return {
-            background: backgroundColors[index],
-            label: capitalize(label),
-            price: value.price,
-          };
-        }
-      );
+        return {
+          background: backgroundColor,
+          label: capitalize(label),
+          price: label === "Budget" ? budget.all.total : d[0] + d[1],
+        };
+      });
     });
-  }, [tooltip.title]);
+  }, [tooltips.title]);
+
+  const renderTooltips = (
+    <>
+      <strong style={{ display: "block" }}>{tooltips.title}</strong>
+      {tooltips.content.map(
+        (tip, index) =>
+          tip !== null &&
+          !data.datasets[index].hidden && (
+            <TooltipsRow key={tip.label}>
+              <ColorBox background={tip.background} />
+              <span>
+                {tip.label}: {commaNumber(tip.price)}
+              </span>
+              <br />
+            </TooltipsRow>
+          )
+      )}
+    </>
+  );
+
+  const BudgetInfo = () => (
+    <span style={{ fontSize: "smaller" }}>
+      {commaNumber(total)}
+      {!data.datasets[0].hidden && <> / {commaNumber(budget.all.total)}</>}
+    </span>
+  );
 
   return (
-    <div className="col-md-12">
-      <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">
-            All Budget Used{" "}
-            <span style={{ fontSize: "smaller" }}>
-              {commaNumber(total)} / {commaNumber(categoryInfo.budget.price)}
-            </span>
-            <span className="menu">
-              <span className="logo-list">
-                <IconFilter
-                  onClick={handleSetDisplay("0")}
-                  selected={display["0"]}
-                >
-                  <img src="/img/boy.png" alt="boy" />
-                </IconFilter>{" "}
-                <IconFilter
-                  onClick={handleSetDisplay("1")}
-                  selected={display["1"]}
-                >
-                  <img src="/img/girl.png" alt="girl" />
-                </IconFilter>
-              </span>
-            </span>
-          </h4>
-        </div>
-        <div className="card-body" data-tip>
-          {data.datasets.length > 0 && (
-            <HorizontalBar
-              data={JSON.parse(JSON.stringify(data))}
-              height={50}
-              options={options}
-              width={400}
-            />
-          )}
-        </div>
-        <div style={{ display: tooltip.title === "" ? "none" : "block" }}>
-          <ReactTooltip>
-            <strong style={{ display: "block" }}>{tooltip.title}</strong>
-            {tooltip.content.map(
-              (tip, index) =>
-                tip !== null &&
-                !data.datasets[index].hidden && (
-                  <TooltipRow key={tip.label}>
-                    <ColorBox background={tip.background} />
-                    <span>
-                      {tip.label}: {commaNumber(tip.price)}
-                    </span>
-                    <br />
-                  </TooltipRow>
-                )
-            )}
-          </ReactTooltip>
-        </div>
-      </div>
-    </div>
+    <BaseCard
+      cardClasses=""
+      allowHeader
+      title={data.datasets[0].hidden ? "All Expenses" : "All Budget Used"}
+      otherHeader={<BudgetInfo />}
+      allowFilter
+      filters={[0, 1]}
+      filterDisplay={filterDisplay}
+      setFilterDisplay={setFilterDisplay}
+      allowFooter={false}
+    >
+      <BaseChart
+        Chart={HorizontalBar}
+        data={renderData()}
+        allowLegend
+        legendOption={legendOption}
+        allowTooltips
+        tooltipsOption={tooltipsOption}
+        showTooltips={tooltips.title !== ""}
+        renderTooltips={renderTooltips}
+      />
+    </BaseCard>
   );
 }

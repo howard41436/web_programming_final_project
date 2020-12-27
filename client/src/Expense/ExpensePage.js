@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useImmer } from "use-immer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 
-import Sidebar from "../components/Sidebar";
+import BasePage from "../components/BasePage";
 import NewItemCard from "./NewItemCard";
-import Navbar from "../components/Navbar";
 import ExpenseCard from "./ExpenseCard";
 import MonthlyExpenses from "./MonthlyExpenses";
 
@@ -13,32 +11,29 @@ import { INSTANCE } from "../constants";
 
 export default function ExpensePage() {
   const { pairId } = useSelector(selectUser);
-  const [display, setDisplay] = useImmer({
-    0: true, // Boy
-    1: false, // Girl
-  });
   const [expenses, setExpenses] = useState([]);
-  const [categoryInfo, setCategoryInfo] = useImmer({
-    budget: {
-      price: 0,
-    },
+  const categoryInfo = {
     food: {
+      index: 1,
+      color: "#fbc658",
       icon: "nc-icon nc-shop text-warning",
-      price: 0,
     },
     transportation: {
+      index: 2,
+      color: "#6bd098",
       icon: "nc-icon nc-bus-front-12 text-success",
-      price: 0,
     },
     education: {
+      index: 3,
+      color: "#51bcda",
       icon: "nc-icon nc-hat-3 text-primary",
-      price: 0,
     },
     others: {
+      index: 4,
+      color: "#a3a3a3",
       icon: "nc-icon nc-cart-simple text-danger",
-      price: 0,
     },
-  });
+  };
 
   useEffect(() => {
     document.title = "Our Expenses | App's name";
@@ -47,42 +42,27 @@ export default function ExpensePage() {
     });
   }, []);
 
-  useEffect(() => {
-    setCategoryInfo((info) => {
-      Object.values(info).forEach((i) => {
-        i.price = 0;
-      });
-
-      expenses.forEach((exp) => {
-        info[exp.category].price += display["0"] ? exp.owed.user0 : 0;
-        info[exp.category].price += display["1"] ? exp.owed.user1 : 0;
-      });
-
-      // Temporary
-      info.budget.price += display["0"] ? 1000 : 0;
-      info.budget.price += display["1"] ? 1000 : 0;
-    });
-  }, [display, expenses]);
-
   return (
-    <div className="wrapper">
-      <Sidebar />
+    <>
       <NewItemCard />
-      <div className="main-panel">
-        <Navbar />
+      <BasePage>
         <div className="content">
           <div className="row">
-            <ExpenseCard
-              categoryInfo={categoryInfo}
-              display={display}
-              setDisplay={setDisplay}
-            />
+            <div className="col-md-12">
+              <ExpenseCard categoryInfo={categoryInfo} expenses={expenses} />
+            </div>
           </div>
           <div className="row">
-            <MonthlyExpenses categoryInfo={categoryInfo} expenses={expenses} />
+            <div className="col-md-12">
+              <MonthlyExpenses
+                categoryInfo={categoryInfo}
+                expenses={expenses}
+                setExpenses={setExpenses}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </BasePage>
+    </>
   );
 }

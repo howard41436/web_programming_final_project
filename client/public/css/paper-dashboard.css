@@ -4930,6 +4930,7 @@ License - nucleoapp.com/license/
   position: relative;
   float: right;
   width: calc(100% - 260px);
+  min-height: 100vh;
   background-color: #f4f3ef;
   transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
 }
@@ -6128,14 +6129,22 @@ License - nucleoapp.com/license/
 }
 .logo-list > a > img {
   max-width: 4%;
+  opacity: 0.3;
 }
+
+.logo-list > a > img:hover,
+.logo-list > a > img .active {
+  max-width: 4%;
+  opacity: 1;
+}
+
 .logo-list li {
   display: inline !important;
 }
 
 .modal {
-  padding: 80px;
-  /* max-width: 50vw; */
+  padding-top: 60px;
+  height: 100vh;
 }
 
 .modal-content {
@@ -6184,9 +6193,17 @@ License - nucleoapp.com/license/
   color: #eb6532 !important;
 }
 
+/* table style */
+
 .selected {
   background-color: #f4f3ef;
 }
+
+.archived {
+  opacity: 0.3;
+}
+
+/* table style end */
 
 .sidebar-footer {
   position: absolute !important;
@@ -6216,4 +6233,33 @@ License - nucleoapp.com/license/
   padding-right: 20px;
 }
 
+.login-panel {
+  background-color: #f4f3ef;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.login-panel .title {
+  text-align: center;
+  bottom: 0;
+}
+
+.login-panel > .login-container {
+  width: 30vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-panel .card .card-header {
+  text-align: center;
+}
+.login-panel .card > .card-body h5 {
+  text-align: left;
+}
+.mydropdown-menu {
+  box-shadow: 1px 2px 7px 1px rgba(0, 0, 0, 0.125);
+}
 /*# sourceMappingURL=paper-dashboard.css.map */
