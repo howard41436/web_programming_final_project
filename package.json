@@ -1,0 +1,40 @@
+{
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "client/src/**/*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "api/routes/**/*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "api/models/**/*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "api/server.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
