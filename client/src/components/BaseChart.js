@@ -31,6 +31,9 @@ export default function BaseChart(props) {
           gridLines: {
             display: false,
           },
+          ticks: {
+            beginAtZero: true,
+          },
         },
       ],
     },

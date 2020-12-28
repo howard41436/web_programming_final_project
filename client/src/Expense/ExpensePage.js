@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useImmer } from "use-immer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 
 import BasePage from "../components/BasePage";
-import NewItemCard from "./NewItemCard";
+import FormModal from "./FormModal";
 import ExpenseCard from "./ExpenseCard";
 import MonthlyExpenses from "./MonthlyExpenses";
 
@@ -11,7 +12,17 @@ import { INSTANCE } from "../constants";
 
 export default function ExpensePage() {
   const { pairId } = useSelector(selectUser);
+
+  const [modalInfo, setModalInfo] = useImmer({
+    show: {
+      add: false,
+      edit: false,
+    },
+    data: null,
+  });
+
   const [expenses, setExpenses] = useState([]);
+
   const categoryInfo = {
     food: {
       index: 1,
@@ -44,7 +55,6 @@ export default function ExpensePage() {
 
   return (
     <>
-      <NewItemCard />
       <BasePage>
         <div className="content">
           <div className="row">
@@ -58,11 +68,13 @@ export default function ExpensePage() {
                 categoryInfo={categoryInfo}
                 expenses={expenses}
                 setExpenses={setExpenses}
+                setModalInfo={setModalInfo}
               />
             </div>
           </div>
         </div>
       </BasePage>
+      <FormModal info={modalInfo} setInfo={setModalInfo} />
     </>
   );
 }

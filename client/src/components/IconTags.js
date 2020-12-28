@@ -43,3 +43,28 @@ export const IconSorter = styled.i`
     right: 9px;
   }
 `;
+
+export const IconRadio = styled.input.attrs(() => ({
+  type: "radio",
+}))`
+  display: none;
+
+  & + label {
+    cursor: pointer;
+    display: contents;
+  }
+
+  & + label img {
+    background: ${({ checked }) =>
+      checked ? "rgba(81, 203, 206, 0.6)" : "transparent"};
+    border-radius: 5px;
+    max-width: 8%;
+    padding: ${({ checked }) => (checked ? "1px" : 0)};
+  }
+
+  &:hover + label img {
+    background: ${({ checked }) =>
+      checked ? "rgba(81, 203, 206, 0.6)" : "rgba(81, 203, 206, 0.2)"};
+    padding: 2px;
+  }
+`;

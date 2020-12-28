@@ -118,7 +118,8 @@ export default function ExpenseCard(props) {
         : true;
 
     const newLabels = [];
-    if (!data.datasets[0].hidden) newLabels.push("Total Budget");
+    if (!data.datasets[0].hidden && !expensesHidden)
+      newLabels.push("Total Budget");
     if (!expensesHidden) newLabels.push("Total Expenses");
 
     const newData = {

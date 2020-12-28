@@ -5,20 +5,15 @@ import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
 import { BASENAME } from "../constants";
 
-const IconAdd = () => (
-  <a data-toggle="modal" data-target="#newItem">
-    <button
-      className="btn btn-outline-success btn-round btn-icon"
-      type="button"
-      style={{ margin: "1px 1px" }}
-    >
-      <i className="nc-icon nc-simple-add" />
-    </button>
-  </a>
-);
-
 export default function MonthlyExpenses(props) {
-  const { categoryInfo, expenses, setExpenses } = props;
+  const { categoryInfo, expenses, setExpenses, setModalInfo } = props;
+  const handleSetModalShow = (type, s, exp) => () => {
+    setModalInfo((ss) => {
+      ss.show[type] = s;
+      ss.data = exp;
+    });
+  };
+
   const [filterDisplay, setFilterDisplay] = useImmer({
     "-1": true,
     0: true,
@@ -69,7 +64,13 @@ export default function MonthlyExpenses(props) {
           className={shouldBeSettled(exp) ? "selected" : null}
         >
           <td className="icon-set">
-            <a data-toggle="modal" data-target="#newItem">
+            <a
+              onClick={handleSetModalShow("edit", true, exp)}
+              onKeyDown={handleSetModalShow("edit", true, exp)}
+              style={{ cursor: "pointer", outline: "none" }}
+              role="button"
+              tabIndex={0}
+            >
               <i className="far fa-edit" />
             </a>{" "}
             <i className="far fa-trash-alt" />
@@ -97,6 +98,24 @@ export default function MonthlyExpenses(props) {
       )
     );
   };
+
+  const IconAdd = () => (
+    <a
+      onClick={handleSetModalShow("add", true, null)}
+      onKeyDown={handleSetModalShow("add", true, null)}
+      style={{ outline: "none" }}
+      role="button"
+      tabIndex={0}
+    >
+      <button
+        className="btn btn-outline-success btn-round btn-icon"
+        type="button"
+        style={{ margin: "1px 1px" }}
+      >
+        <i className="nc-icon nc-simple-add" />
+      </button>
+    </a>
+  );
 
   return (
     <BaseCard
