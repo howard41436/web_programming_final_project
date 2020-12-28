@@ -91,7 +91,7 @@ export default function ExpenseCard(props) {
     ],
   });
 
-  const [total, setTotal] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
   const renderData = () => {
     const newDataset = data.datasets
@@ -151,18 +151,18 @@ export default function ExpenseCard(props) {
     setData((d) => {
       d.datasets = d.datasets.map((dd) => ({ ...dd, data: [0, 0] }));
 
-      let t = 0;
-      expenses.forEach((exp) => {
+      let total = 0;
+      Object.values(expenses).forEach((exp) => {
         const filtered =
           (filterDisplay["0"] ? exp.owed.user0 : 0) +
           (filterDisplay["1"] ? exp.owed.user1 : 0);
         const { index } = categoryInfo[exp.category];
 
         d.datasets[index].data[1] += filtered;
-        t += legendDisplay[exp.category] && filtered;
+        total += legendDisplay[exp.category] && filtered;
       });
 
-      setTotal(t);
+      setTotalExpenses(total);
     });
   }, [expenses, filterDisplay, legendDisplay]);
 
@@ -204,19 +204,22 @@ export default function ExpenseCard(props) {
 
   useEffect(() => {
     setTooltips((tip) => {
-      tip.content = data.datasets.map(({ label, data: d, backgroundColor }) => {
-        if (tip.title === "") return null;
-        if (tip.title === "Total Budget" && label !== "Budget") return null;
-        if (tip.title === "Total Expenses" && label === "Budget") return null;
-        if (d[0] + d[1] === 0 && label !== "Budget") return null;
-        if (budget.all.total === 0 && label === "Budget") return null;
+      tip.content = data.datasets.map(
+        ({ label, data: d, backgroundColor, hidden }) => {
+          if (tip.title === "") return null;
+          if (hidden) return null;
+          if (tip.title === "Total Budget" && label !== "Budget") return null;
+          if (tip.title === "Total Expenses" && label === "Budget") return null;
+          if (d[0] + d[1] === 0 && label !== "Budget") return null;
+          if (budget.all.total === 0 && label === "Budget") return null;
 
-        return {
-          background: backgroundColor,
-          label: capitalize(label),
-          price: label === "Budget" ? budget.all.total : d[0] + d[1],
-        };
-      });
+          return {
+            background: backgroundColor,
+            label: capitalize(label),
+            price: label === "Budget" ? budget.all.total : d[0] + d[1],
+          };
+        }
+      );
     });
   }, [tooltips.title]);
 
@@ -224,9 +227,8 @@ export default function ExpenseCard(props) {
     <>
       <strong style={{ display: "block" }}>{tooltips.title}</strong>
       {tooltips.content.map(
-        (tip, index) =>
-          tip !== null &&
-          !data.datasets[index].hidden && (
+        (tip) =>
+          tip !== null && (
             <TooltipsRow key={tip.label}>
               <ColorBox background={tip.background} />
               <span>
@@ -241,7 +243,7 @@ export default function ExpenseCard(props) {
 
   const BudgetInfo = () => (
     <span style={{ fontSize: "smaller" }}>
-      {commaNumber(total)}
+      {commaNumber(totalExpenses)}
       {!data.datasets[0].hidden && <> / {commaNumber(budget.all.total)}</>}
     </span>
   );
@@ -256,7 +258,6 @@ export default function ExpenseCard(props) {
       filters={[0, 1]}
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
-      allowFooter={false}
     >
       <BaseChart
         Chart={HorizontalBar}

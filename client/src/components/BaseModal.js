@@ -4,7 +4,7 @@ export default function BaseModal(props) {
   const {
     show = false,
     setShow = () => {},
-    modalId = "",
+    modalId = "", // Should be unique
     title = "",
     children = <></>,
   } = props;

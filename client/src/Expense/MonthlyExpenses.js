@@ -1,18 +1,35 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
-import { BASENAME } from "../constants";
+import { BASENAME, INSTANCE } from "../constants";
 
 export default function MonthlyExpenses(props) {
   const { categoryInfo, expenses, setExpenses, setModalInfo } = props;
-  const handleSetModalShow = (type, s, exp) => () => {
-    setModalInfo((ss) => {
-      ss.show[type] = s;
-      ss.data = exp;
+  const handleSetModalInfo = (type, show, exp) => () => {
+    setModalInfo((info) => {
+      info.show[type] = show;
+      info.data = exp;
     });
   };
+
+  const columns = ["", "date", "category", "member", "descriptions", "amount"];
+  const [data, setData] = useImmer([]);
+
+  useEffect(() => {
+    setData(() =>
+      Object.values(expenses).map((exp) => [
+        null,
+        exp.date,
+        exp.category,
+        exp.owner,
+        exp.name,
+        exp.price,
+        exp,
+      ])
+    );
+  }, [expenses]);
 
   const [filterDisplay, setFilterDisplay] = useImmer({
     "-1": true,
@@ -54,7 +71,21 @@ export default function MonthlyExpenses(props) {
   const commaNumber = (num) =>
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const renderRow = (exp) => {
+  const handleDeleteExpenses = (_id, pairId) => () => {
+    INSTANCE.post("/api/deleteRecord", {}, { params: { _id, pairId } }).then(
+      (res) => {
+        if (res.status === 200) {
+          setExpenses((exp) => {
+            // eslint-disable-next-line no-underscore-dangle
+            delete exp[_id];
+          });
+        }
+      }
+    );
+  };
+
+  const renderRow = (d) => {
+    const exp = d[6];
     return (
       filterDisplay[exp.owner] &&
       selectorDisplay[exp.category] && (
@@ -65,15 +96,26 @@ export default function MonthlyExpenses(props) {
         >
           <td className="icon-set">
             <a
-              onClick={handleSetModalShow("edit", true, exp)}
-              onKeyDown={handleSetModalShow("edit", true, exp)}
+              onClick={handleSetModalInfo("edit", true, exp)}
+              onKeyDown={handleSetModalInfo("edit", true, exp)}
               style={{ cursor: "pointer", outline: "none" }}
               role="button"
               tabIndex={0}
             >
               <i className="far fa-edit" />
             </a>{" "}
-            <i className="far fa-trash-alt" />
+            <i
+              className="far fa-trash-alt"
+              // eslint-disable-next-line dot-notation
+              onClick={handleDeleteExpenses(exp["_id"], exp.pairId)}
+              // eslint-disable-next-line dot-notation
+              onKeyDown={handleDeleteExpenses(exp["_id"], exp.pairId)}
+              style={{ cursor: "pointer", outline: "none" }}
+              role="button"
+              tabIndex={0}
+            >
+              {" "}
+            </i>
           </td>
           <td>
             <span>{formatDate(exp.date)}</span>
@@ -101,8 +143,8 @@ export default function MonthlyExpenses(props) {
 
   const IconAdd = () => (
     <a
-      onClick={handleSetModalShow("add", true, null)}
-      onKeyDown={handleSetModalShow("add", true, null)}
+      onClick={handleSetModalInfo("add", true, null)}
+      onKeyDown={handleSetModalInfo("add", true, null)}
       style={{ outline: "none" }}
       role="button"
       tabIndex={0}
@@ -131,14 +173,12 @@ export default function MonthlyExpenses(props) {
       selectorOptions={Object.keys(categoryInfo)}
       selectorDisplay={selectorDisplay}
       setSelectorDisplay={setSelectorDisplay}
-      allowFooter={false}
     >
       <BaseTable
-        columns={["", "date", "category", "member", "descriptions", "amount"]}
+        columns={columns}
         sortableIndex={[1]}
         defaultSortedOrder={[1, "desc"]}
-        data={expenses}
-        setData={setExpenses}
+        data={data}
         renderRow={renderRow}
       />
     </BaseCard>

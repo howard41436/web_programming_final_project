@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
@@ -20,8 +20,6 @@ export default function ExpensePage() {
     },
     data: null,
   });
-
-  const [expenses, setExpenses] = useState([]);
 
   const categoryInfo = {
     food: {
@@ -46,10 +44,16 @@ export default function ExpensePage() {
     },
   };
 
+  const [expenses, setExpenses] = useImmer({});
+
   useEffect(() => {
     document.title = "Our Expenses | App's name";
     INSTANCE.get("/api/allRecords", { params: { pairId } }).then((res) => {
-      if (res.status === 200) setExpenses(res.data);
+      if (res.status === 200)
+        setExpenses(() =>
+          // eslint-disable-next-line dot-notation
+          res.data.reduce((obj, cur) => ({ ...obj, [cur["_id"]]: cur }), {})
+        );
     });
   }, []);
 
@@ -74,7 +78,12 @@ export default function ExpensePage() {
           </div>
         </div>
       </BasePage>
-      <FormModal info={modalInfo} setInfo={setModalInfo} />
+      <FormModal
+        categoryList={Object.keys(categoryInfo)}
+        info={modalInfo}
+        setInfo={setModalInfo}
+        setExpenses={setExpenses}
+      />
     </>
   );
 }

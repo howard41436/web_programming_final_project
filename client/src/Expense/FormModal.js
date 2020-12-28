@@ -10,16 +10,14 @@ import { BASENAME, INSTANCE } from "../constants";
 export default function FormModal(props) {
   const { pairId } = useSelector(selectUser);
 
-  const { info, setInfo } = props;
-  const handleSetShow = (type) => (s) => {
-    setInfo((ss) => {
-      ss.show[type] = s;
+  const { categoryList, info, setInfo, setExpenses } = props;
+  const handleSetShow = (type) => (show) => {
+    setInfo((inf) => {
+      inf.show[type] = show;
     });
   };
 
-  const categoryList = ["food", "transportation", "education", "others"];
-
-  const initExpense = {
+  const initExpenses = {
     pairId,
     category: "food",
     owner: -2,
@@ -29,11 +27,11 @@ export default function FormModal(props) {
     paid: { user0: 0, user1: 0 },
     owed: { user0: 0, user1: 0 },
   };
-  const [newExpense, setNewExpense] = useImmer(initExpense);
+  const [newExpenses, setNewExpenses] = useImmer(initExpenses);
 
-  const handleSetNewExpense = (key1, key2 = null) => (event) => {
+  const handleSetNewExpenses = (key1, key2 = null) => (event) => {
     if (key2) {
-      setNewExpense((exp) => {
+      setNewExpenses((exp) => {
         const tmp = parseInt(event.target.value, 10);
         exp[key1][key2] =
           Number.isNaN(tmp) || tmp < 0 ? 0 : tmp > exp.price ? exp.price : tmp;
@@ -42,7 +40,7 @@ export default function FormModal(props) {
         else exp[key1].user0 = exp.price - exp[key1].user1;
       });
     } else {
-      setNewExpense((exp) => {
+      setNewExpenses((exp) => {
         if (typeof exp[key1] === "number") {
           const tmp = parseInt(event.target.value, 10);
           exp[key1] =
@@ -64,29 +62,58 @@ export default function FormModal(props) {
 
   useEffect(() => {
     if (info.data) {
-      setNewExpense(() => info.data);
+      setNewExpenses(() => info.data);
     } else {
-      setNewExpense(() => initExpense);
+      setNewExpenses(() => initExpenses);
     }
   }, [info.data]);
 
   const handleSubmit = (type) => () => {
     const flag = !(
-      newExpense.owner === -2 ||
-      newExpense.price === 0 ||
-      newExpense.name === ""
+      newExpenses.owner === -2 ||
+      newExpenses.price === 0 ||
+      newExpenses.name === ""
     );
 
     if (flag) {
       if (type === "add") {
         INSTANCE.post("/api/newRecord", {
-          ...newExpense,
+          ...newExpenses,
           date: new Date().toISOString(),
         }).then((res) => {
-          if (res.status === 200)
+          if (res.status === 200) {
             setInfo((s) => {
               s.show[type] = false;
             });
+            setExpenses((exp) => {
+              // eslint-disable-next-line dot-notation
+              exp[res.data["_id"]] = res.data;
+            });
+          }
+        });
+      }
+      if (type === "edit") {
+        INSTANCE.post(
+          "/api/editRecord",
+          {
+            ...newExpenses,
+          },
+          {
+            params: {
+              // eslint-disable-next-line dot-notation
+              _id: newExpenses["_id"],
+            },
+          }
+        ).then((res) => {
+          if (res.status === 200) {
+            setInfo((s) => {
+              s.show[type] = false;
+            });
+            setExpenses((exp) => {
+              // eslint-disable-next-line dot-notation
+              exp[res.data["_id"]] = res.data;
+            });
+          }
         });
       }
     }
@@ -100,8 +127,8 @@ export default function FormModal(props) {
             <label>Category</label>
             <select
               className="form-control"
-              value={newExpense.category}
-              onChange={handleSetNewExpense("category")}
+              value={newExpenses.category}
+              onChange={handleSetNewExpenses("category")}
               style={{ textTransform: "capitalize" }}
             >
               {categoryList.map((cat) => (
@@ -122,8 +149,8 @@ export default function FormModal(props) {
             <input
               type="number"
               className="form-control"
-              onChange={handleSetNewExpense("price")}
-              value={String(newExpense.price)}
+              onChange={handleSetNewExpenses("price")}
+              value={String(newExpenses.price)}
             />
           </div>
         </div>
@@ -136,32 +163,32 @@ export default function FormModal(props) {
               {" "}
               <IconRadio
                 id={`${type}_radio_boy`}
-                checked={newExpense.owner === 0}
-                onChange={handleSetNewExpense("owner")}
+                checked={newExpenses.owner === 0}
+                onChange={handleSetNewExpenses("owner")}
                 name="owner"
                 value={0}
               />
-              <label htmlFor={`${type}_radio_boy}`}>
+              <label htmlFor={`${type}_radio_boy`}>
                 <img src={`${BASENAME}img/boy.png`} alt="boy" />
               </label>{" "}
               <IconRadio
-                id={`${type}_radio_girl}`}
-                checked={newExpense.owner === 1}
-                onChange={handleSetNewExpense("owner")}
+                id={`${type}_radio_girl`}
+                checked={newExpenses.owner === 1}
+                onChange={handleSetNewExpenses("owner")}
                 name="owner"
                 value={1}
               />
-              <label htmlFor={`${type}_radio_girl}`}>
+              <label htmlFor={`${type}_radio_girl`}>
                 <img src={`${BASENAME}img/girl.png`} alt="girl" />
               </label>{" "}
               <IconRadio
-                id={`${type}_radio_both}`}
-                checked={newExpense.owner === -1}
-                onChange={handleSetNewExpense("owner")}
+                id={`${type}_radio_both`}
+                checked={newExpenses.owner === -1}
+                onChange={handleSetNewExpenses("owner")}
                 name="owner"
                 value={-1}
               />
-              <label htmlFor={`${type}_radio_both}`}>
+              <label htmlFor={`${type}_radio_both`}>
                 <img src={`${BASENAME}img/both.png`} alt="both" />
               </label>
             </span>
@@ -175,8 +202,8 @@ export default function FormModal(props) {
             <input
               type="number"
               className="form-control"
-              onChange={handleSetNewExpense("paid", "user0")}
-              value={String(newExpense.paid.user0)}
+              onChange={handleSetNewExpenses("paid", "user0")}
+              value={String(newExpenses.paid.user0)}
             />
           </div>
         </div>
@@ -186,13 +213,13 @@ export default function FormModal(props) {
             <input
               type="number"
               className="form-control"
-              onChange={handleSetNewExpense("paid", "user1")}
-              value={String(newExpense.paid.user1)}
+              onChange={handleSetNewExpenses("paid", "user1")}
+              value={String(newExpenses.paid.user1)}
             />
           </div>
         </div>
       </div>
-      {newExpense.owner === -1 && (
+      {newExpenses.owner === -1 && (
         <div className="row">
           <div className="col-md-6 pr-1">
             <div className="form-group">
@@ -201,8 +228,8 @@ export default function FormModal(props) {
                 type="number"
                 className="form-control"
                 placeholder="Tom"
-                onChange={handleSetNewExpense("owed", "user0")}
-                value={String(newExpense.owed.user0)}
+                onChange={handleSetNewExpenses("owed", "user0")}
+                value={String(newExpenses.owed.user0)}
               />
             </div>
           </div>
@@ -213,8 +240,8 @@ export default function FormModal(props) {
                 type="number"
                 className="form-control"
                 placeholder="Amy"
-                onChange={handleSetNewExpense("owed", "user1")}
-                value={String(newExpense.owed.user1)}
+                onChange={handleSetNewExpenses("owed", "user1")}
+                value={String(newExpenses.owed.user1)}
               />
             </div>
           </div>
@@ -226,8 +253,8 @@ export default function FormModal(props) {
             <label>Description</label>
             <textarea
               className="form-control"
-              onChange={handleSetNewExpense("name")}
-              value={newExpense.name}
+              onChange={handleSetNewExpenses("name")}
+              value={newExpenses.name}
             />
           </div>
         </div>

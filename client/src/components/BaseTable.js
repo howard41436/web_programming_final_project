@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useImmer } from "use-immer";
 import { IconSorter } from "./IconTags";
 
@@ -11,20 +11,15 @@ export default function BaseTable(props) {
     renderRow = () => {},
   } = props;
 
-  const [sortedData, setSortedData] = useImmer(data.map((d) => d));
-  useEffect(() => {
-    setSortedData(() => data.map((d) => d));
-  }, [data]);
-
   const [sortedOrder, setSortedOrder] = useImmer(
     Object.keys(defaultSortedOrder).length === 2
       ? defaultSortedOrder
       : [sortableIndex[0], "asc"]
   );
 
-  const compare = (label, order) => (a, b) => {
-    if (a[label] < b[label]) return order === "asc" ? -1 : 1;
-    if (a[label] > b[label]) return order === "asc" ? 1 : -1;
+  const compare = (index, order) => (a, b) => {
+    if (a[index] < b[index]) return order === "asc" ? -1 : 1;
+    if (a[index] > b[index]) return order === "asc" ? 1 : -1;
     return 0;
   };
 
@@ -34,12 +29,9 @@ export default function BaseTable(props) {
     });
   };
 
-  useEffect(() => {
-    setSortedData((d) =>
-      d.sort(compare(columns[sortedOrder[0]], sortedOrder[1]))
-    );
-    // eslint-disable-next-line dot-notation
-  }, [sortedOrder, sortedData[0] ? sortedData[0]["_id"] : null]);
+  const renderSortedData = data
+    .map((d) => d)
+    .sort(compare(sortedOrder[0], sortedOrder[1]));
 
   return (
     <div className="table-responsive">
@@ -81,7 +73,7 @@ export default function BaseTable(props) {
             ))}
           </tr>
         </thead>
-        <tbody>{sortedData.map((d) => renderRow(d))}</tbody>
+        <tbody>{renderSortedData.map((d) => renderRow(d))}</tbody>
       </table>
     </div>
   );
