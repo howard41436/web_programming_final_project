@@ -57,24 +57,50 @@
         </ul>
       </div>
     </div>
-    <!-- new item -->
-    <div class="content modal fade center" id="newItem">
+
+    <!-- settle with amount-->
+    <div class="content modal fade center" id="settleMoney">
       <div class="row modal-dialog modal-content" role="document">
         <div class="col-md-12">
           <div class="card card-user">
             <div class="card-header">
-              <h5 class="card-title">Add Expenses</h5>
+              <h5 class="card-title">Settle with amount</h5>
             </div>
             <div class="close-modal"><a data-dismiss="modal"><i class="fas fa-times" ></i></a></div>
             <div class="card-body">
               <form>
                 <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Category</label>
-                      <input type="text" class="form-control" placeholder="Category">
+                  <div class="col-md-4 pr-1" >
+                    <div class="logo logo-form">
+                      <a class="simple-text logo-mini">
+                        <div class="">
+                          <img src="assets/img/girl.png">
+                        </div>
+                      </a>
                     </div>
                   </div>
+                  <div class="col-md-4 px-1" >
+                    <h1 class="settle-arrow">
+                      <a class="simple-text">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                      </a>
+                      <br>
+                      <a class="simple-text">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                      </a>
+                    </h1>
+                  </div>
+                  <div class="col-md-4 pl-1" >
+                    <div class="logo logo-form">
+                      <a class="simple-text logo-mini">
+                        <div class="">
+                          <img src="assets/img/boy.png">
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Amount</label>
@@ -82,32 +108,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Member</label>
-                      <span class="logo-list">
-                        <a href="javascript:;"><img src="assets/img/boy.png"></a>
-                        <a href="javascript:;"><img src="assets/img/girl.png"></a>
-                        <a href="javascript:;"><img src="assets/img/both1.png"></a>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6 pr-1">
-                    <div class="form-group">
-                      <label>Partition</label>
-                      <input type="text" class="form-control" placeholder="Tom">
-                    </div>
-                  </div>
-                  <div class="col-md-6 pl-1">
-                    <div class="form-group">
-                      <label>Partition</label>
-                      <input type="text" class="form-control" placeholder="Amy">
-                    </div>
-                  </div>
-                </div>
+                
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
@@ -215,12 +216,10 @@
               <div class="card-body ">
                 <canvas id="chartDebt"></canvas>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-clock-o"></i>
-                  In the last hour
-                </div>
+              <div class="card-footer" style="text-align: center;">
+                <a data-toggle="modal" data-target="#settleMoney">
+                  <button class="btn btn-primary">Settle with amount</button>
+                </a>
               </div>
             </div>
           </div>
@@ -256,7 +255,6 @@
             </div>
           </div>
         </div>
-
         <div class="row">
           <div class="col-md-12">
             <div class="card">
@@ -393,7 +391,7 @@
                         <td class="text-right">
                           $23,789
                         </td>
-                        <td class="text-right"><button class="btn btn-primary">Been Settled</button></td>
+                        <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td>
                       </tr>
                     </tbody>
                   </table>

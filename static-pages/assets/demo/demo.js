@@ -365,8 +365,8 @@ demo = {
           pointRadius: 0,
           pointHoverRadius: 0,
           backgroundColor: [
-            '#fcc468',
-            '#4acccd'
+            '#ED7B8F',
+            '#5A586B'
           ],
           borderWidth: 0,
           data: [310, 100]
@@ -524,7 +524,7 @@ demo = {
     marker.setMap(map);
   },
 
-  showNotification: function(from, align) {
+  showDebtNotification: function(from, align) {
     color = 'primary';
 
     $.notify({
@@ -539,6 +539,21 @@ demo = {
         align: align
       }
     });
-  }
+  },
+  showInviteNotification: function(from, align) {
+    color = 'warning';
 
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: 'There is an invitation from Amy.  <button type="submit" class="btn btn-primary btn-round">Confirm</button>'
+
+    }, {
+      type: color,
+      timer: 12000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+  }
 };
