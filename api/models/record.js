@@ -26,9 +26,6 @@ const RecordSchema = new Schema(
       required: true,
       validate: {
         validator(v) {
-          if (this.category === "Income") {
-            return true;
-          }
           return (
             this.paid.user0 + this.paid.user1 === v &&
             this.owed.user0 + this.owed.user1 === v
@@ -50,44 +47,24 @@ const RecordSchema = new Schema(
       user0: {
         type: Number,
         min: 0,
-        required: [
-          function required() {
-            return this.category !== "Income";
-          },
-          '"paid" field is required if this record is an expense rather than an income',
-        ],
+        required: true,
       },
       user1: {
         type: Number,
         min: 0,
-        required: [
-          function required() {
-            return this.category !== "Income";
-          },
-          '"paid" field is required if this record is an expense rather than an income',
-        ],
+        required: true,
       },
     },
     owed: {
       user0: {
         type: Number,
         min: 0,
-        required: [
-          function required() {
-            return this.category !== "Income";
-          },
-          '"owed" field is required if this record is an expense rather than an income',
-        ],
+        required: true,
       },
       user1: {
         type: Number,
         min: 0,
-        required: [
-          function required() {
-            return this.category !== "Income";
-          },
-          '"owed" field is required if this record is an expense rather than an income',
-        ],
+        required: true,
       },
     },
   },
