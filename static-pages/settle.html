@@ -306,7 +306,8 @@
                     <tbody>
                       <tr class="selected">
                         <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i>
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
                         </td>
                         <td>
                           <span>Oct. 11</span>
@@ -336,7 +337,10 @@
                         <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
                       </tr>
                       <tr>
-                        <td class="icon-set"><a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i></td>
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                        </td>
                         <td>
                           Oct. 11
                         </td>
@@ -365,7 +369,10 @@
                         <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
                       </tr>
                       <tr class="archived">
-                        <td class="icon-set"><a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> <i class="far fa-trash-alt"></i></td>
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                        </td>
                         <td>
                           Oct. 11
                         </td>
@@ -421,7 +428,7 @@
     $(document).ready(function() {
       // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
       demo.initSettlePages();
-      demo.showNotification('bottom','left');
+      demo.showDebtNotification('bottom','left');
     });
   </script>
 </body>

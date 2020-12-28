@@ -555,5 +555,21 @@ demo = {
         align: align
       }
     });
+  },
+  showRemoveNotification: function(from, align) {
+    color = 'danger';
+
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: 'Remove the record?  <button type="submit" class="btn btn-danger btn-round">Remove</button>'
+
+    }, {
+      type: color,
+      timer: 12000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
   }
 };

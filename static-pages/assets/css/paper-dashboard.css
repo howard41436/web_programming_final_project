@@ -4287,7 +4287,7 @@ License - nucleoapp.com/license/
   font-size: large;
 }
 
-.icon-set > .fa-trash-alt{
+.icon-set .fa-trash-alt{
   color: #eb6532 !important;
 }
 
