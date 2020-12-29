@@ -2,8 +2,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar(props) {
   const { pathname } = useLocation();
+  const { title } = props;
 
   const handleSetSearch = () => {};
 
@@ -24,7 +25,7 @@ export default function Navbar() {
           </div>
           {pathname === "/" && (
             <a className="navbar-brand" style={{ marginRight: "1rem" }}>
-              Our Expenses
+              {title}
             </a>
           )}
         </div>

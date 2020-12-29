@@ -155,7 +155,12 @@ export default function BaseCard(props) {
 
       <div className="card-body">{children}</div>
 
-      {allowFooter && <div className="card-footer">{footer}</div>}
+      {allowFooter && (
+        <div className="card-footer">
+          <hr />
+          {footer}
+        </div>
+      )}
     </div>
   );
 }

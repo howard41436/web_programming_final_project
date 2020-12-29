@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useImmer } from "use-immer";
 import { HorizontalBar } from "react-chartjs-2";
+import { useSelector } from "react-redux";
+import { selectInfo } from "../redux/infoSlice";
+import { selectExpenses } from "../redux/expenseSlice";
+
 import BaseCard from "../components/BaseCard";
 import BaseChart from "../components/BaseChart";
 
@@ -19,8 +23,9 @@ const ColorBox = styled.span`
   width: 15px;
 `;
 
-export default function ExpenseCard(props) {
-  const { categoryInfo, expenses } = props;
+export default function ExpenseCard() {
+  const { categoryInfo } = useSelector(selectInfo);
+  const { expenses } = useSelector(selectExpenses);
 
   const commaNumber = (num) =>
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -202,6 +207,32 @@ export default function ExpenseCard(props) {
     },
   };
 
+  const options = {
+    legend: legendOption,
+    scales: {
+      yAxes: [
+        {
+          stacked: true,
+          gridLines: {
+            display: false,
+          },
+        },
+      ],
+      xAxes: [
+        {
+          stacked: true,
+          gridLines: {
+            display: false,
+          },
+          ticks: {
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
+    tooltips: tooltipsOption,
+  };
+
   useEffect(() => {
     setTooltips((tip) => {
       tip.content = data.datasets.map(
@@ -262,10 +293,8 @@ export default function ExpenseCard(props) {
       <BaseChart
         Chart={HorizontalBar}
         data={renderData()}
-        allowLegend
-        legendOption={legendOption}
+        options={options}
         allowTooltips
-        tooltipsOption={tooltipsOption}
         showTooltips={tooltips.title !== ""}
         renderTooltips={renderTooltips}
       />

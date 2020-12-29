@@ -1,12 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
+import { useDispatch, useSelector } from "react-redux";
+import { selectInfo } from "../redux/infoSlice";
+import { setExpenses, selectExpenses } from "../redux/expenseSlice";
+
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
-import { BASENAME, INSTANCE } from "../constants";
+import { INSTANCE } from "../constants";
 
 export default function MonthlyExpenses(props) {
-  const { categoryInfo, expenses, setExpenses, setModalInfo } = props;
+  const dispatch = useDispatch();
+  const { categoryInfo, ownerIcon } = useSelector(selectInfo);
+  const { expenses } = useSelector(selectExpenses);
+
+  const { setModalInfo } = props;
   const handleSetModalInfo = (type, show, exp) => () => {
     setModalInfo((info) => {
       info.show[type] = show;
@@ -44,21 +52,6 @@ export default function MonthlyExpenses(props) {
     )
   );
 
-  const ownerIcon = {
-    "-1": {
-      src: `${BASENAME}img/both.png`,
-      alt: "both",
-    },
-    0: {
-      src: `${BASENAME}img/boy.png`,
-      alt: "boy",
-    },
-    1: {
-      src: `${BASENAME}img/girl.png`,
-      alt: "girl",
-    },
-  };
-
   const shouldBeSettled = (exp) =>
     exp.paid.user0 !== exp.owed.user0 || exp.paid.user1 !== exp.owed.user1;
 
@@ -75,10 +68,12 @@ export default function MonthlyExpenses(props) {
     INSTANCE.post("/api/deleteRecord", {}, { params: { _id, pairId } }).then(
       (res) => {
         if (res.status === 200) {
-          setExpenses((exp) => {
-            // eslint-disable-next-line no-underscore-dangle
-            delete exp[_id];
-          });
+          const { [_id]: _, ...newExpenses } = expenses;
+          dispatch(
+            setExpenses({
+              expenses: newExpenses,
+            })
+          );
         }
       }
     );

@@ -7,38 +7,11 @@ export default function BaseChart(props) {
     height = 50,
     width = 400,
     data = { datasets: [] },
-    legendOption = {},
+    options = {},
     allowTooltips = false,
-    tooltipsOption = {},
     showTooltips = false,
     renderTooltips = <></>,
   } = props;
-
-  const options = {
-    legend: legendOption,
-    scales: {
-      yAxes: [
-        {
-          stacked: true,
-          gridLines: {
-            display: false,
-          },
-        },
-      ],
-      xAxes: [
-        {
-          stacked: true,
-          gridLines: {
-            display: false,
-          },
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-    tooltips: tooltipsOption,
-  };
 
   return (
     <>

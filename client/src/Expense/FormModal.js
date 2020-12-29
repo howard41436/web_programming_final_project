@@ -1,16 +1,23 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
+import { selectInfo } from "../redux/infoSlice";
+import { setExpenses, selectExpenses } from "../redux/expenseSlice";
+
 import BaseModal from "../components/BaseModal";
 import { IconRadio } from "../components/IconTags";
 import { BASENAME, INSTANCE } from "../constants";
 
 export default function FormModal(props) {
+  const dispatch = useDispatch();
+  const { categoryInfo } = useSelector(selectInfo);
+  const categoryList = Object.keys(categoryInfo);
+  const { expenses } = useSelector(selectExpenses);
   const { pairId } = useSelector(selectUser);
 
-  const { categoryList, info, setInfo, setExpenses } = props;
+  const { info, setInfo } = props;
   const handleSetShow = (type) => (show) => {
     setInfo((inf) => {
       inf.show[type] = show;
@@ -85,10 +92,12 @@ export default function FormModal(props) {
             setInfo((s) => {
               s.show[type] = false;
             });
-            setExpenses((exp) => {
-              // eslint-disable-next-line dot-notation
-              exp[res.data["_id"]] = res.data;
-            });
+            dispatch(
+              setExpenses({
+                // eslint-disable-next-line dot-notation
+                expenses: { ...expenses, [res.data["_id"]]: res.data },
+              })
+            );
           }
         });
       }
@@ -109,10 +118,12 @@ export default function FormModal(props) {
             setInfo((s) => {
               s.show[type] = false;
             });
-            setExpenses((exp) => {
-              // eslint-disable-next-line dot-notation
-              exp[res.data["_id"]] = res.data;
-            });
+            dispatch(
+              setExpenses({
+                // eslint-disable-next-line dot-notation
+                expenses: { ...expenses, [res.data["_id"]]: res.data },
+              })
+            );
           }
         });
       }
