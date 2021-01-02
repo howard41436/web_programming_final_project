@@ -3,6 +3,7 @@ import userReducer from "./userSlice";
 import infoReducer from "./infoSlice";
 import expenseReducer from "./expenseSlice";
 import formReducer from "./formSlice";
+import toastReducer from "./toastSlice";
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     info: infoReducer,
     expenses: expenseReducer,
     form: formReducer,
+    toast: toastReducer,
   },
 });

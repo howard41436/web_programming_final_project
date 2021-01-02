@@ -19,6 +19,13 @@ export default function BaseModal(props) {
   const closeRef = useRef();
 
   useEffect(() => {
+    return () => {
+      if (document.getElementsByClassName("modal-backdrop")[0])
+        document.getElementsByClassName("modal-backdrop")[0].remove();
+    }; // Remove backdrop
+  }, []);
+
+  useEffect(() => {
     if (show) openRef.current.click();
     else closeRef.current.click();
   }, [show]);

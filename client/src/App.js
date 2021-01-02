@@ -7,6 +7,7 @@ import { setExpenses, setDebt } from "./redux/expenseSlice";
 import ExpensePage from "./Expense/ExpensePage";
 import SettlePage from "./Settle/SettlePage";
 import ChartPage from "./Chart/ChartPage";
+import BaseToast from "./components/BaseToast";
 
 import { INSTANCE } from "./constants";
 
@@ -58,11 +59,14 @@ function App() {
   }, [readyUser]);
 
   return readyUser && readyExpenses && readyDebt ? (
-    <Switch>
-      <Route exact path="/" component={ExpensePage} />
-      <Route exact path="/settles" component={SettlePage} />
-      <Route exact path="/charts" component={ChartPage} />
-    </Switch>
+    <>
+      <Switch>
+        <Route exact path="/" component={ExpensePage} />
+        <Route exact path="/settles" component={SettlePage} />
+        <Route exact path="/charts" component={ChartPage} />
+      </Switch>
+      <BaseToast />
+    </>
   ) : (
     <></>
   );

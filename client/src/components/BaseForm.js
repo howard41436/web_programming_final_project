@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm, selectForm } from "../redux/formSlice";
@@ -106,6 +106,7 @@ export const BaseFormGroup = (props) => {
       className="form-group"
       style={{ display: inputHidden() ? "none" : null }}
     >
+      {/* eslint-disable jsx-a11y/label-has-associated-control */}
       {label && <label>{label}</label>}
       {children}
     </div>
@@ -163,10 +164,8 @@ export const BaseFormInput = (props) => {
     },
   };
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   if (CustomInput) return <CustomInput {...inputProps} />;
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <input {...inputProps} />;
 };
 
@@ -212,10 +211,8 @@ export const BaseFormTextarea = (props) => {
     },
   };
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   if (CustomTextarea) return <CustomTextarea {...textareaProps} />;
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <textarea {...textareaProps} />;
 };
 
@@ -264,9 +261,7 @@ export const BaseFormSelect = (props) => {
   };
 
   if (CustomSelect)
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return <CustomSelect {...selectProps}>{children}</CustomSelect>;
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <select {...selectProps}>{children}</select>;
 };

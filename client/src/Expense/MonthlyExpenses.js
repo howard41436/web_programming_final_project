@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectInfo } from "../redux/infoSlice";
@@ -7,6 +9,7 @@ import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
+import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { INSTANCE } from "../constants";
 
 export default function MonthlyExpenses(props) {
@@ -64,19 +67,74 @@ export default function MonthlyExpenses(props) {
   const commaNumber = (num) =>
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-  const handleDeleteExpenses = (_id, pairId) => () => {
-    INSTANCE.post("/api/deleteRecord", {}, { params: { _id, pairId } }).then(
-      (res) => {
-        if (res.status === 200) {
-          const { [_id]: _, ...newExpenses } = expenses;
-          dispatch(
-            setExpenses({
-              expenses: newExpenses,
-            })
-          );
-        }
+  const handleDeleteExpenses = async (_id, pairId) => {
+    await INSTANCE.post(
+      "/api/deleteRecord",
+      {},
+      { params: { _id, pairId } }
+    ).then((res) => {
+      if (res.status === 200) {
+        const { [_id]: _, ...newExpenses } = expenses;
+        dispatch(
+          setExpenses({
+            expenses: newExpenses,
+          })
+        );
       }
+    });
+  };
+
+  const DeleteToast = ({
+    exp,
+    ...toastProps // From react-toastify
+  }) => {
+    const { closeToast } = toastProps;
+
+    const handleDelete = async () => {
+      // eslint-disable-next-line dot-notation
+      await handleDeleteExpenses(exp["_id"], exp.pairId);
+      closeToast();
+
+      baseToast(
+        <BaseToastInner
+          icon="nc-icon nc-check-2"
+          title="Delete successfully."
+          message={`(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`}
+        />,
+        {
+          autoClose: 6000,
+          position: "top-center",
+        }
+      );
+    };
+
+    return (
+      <BaseToastInner
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...toastProps}
+        icon="nc-icon nc-bell-55"
+        title="Remove this record?"
+        message={`(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`}
+        allowButton
+        buttonAction={handleDelete}
+        buttonClasses="btn btn-danger btn-round"
+        buttonText="Remove"
+      />
     );
+  };
+
+  const handleShowToast = (exp) => (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+
+    baseToast(<DeleteToast exp={exp} />, {
+      backdrop: true,
+      dispatch,
+      autoClose: 12000,
+      closeOnClick: false,
+      draggable: false,
+      position: "top-center",
+      type: "alert",
+    });
   };
 
   const renderRow = (d) => {
@@ -99,18 +157,15 @@ export default function MonthlyExpenses(props) {
             >
               <i className="far fa-edit" />
             </a>{" "}
-            <i
-              className="far fa-trash-alt"
-              // eslint-disable-next-line dot-notation
-              onClick={handleDeleteExpenses(exp["_id"], exp.pairId)}
-              // eslint-disable-next-line dot-notation
-              onKeyDown={handleDeleteExpenses(exp["_id"], exp.pairId)}
+            <a
+              onClick={handleShowToast(exp)}
+              onKeyDown={handleShowToast(exp)}
               style={{ cursor: "pointer", outline: "none" }}
               role="button"
               tabIndex={0}
             >
-              {" "}
-            </i>
+              <i className="far fa-trash-alt" />
+            </a>
           </td>
           <td>
             <span>{formatDate(exp.date)}</span>

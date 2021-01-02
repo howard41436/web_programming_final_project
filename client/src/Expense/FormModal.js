@@ -13,6 +13,7 @@ import BaseForm, {
   BaseFormSelect,
   baseFormReset,
 } from "../components/BaseForm";
+import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
 import { BASENAME, INSTANCE } from "../constants";
 
@@ -83,24 +84,47 @@ export default function FormModal(props) {
     else baseFormReset(dispatch, "add_expenses_form", initialExpenses);
   }, [info.data]);
 
+  const formatDate = (date) => {
+    return `${new Date(date).toLocaleString("en", {
+      month: "short",
+    })}. ${new Date(date).getDate()}`;
+  };
+
   const handleSubmit = (type) => (formValues) => {
     if (type === "add") {
       INSTANCE.post("/api/newRecord", {
         ...formValues,
         date: new Date().toISOString(),
-      }).then((res) => {
-        if (res.status === 200) {
-          setInfo((s) => {
-            s.show[type] = false; // Close Modal
-          });
-          dispatch(
-            setExpenses({
-              // eslint-disable-next-line dot-notation
-              expenses: { ...expenses, [res.data["_id"]]: res.data },
-            })
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            setInfo((s) => {
+              s.show[type] = false; // Close Modal
+            });
+            dispatch(
+              setExpenses({
+                // eslint-disable-next-line dot-notation
+                expenses: { ...expenses, [res.data["_id"]]: res.data },
+              })
+            );
+          }
+          return res.data;
+        })
+        .then((data) => {
+          baseToast(
+            <BaseToastInner
+              icon="nc-icon nc-check-2"
+              title="Add successfully."
+              message={`(${data.name}, $ ${data.price}, ${formatDate(
+                data.date
+              )})`}
+            />,
+            {
+              position: "top-center",
+              autoClose: 6000,
+            }
           );
-        }
-      });
+        });
     }
     if (type === "edit") {
       INSTANCE.post("/api/editRecord", formValues, {
@@ -108,19 +132,36 @@ export default function FormModal(props) {
           // eslint-disable-next-line dot-notation
           _id: formValues["_id"],
         },
-      }).then((res) => {
-        if (res.status === 200) {
-          setInfo((s) => {
-            s.show[type] = false; // Close Modal
-          });
-          dispatch(
-            setExpenses({
-              // eslint-disable-next-line dot-notation
-              expenses: { ...expenses, [res.data["_id"]]: res.data },
-            })
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            setInfo((s) => {
+              s.show[type] = false; // Close Modal
+            });
+            dispatch(
+              setExpenses({
+                // eslint-disable-next-line dot-notation
+                expenses: { ...expenses, [res.data["_id"]]: res.data },
+              })
+            );
+          }
+          return res.data;
+        })
+        .then((data) => {
+          baseToast(
+            <BaseToastInner
+              icon="nc-icon nc-check-2"
+              title="Edit successfully."
+              message={`(${data.name}, $ ${data.price}, ${formatDate(
+                data.date
+              )})`}
+            />,
+            {
+              position: "top-center",
+              autoClose: 6000,
+            }
           );
-        }
-      });
+        });
     }
   };
 
