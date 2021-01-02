@@ -281,7 +281,6 @@ export default function ExpenseCard() {
 
   return (
     <BaseCard
-      cardClasses=""
       allowHeader
       title={data.datasets[0].hidden ? "All Expenses" : "All Budget Used"}
       otherHeader={<BudgetInfo />}

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
-import { IconFilter, IconSelector, IconOption } from "./IconTags";
+import { IconFilter, IconSelector, IconOption } from "./BaseTags";
 import { BASENAME } from "../constants";
 
 export default function BaseCard(props) {

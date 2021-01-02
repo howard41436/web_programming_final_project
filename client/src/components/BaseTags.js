@@ -1,4 +1,16 @@
+import React from "react";
 import styled from "styled-components";
+
+export const Row = (props) => {
+  const { children, className = "" } = props;
+  return <div className={`row ${className}`}>{children}</div>;
+};
+
+export const Col = (props) => {
+  const { children, grid = "md", size = 12, className = "" } = props;
+
+  return <div className={`col-${grid}-${size} ${className}`}>{children}</div>;
+};
 
 export const IconFilter = styled.a`
   img {
@@ -30,6 +42,10 @@ export const IconOption = styled.a`
       cursor: pointer;
       left: 10px;
       position: absolute;
+    }
+
+    :hover {
+      color: white;
     }
   }
 `;

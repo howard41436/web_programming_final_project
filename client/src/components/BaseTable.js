@@ -1,6 +1,6 @@
 import React from "react";
 import { useImmer } from "use-immer";
-import { IconSorter } from "./IconTags";
+import { IconSorter } from "./BaseTags";
 
 export default function BaseTable(props) {
   const {
@@ -12,7 +12,7 @@ export default function BaseTable(props) {
   } = props;
 
   const [sortedOrder, setSortedOrder] = useImmer(
-    Object.keys(defaultSortedOrder).length === 2
+    defaultSortedOrder.length === 2
       ? defaultSortedOrder
       : [sortableIndex[0], "asc"]
   );

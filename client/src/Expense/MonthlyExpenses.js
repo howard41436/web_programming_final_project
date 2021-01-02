@@ -156,7 +156,6 @@ export default function MonthlyExpenses(props) {
 
   return (
     <BaseCard
-      cardClasses=""
       allowHeader
       title="Monthly Expenses"
       otherHeader={<IconAdd />}

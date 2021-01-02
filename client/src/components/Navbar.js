@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { useLocation } from "react-router-dom";
 
 export default function Navbar(props) {
-  const { pathname } = useLocation();
   const { title } = props;
 
   const handleSetSearch = () => {};
@@ -23,11 +21,9 @@ export default function Navbar(props) {
               <span className="navbar-toggler-bar bar3" />
             </button>
           </div>
-          {pathname === "/" && (
-            <a className="navbar-brand" style={{ marginRight: "1rem" }}>
-              {title}
-            </a>
-          )}
+          <a className="navbar-brand" style={{ marginRight: "1rem" }}>
+            {title}
+          </a>
         </div>
         <button
           className="navbar-toggler"

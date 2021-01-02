@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, selectUser } from "./redux/userSlice";
-import { setExpenses } from "./redux/expenseSlice";
+import { setExpenses, setDebt } from "./redux/expenseSlice";
 
 import ExpensePage from "./Expense/ExpensePage";
 import SettlePage from "./Settle/SettlePage";
@@ -14,6 +14,7 @@ function App() {
   const dispatch = useDispatch();
   const { pairId, ready: readyUser } = useSelector(selectUser);
   const [readyExpenses, setReadyExpenses] = useState(false);
+  const [readyDebt, setReadyDebt] = useState(false);
 
   useEffect(() => {
     dispatch(
@@ -42,10 +43,21 @@ function App() {
             );
         })
         .finally(() => setReadyExpenses(true));
+
+      INSTANCE.get("/api/debt", { params: { pairId } })
+        .then((res) => {
+          if (res.status === 200)
+            dispatch(
+              setDebt({
+                debt: res.data,
+              })
+            );
+        })
+        .finally(() => setReadyDebt(true));
     }
   }, [readyUser]);
 
-  return readyUser && readyExpenses ? (
+  return readyUser && readyExpenses && readyDebt ? (
     <Switch>
       <Route exact path="/" component={ExpensePage} />
       <Route exact path="/settles" component={SettlePage} />

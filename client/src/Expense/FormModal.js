@@ -1,13 +1,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect } from "react";
-import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 
 import BaseModal from "../components/BaseModal";
-import { IconRadio } from "../components/IconTags";
+import BaseForm, {
+  BaseFormGroup,
+  BaseFormInput,
+  BaseFormTextarea,
+  BaseFormSelect,
+  baseFormReset,
+} from "../components/BaseForm";
+import { Row, Col, IconRadio } from "../components/BaseTags";
 import { BASENAME, INSTANCE } from "../constants";
 
 export default function FormModal(props) {
@@ -24,7 +30,7 @@ export default function FormModal(props) {
     });
   };
 
-  const initExpenses = {
+  const initialExpenses = {
     pairId,
     category: "food",
     owner: -2,
@@ -34,114 +40,100 @@ export default function FormModal(props) {
     paid: { user0: 0, user1: 0 },
     owed: { user0: 0, user1: 0 },
   };
-  const [newExpenses, setNewExpenses] = useImmer(initExpenses);
 
-  const handleSetNewExpenses = (key1, key2 = null) => (event) => {
-    if (key2) {
-      setNewExpenses((exp) => {
-        const tmp = parseInt(event.target.value, 10);
-        exp[key1][key2] =
-          Number.isNaN(tmp) || tmp < 0 ? 0 : tmp > exp.price ? exp.price : tmp;
-
-        if (key2 === "user0") exp[key1].user1 = exp.price - exp[key1].user0;
-        else exp[key1].user0 = exp.price - exp[key1].user1;
-      });
-    } else {
-      setNewExpenses((exp) => {
-        if (typeof exp[key1] === "number") {
-          const tmp = parseInt(event.target.value, 10);
-          exp[key1] =
-            Number.isNaN(tmp) || (tmp < 0 && key1 !== "owner") ? 0 : tmp;
-
-          const owner = key1 === "owner" ? tmp : exp.owner;
-          const price = key1 === "price" ? tmp : exp.price;
-          if (owner === 0) {
-            exp.owed.user0 = price;
-            exp.owed.user1 = 0;
-          } else if (owner === 1) {
-            exp.owed.user0 = 0;
-            exp.owed.user1 = price;
-          }
-        } else exp[key1] = event.target.value;
-      });
-    }
+  const validator = (value) => {
+    const tmp = parseInt(value, 10);
+    const result = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
+    return result;
   };
+
+  const updater = (formKey, all) => {
+    if (Array.isArray(formKey)) {
+      // formKey: owed / paid
+      if (formKey[1] === "user0") {
+        all[formKey[0]].user0 = Math.min(all.price, all[formKey[0]].user0);
+        all[formKey[0]].user1 = all.price - all[formKey[0]].user0;
+      } else {
+        all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
+        all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
+      }
+
+      // formKey: owner
+    } else if (all.owner === 0) {
+      all.owed.user0 = all.price;
+      all.owed.user1 = 0;
+    } else if (all.owner === 1) {
+      all.owed.user0 = 0;
+      all.owed.user1 = all.price;
+    }
+
+    return all;
+  };
+
+  const allUpdater = [
+    { depend: "owner", update: updater },
+    { depend: ["paid", "user0"], update: updater },
+    { depend: ["paid", "user1"], update: updater },
+    { depend: ["owed", "user0"], update: updater },
+    { depend: ["owed", "user1"], update: updater },
+  ];
 
   useEffect(() => {
-    if (info.data) {
-      setNewExpenses(() => info.data);
-    } else {
-      setNewExpenses(() => initExpenses);
-    }
+    if (info.data) baseFormReset(dispatch, "edit_expenses_form", info.data);
+    else baseFormReset(dispatch, "add_expenses_form", initialExpenses);
   }, [info.data]);
 
-  const handleSubmit = (type) => () => {
-    const flag = !(
-      newExpenses.owner === -2 ||
-      newExpenses.price === 0 ||
-      newExpenses.name === ""
-    );
-
-    if (flag) {
-      if (type === "add") {
-        INSTANCE.post("/api/newRecord", {
-          ...newExpenses,
-          date: new Date().toISOString(),
-        }).then((res) => {
-          if (res.status === 200) {
-            setInfo((s) => {
-              s.show[type] = false;
-            });
-            dispatch(
-              setExpenses({
-                // eslint-disable-next-line dot-notation
-                expenses: { ...expenses, [res.data["_id"]]: res.data },
-              })
-            );
-          }
-        });
-      }
-      if (type === "edit") {
-        INSTANCE.post(
-          "/api/editRecord",
-          {
-            ...newExpenses,
-          },
-          {
-            params: {
+  const handleSubmit = (type) => (formValues) => {
+    if (type === "add") {
+      INSTANCE.post("/api/newRecord", {
+        ...formValues,
+        date: new Date().toISOString(),
+      }).then((res) => {
+        if (res.status === 200) {
+          setInfo((s) => {
+            s.show[type] = false; // Close Modal
+          });
+          dispatch(
+            setExpenses({
               // eslint-disable-next-line dot-notation
-              _id: newExpenses["_id"],
-            },
-          }
-        ).then((res) => {
-          if (res.status === 200) {
-            setInfo((s) => {
-              s.show[type] = false;
-            });
-            dispatch(
-              setExpenses({
-                // eslint-disable-next-line dot-notation
-                expenses: { ...expenses, [res.data["_id"]]: res.data },
-              })
-            );
-          }
-        });
-      }
+              expenses: { ...expenses, [res.data["_id"]]: res.data },
+            })
+          );
+        }
+      });
+    }
+    if (type === "edit") {
+      INSTANCE.post("/api/editRecord", formValues, {
+        params: {
+          // eslint-disable-next-line dot-notation
+          _id: formValues["_id"],
+        },
+      }).then((res) => {
+        if (res.status === 200) {
+          setInfo((s) => {
+            s.show[type] = false; // Close Modal
+          });
+          dispatch(
+            setExpenses({
+              // eslint-disable-next-line dot-notation
+              expenses: { ...expenses, [res.data["_id"]]: res.data },
+            })
+          );
+        }
+      });
     }
   };
 
-  const renderForm = (type) => (
-    <form>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="form-group">
-            <label>Category</label>
-            <select
-              className="form-control"
-              value={newExpenses.category}
-              onChange={handleSetNewExpenses("category")}
-              style={{ textTransform: "capitalize" }}
-            >
+  const owedHidden = (_, all, getOthers) => {
+    return String(getOthers("owner", all)) !== "-1";
+  };
+
+  const renderForm = (type, formId) => (
+    <>
+      <Row>
+        <Col>
+          <BaseFormGroup formId={formId} label="Category">
+            <BaseFormSelect formId={formId} formKey="category">
               {categoryList.map((cat) => (
                 <option
                   key={cat}
@@ -151,137 +143,117 @@ export default function FormModal(props) {
                   {cat}
                 </option>
               ))}
-            </select>
-          </div>
-        </div>
-        <div className="col-md-12">
-          <div className="form-group">
-            <label>Amount</label>
-            <input
+            </BaseFormSelect>
+          </BaseFormGroup>
+        </Col>
+        <Col>
+          <BaseFormGroup formId={formId} label="Amount">
+            <BaseFormInput
+              formId={formId}
+              formKey="price"
               type="number"
-              className="form-control"
-              onChange={handleSetNewExpenses("price")}
-              value={String(newExpenses.price)}
+              validator={validator}
             />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="form-group">
-            <label>Member</label>
+          </BaseFormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <BaseFormGroup formId={formId} label="Member">
             <span className="logo-list">
               {" "}
-              <IconRadio
+              <BaseFormInput
                 id={`${type}_radio_boy`}
-                checked={newExpenses.owner === 0}
-                onChange={handleSetNewExpenses("owner")}
+                formId={formId}
+                formKey="owner"
+                type="radio"
                 name="owner"
-                value={0}
+                inputValue={0}
+                CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_boy`}>
                 <img src={`${BASENAME}img/boy.png`} alt="boy" />
               </label>{" "}
-              <IconRadio
+              <BaseFormInput
                 id={`${type}_radio_girl`}
-                checked={newExpenses.owner === 1}
-                onChange={handleSetNewExpenses("owner")}
+                formId={formId}
+                formKey="owner"
+                type="radio"
                 name="owner"
-                value={1}
+                inputValue={1}
+                CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_girl`}>
                 <img src={`${BASENAME}img/girl.png`} alt="girl" />
               </label>{" "}
-              <IconRadio
+              <BaseFormInput
                 id={`${type}_radio_both`}
-                checked={newExpenses.owner === -1}
-                onChange={handleSetNewExpenses("owner")}
+                formId={formId}
+                formKey="owner"
+                type="radio"
                 name="owner"
-                value={-1}
+                inputValue={-1}
+                CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_both`}>
-                <img src={`${BASENAME}img/both.png`} alt="both" />
+                <img src={`${BASENAME}img/both1.png`} alt="both" />
               </label>
             </span>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-md-6 pr-1">
-          <div className="form-group">
-            <label>Tom | Paid</label>
-            <input
+          </BaseFormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col size={6} className="pr-1">
+          <BaseFormGroup formId={formId} label="Tom | Paid">
+            <BaseFormInput
+              formId={formId}
+              formKey={["paid", "user0"]}
               type="number"
-              className="form-control"
-              onChange={handleSetNewExpenses("paid", "user0")}
-              value={String(newExpenses.paid.user0)}
+              validator={validator}
             />
-          </div>
-        </div>
-        <div className="col-md-6 pl-1">
-          <div className="form-group">
-            <label>Amy | Paid</label>
-            <input
+          </BaseFormGroup>
+        </Col>
+        <Col size={6} className="pl-1">
+          <BaseFormGroup formId={formId} label="Amy | Paid">
+            <BaseFormInput
+              formId={formId}
+              formKey={["paid", "user1"]}
               type="number"
-              className="form-control"
-              onChange={handleSetNewExpenses("paid", "user1")}
-              value={String(newExpenses.paid.user1)}
+              validator={validator}
             />
-          </div>
-        </div>
-      </div>
-      {newExpenses.owner === -1 && (
-        <div className="row">
-          <div className="col-md-6 pr-1">
-            <div className="form-group">
-              <label>Tom | Owed</label>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Tom"
-                onChange={handleSetNewExpenses("owed", "user0")}
-                value={String(newExpenses.owed.user0)}
-              />
-            </div>
-          </div>
-          <div className="col-md-6 pl-1">
-            <div className="form-group">
-              <label>Amy | Owed</label>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Amy"
-                onChange={handleSetNewExpenses("owed", "user1")}
-                value={String(newExpenses.owed.user1)}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="row">
-        <div className="col-md-12">
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              className="form-control"
-              onChange={handleSetNewExpenses("name")}
-              value={newExpenses.name}
+          </BaseFormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col size={6} className="pr-1">
+          <BaseFormGroup formId={formId} label="Tom | Owed" hidden={owedHidden}>
+            <BaseFormInput
+              formId={formId}
+              formKey={["owed", "user0"]}
+              type="number"
+              validator={validator}
             />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="update ml-auto mr-auto">
-          <button
-            type="button"
-            className="btn btn-primary btn-round"
-            onClick={handleSubmit(type)}
-          >
-            {type}
-          </button>
-        </div>
-      </div>
-    </form>
+          </BaseFormGroup>
+        </Col>
+        <Col size={6} className="pl-1">
+          <BaseFormGroup formId={formId} label="Amy | Owed" hidden={owedHidden}>
+            <BaseFormInput
+              formId={formId}
+              formKey={["owed", "user1"]}
+              type="number"
+              validator={validator}
+            />
+          </BaseFormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <BaseFormGroup label="Description">
+            <BaseFormTextarea formId={formId} formKey="name" />
+          </BaseFormGroup>
+        </Col>
+      </Row>
+    </>
   );
 
   return (
@@ -292,7 +264,16 @@ export default function FormModal(props) {
         modalId="add_modal"
         title="Add Expenses"
       >
-        {renderForm("add")}
+        <BaseForm
+          formId="add_expenses_form"
+          initialValues={initialExpenses}
+          updater={allUpdater}
+          allowSubmit
+          submitText="Add"
+          onSubmit={handleSubmit("add")}
+        >
+          {renderForm("add", "add_expenses_form")}
+        </BaseForm>
       </BaseModal>
       <BaseModal
         show={info.show.edit}
@@ -300,7 +281,16 @@ export default function FormModal(props) {
         modalId="edit_modal"
         title="Edit Expenses"
       >
-        {renderForm("edit")}
+        <BaseForm
+          formId="edit_expenses_form"
+          initialValues={initialExpenses}
+          updater={allUpdater}
+          allowSubmit
+          submitText="Edit"
+          onSubmit={handleSubmit("edit")}
+        >
+          {renderForm("edit", "edit_expenses_form")}
+        </BaseForm>
       </BaseModal>
     </>
   );

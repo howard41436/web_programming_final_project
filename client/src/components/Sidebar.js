@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import { BASENAME } from "../constants";
 
 export default function Sidebar() {
+  const { boyName, girlName } = useSelector(selectUser);
   const { pathname } = useLocation();
 
   return (
@@ -14,7 +17,9 @@ export default function Sidebar() {
             <img src={`${BASENAME}img/boy.png`} alt="boy" />
           </div>
         </a>
-        <a className="simple-text logo-normal">Tom & Amy</a>
+        <a className="simple-text logo-normal">
+          {boyName} & {girlName}
+        </a>
       </div>
       <div className="sidebar-wrapper">
         <ul className="nav">
