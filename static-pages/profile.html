@@ -105,24 +105,85 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="row">
-          <div class="col-md-12">
-            <div class="card">
+          <div class="col-md-4">
+            <div class="card card-user">
+              <div class="image">
+                <img src="./assets/img/damir-bosnjak.jpg">
+              </div>
+              <div class="card-body">
+                <div class="author">
+                  <a href="#">
+                    <img class="avatar border-gray" src="./assets/img/boy.png">
+                    <h5 class="title">Tom</h5>
+                  </a>
+                  <p class="description">
+                    @tom123
+                  </p>
+                  <p class="description text-center">
+                    In a relationship with Amy <img class="logo-image-small" src="./assets/img/both1.png"><br>
+                    Since 2019/01/01
+                  </p>
+
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="button-container">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-6 col-6 ml-auto">
+                      <h5>12<br><small>Stores</small></h5>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-6 ml-auto mr-auto">
+                      <h5>100<br><small>Days </small></h5>
+                    </div>
+                    <div class="col-lg-3 mr-auto">
+                      <h5>24,6$<br><small>Spent</small></h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card card-user">
               <div class="card-header">
-                <h4 class="card-title">Edit Profile</h4>
+                <h5 class="card-title">Edit Profile</h5>
               </div>
               <div class="card-body">
                 <form>
                   <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6 pr-1">
                       <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" class="form-control" placeholder="Username">
+                        <label>Username (disabled)</label>
+                        <input type="text" class="form-control" disabled="" placeholder="Username" value="tom123">
                       </div>
                     </div>
+                    <div class="col-md-6 pl-1">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" placeholder="Email">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 pr-1">
+                      <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" placeholder="First Name" value="">
+                      </div>
+                    </div>
+                    <div class="col-md-6 pl-1">
+                      <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" placeholder="Last Name" value="">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Password</label>
-                        <input type="text" class="form-control" placeholder="Password">
+                        <label>Budget</label>
+                        <input type="number" class="form-control" placeholder="Budget" value="">
                       </div>
                     </div>
                   </div>
@@ -130,17 +191,24 @@
                     <div class="col-md-12">
                       <div class="form-group">
                         <label>Partition Rules</label>
-                        <input type="text" class="form-control" placeholder="Rules">
+                        <input type="text" class="form-control" placeholder="Even Split" value="">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Anniversary (Optional)</label>
+                        <input type="date" class="form-control" placeholder="Anniversary" value="">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="update ml-auto mr-auto">
-                      <button type="submit" class="btn btn-primary btn-round">Update</button>
+                      <button type="submit" class="btn btn-primary btn-round">Update Profile</button>
                     </div>
                   </div>
                 </form>
-                
               </div>
             </div>
           </div>

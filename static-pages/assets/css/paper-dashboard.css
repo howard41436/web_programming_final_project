@@ -3122,7 +3122,7 @@ License - nucleoapp.com/license/
   .off-canvas-sidebar .logo {
     position: relative;
     padding: 7px 0.7rem;
-    z-index: 4; }
+    z-index: 4;}
     .sidebar .logo a.logo-mini,
     .off-canvas-sidebar .logo a.logo-mini {
       opacity: 1;
@@ -4287,7 +4287,7 @@ License - nucleoapp.com/license/
   font-size: large;
 }
 
-.icon-set > .fa-trash-alt{
+.icon-set .fa-trash-alt{
   color: #eb6532 !important;
 }
 
@@ -4361,6 +4361,66 @@ License - nucleoapp.com/license/
 }
 .mydropdown-menu {
   box-shadow: 1px 2px 7px 1px rgba(0, 0, 0, 0.125);
+}
+
+
+/* midCard flip */
+#midCard {
+    position: absolute;
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    -o-transition: -o-transform 1s;
+    transition: transform 1s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+}
+#midCard div {
+    position: absolute;
+    text-align: center;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+#midCard .front {
+}
+#midCard .back {
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+#midCard.flipped {
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+.invitation-code {
+  border-style: groove;
+  background: gainsboro;
+  font-family: Andale Mono;
+  padding: 5px;
+}
+
+.logo-form {
+  text-align: -webkit-center;
+}
+
+.settle-arrow {
+  text-align: -webkit-center;
+  margin-top: 20px; 
+  color: gray
+}
+
+.settle-arrow > a:hover {
+  color: black
+
 }
 /*# sourceMappingURL=paper-dashboard.css.map */
 
