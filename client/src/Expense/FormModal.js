@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -103,7 +104,6 @@ export default function FormModal(props) {
             });
             dispatch(
               setExpenses({
-                // eslint-disable-next-line dot-notation
                 expenses: { ...expenses, [res.data["_id"]]: res.data },
               })
             );
@@ -129,7 +129,6 @@ export default function FormModal(props) {
     if (type === "edit") {
       INSTANCE.post("/api/editRecord", formValues, {
         params: {
-          // eslint-disable-next-line dot-notation
           _id: formValues["_id"],
         },
       })
@@ -140,7 +139,6 @@ export default function FormModal(props) {
             });
             dispatch(
               setExpenses({
-                // eslint-disable-next-line dot-notation
                 expenses: { ...expenses, [res.data["_id"]]: res.data },
               })
             );

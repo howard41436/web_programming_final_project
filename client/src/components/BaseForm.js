@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm, selectForm } from "../redux/formSlice";
+import { Row, Button } from "./BaseTags";
 
 export const baseFormReset = (dispatch, formId, initialValue) => {
   dispatch(setForm({ formId, form: initialValue }));
@@ -42,7 +43,7 @@ export default function BaseForm(props) {
     initialValues = { Default: "default" },
     updater = [],
     children,
-    allowSubmit = true,
+    allowSubmit = false,
     submitText = "Submit",
     onSubmit = () => {},
     otherFooter = <></>,
@@ -79,14 +80,14 @@ export default function BaseForm(props) {
     <form onSubmit={handleOnSubmit}>
       {children}
       {allowSubmit && (
-        <div className="row">
+        <Row>
           {otherFooter}
           <div className="update ml-auto mr-auto">
-            <button type="submit" className="btn btn-primary btn-round">
+            <Button type="submit" round theme="primary">
               {submitText}
-            </button>
+            </Button>
           </div>
-        </div>
+        </Row>
       )}
     </form>
   );
@@ -116,12 +117,14 @@ export const BaseFormGroup = (props) => {
 export const BaseFormInput = (props) => {
   const dispatch = useDispatch();
   const {
-    id = "",
+    id = "", // For label
     className = "",
     formId = "",
     formKey = "",
     type = "text",
-    name = "",
+    name = "", // For radio & checkbox
+    disabled = false,
+    placeholder = "",
     inputValue = "", // For radio & checkbox
     style = {},
     hidden = false, // Boolean or Function
@@ -154,6 +157,8 @@ export const BaseFormInput = (props) => {
     className: `form-control ${className}`,
     type,
     name,
+    disabled,
+    placeholder,
     checked: String(getFieldValue(formKey, formValues)) === String(inputValue),
     value:
       String(inputValue) || String(getFieldValue(formKey, formValues)) || "",
@@ -175,6 +180,7 @@ export const BaseFormTextarea = (props) => {
     className = "",
     formId = "",
     formKey = "",
+    placeholder = "",
     style = {},
     hidden = false, // Boolean or Function
     validator = (value) => value,
@@ -203,6 +209,7 @@ export const BaseFormTextarea = (props) => {
 
   const textareaProps = {
     className: `form-control ${className}`,
+    placeholder,
     value: String(getFieldValue(formKey, formValues)) || "",
     onChange: handleValidateUpdate,
     style: {

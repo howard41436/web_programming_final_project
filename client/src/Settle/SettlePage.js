@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import BasePage from "../components/BasePage";
+import { Row, Col } from "../components/BaseTags";
+import SettleCards from "./SettleCards";
+import DebtDetails from "./DebtDetails";
 
 export default function SettlePage() {
   useEffect(() => {
@@ -8,11 +10,15 @@ export default function SettlePage() {
   }, []);
 
   return (
-    <div className="wrapper">
-      <Sidebar />
-      <div className="main-panel">
-        <Navbar />
-      </div>
-    </div>
+    <BasePage title="Settle Up">
+      <Row>
+        <SettleCards />
+      </Row>
+      <Row>
+        <Col>
+          <DebtDetails />
+        </Col>
+      </Row>
+    </BasePage>
   );
 }

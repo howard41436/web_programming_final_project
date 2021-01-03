@@ -9,6 +9,7 @@ import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
+import { Button } from "../components/BaseTags";
 import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { INSTANCE } from "../constants";
 
@@ -117,7 +118,8 @@ export default function MonthlyExpenses(props) {
         message={`(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`}
         allowButton
         buttonAction={handleDelete}
-        buttonClasses="btn btn-danger btn-round"
+        buttonRound
+        buttonTheme="danger"
         buttonText="Remove"
       />
     );
@@ -137,8 +139,8 @@ export default function MonthlyExpenses(props) {
     });
   };
 
-  const renderRow = (d) => {
-    const exp = d[6];
+  const renderRow = (row) => {
+    const exp = row[6];
     return (
       filterDisplay[exp.owner] &&
       selectorDisplay[exp.category] && (
@@ -168,24 +170,24 @@ export default function MonthlyExpenses(props) {
             </a>
           </td>
           <td>
-            <span>{formatDate(exp.date)}</span>
+            <span>{formatDate(row[1])}</span>
           </td>
           <td style={{ textTransform: "capitalize" }}>
             <span className="icon-big text-center icon-warning">
-              <i className={categoryInfo[exp.category].icon} />
+              <i className={categoryInfo[row[2]].icon} />
             </span>{" "}
-            {exp.category}
+            {row[2]}
           </td>
           <td>
             <div className="logo-image-small">
               <img
-                src={ownerIcon[String(exp.owner)].src}
-                alt={ownerIcon[String(exp.owner)].alt}
+                src={ownerIcon[String(row[3])].src}
+                alt={ownerIcon[String(row[3])].alt}
               />
             </div>
           </td>
-          <td style={{ textTransform: "capitalize" }}>{exp.name}</td>
-          <td className="text-right">$ {commaNumber(exp.price)}</td>
+          <td style={{ textTransform: "capitalize" }}>{row[4]}</td>
+          <td className="text-right">$ {commaNumber(row[5])}</td>
         </tr>
       )
     );
@@ -199,13 +201,15 @@ export default function MonthlyExpenses(props) {
       role="button"
       tabIndex={0}
     >
-      <button
-        className="btn btn-outline-success btn-round btn-icon"
+      <Button
+        className="btn-outline-success"
+        round
+        theme="icon"
         type="button"
         style={{ margin: "1px 1px" }}
       >
         <i className="nc-icon nc-simple-add" />
-      </button>
+      </Button>
     </a>
   );
 
@@ -213,6 +217,7 @@ export default function MonthlyExpenses(props) {
     <BaseCard
       allowHeader
       title="Monthly Expenses"
+      headerStyle={{ display: "inline" }}
       otherHeader={<IconAdd />}
       allowFilter
       filters={[-1, 0, 1]}

@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { useSelector } from "react-redux";
 import { setToast, selectToast } from "../redux/toastSlice";
+import { Button } from "./BaseTags";
 
 const ToastContainerCustom = styled(ToastContainer)`
   > div {
@@ -78,6 +79,8 @@ export const BaseToastInner = (props) => {
     message = "",
     allowButton = false,
     buttonClasses = "",
+    buttonRound = "",
+    buttonTheme = "",
     buttonText = "OK",
     buttonAction = () => {},
   } = props;
@@ -92,13 +95,15 @@ export const BaseToastInner = (props) => {
         {allowButton && (
           <>
             <br />
-            <button
+            <Button
               type="submit"
               className={buttonClasses}
+              round={buttonRound}
+              theme={buttonTheme}
               onClick={buttonAction}
             >
               {buttonText}
-            </button>
+            </Button>
           </>
         )}
       </ToastMessage>

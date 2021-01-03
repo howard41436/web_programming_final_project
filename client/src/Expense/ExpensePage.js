@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import BasePage from "../components/BasePage";
+import { Row, Col } from "../components/BaseTags";
 import FormModal from "./FormModal";
 import ExpenseCard from "./ExpenseCard";
 import MonthlyExpenses from "./MonthlyExpenses";
@@ -21,16 +22,16 @@ export default function ExpensePage() {
   return (
     <>
       <BasePage title="Our Expenses">
-        <div className="row">
-          <div className="col-md-12">
+        <Row>
+          <Col>
             <ExpenseCard />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
+          </Col>
+        </Row>
+        <Row>
+          <Col>
             <MonthlyExpenses setModalInfo={setModalInfo} />
-          </div>
-        </div>
+          </Col>
+        </Row>
       </BasePage>
       <FormModal info={modalInfo} setInfo={setModalInfo} />
     </>

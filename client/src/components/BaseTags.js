@@ -1,16 +1,65 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import styled from "styled-components";
 
 export const Row = (props) => {
-  const { children, className = "" } = props;
-  return <div className={`row ${className}`}>{children}</div>;
+  const { children, className = "", ...restProps } = props;
+  return (
+    <div {...restProps} className={`row ${className}`}>
+      {children}
+    </div>
+  );
 };
 
 export const Col = (props) => {
-  const { children, grid = "md", size = 12, className = "" } = props;
+  const {
+    children,
+    size = 12, // md
+    otherSize = {}, // lg, sm, ...
+    className = "",
+    ...restProps
+  } = props;
 
-  return <div className={`col-${grid}-${size} ${className}`}>{children}</div>;
+  const otherGrids = Object.entries(otherSize).reduce((str, [key, value]) => {
+    return key === "default"
+      ? `${str}col-${value} `
+      : `${str}col-${key}-${value} `;
+  }, "");
+
+  return (
+    <div
+      {...restProps}
+      className={`${otherGrids}${size && `col-md-${size}`} ${className}`}
+    >
+      {children}
+    </div>
+  );
 };
+
+export const Button = React.forwardRef((props, ref) => {
+  const {
+    children,
+    className = "",
+    round = false,
+    theme = "",
+    type = "button",
+    ...restProps
+  } = props;
+
+  return (
+    <button
+      className={`${className} ${
+        theme ? `btn btn-${theme} ${round ? "btn-round" : ""}` : ""
+      }`}
+      ref={ref}
+      // eslint-disable-next-line react/button-has-type
+      type={type}
+      {...restProps}
+    >
+      {children}
+    </button>
+  );
+});
 
 export const IconFilter = styled.a`
   img {
@@ -82,5 +131,42 @@ export const IconRadio = styled.input.attrs(() => ({
     background: ${({ checked }) =>
       checked ? "rgba(81, 203, 206, 0.6)" : "rgba(81, 203, 206, 0.2)"};
     padding: 2px;
+  }
+`;
+
+export const IconRadioBig = styled.input.attrs(() => ({
+  type: "radio",
+}))`
+  display: none;
+
+  & + label {
+    cursor: pointer;
+    display: contents;
+  }
+
+  & + label img {
+    opacity: ${({ checked }) => (checked ? "1" : "0.6")};
+
+    :hover {
+      opacity: 1;
+    }
+  }
+`;
+
+export const IconArrow = styled.input.attrs(() => ({
+  type: "radio",
+}))`
+  display: none;
+
+  & + label {
+    color: ${({ checked }) => (checked ? "black" : "#888")};
+    cursor: pointer;
+    display: contents;
+    font-size: ${({ checked }) => (checked ? "59px" : "49px")};
+    margin-bottom: 8px;
+
+    :hover {
+      color: black;
+    }
   }
 `;

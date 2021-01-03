@@ -1,13 +1,25 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import { IconFilter, IconSelector, IconOption } from "./BaseTags";
 import { BASENAME } from "../constants";
 
+const Title = ({ size, children, ...restProps }) => {
+  if (size === 1) return <h1 {...restProps}>{children}</h1>;
+  if (size === 2) return <h2 {...restProps}>{children}</h2>;
+  if (size === 3) return <h3 {...restProps}>{children}</h3>;
+  if (size === 4) return <h4 {...restProps}>{children}</h4>;
+  if (size === 5) return <h5 {...restProps}>{children}</h5>;
+  return <h6 {...restProps}>{children}</h6>;
+};
+
 export default function BaseCard(props) {
   const {
-    cardClasses = "",
+    className = "",
     allowHeader = false,
     title = "",
+    titleSize = 4,
+    headerStyle = {},
     otherHeader = <></>,
     allowFilter = false,
     filters = [],
@@ -62,10 +74,10 @@ export default function BaseCard(props) {
   };
 
   return (
-    <div className={`card ${cardClasses}`}>
+    <div className={`card ${className}`}>
       {allowHeader && (
         <div className="card-header">
-          <h4 className="card-title" style={{ display: "inline" }}>
+          <Title size={titleSize} className="card-title" style={headerStyle}>
             {title} {otherHeader}
             {(allowFilter || allowSelector) && (
               <span className="menu">
@@ -149,7 +161,7 @@ export default function BaseCard(props) {
                 )}
               </span>
             )}
-          </h4>
+          </Title>
         </div>
       )}
 

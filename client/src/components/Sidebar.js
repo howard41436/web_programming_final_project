@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -12,11 +11,13 @@ export default function Sidebar() {
   return (
     <div className="sidebar" data-color="white" data-active-color="danger">
       <div className="logo">
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="simple-text logo-mini">
           <div className="logo-image-small">
             <img src={`${BASENAME}img/boy.png`} alt="boy" />
           </div>
         </a>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="simple-text logo-normal">
           {boyName} & {girlName}
         </a>

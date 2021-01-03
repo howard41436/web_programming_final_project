@@ -1,17 +1,17 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import { Link } from "react-router-dom";
+import BaseForm, { BaseFormInput } from "./BaseForm";
+import { Button } from "./BaseTags";
 
 export default function Navbar(props) {
   const { title } = props;
-
-  const handleSetSearch = () => {};
 
   return (
     <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
       <div className="container-fluid">
         <div className="navbar-wrapper">
           <div className="navbar-toggle">
-            <button
+            <Button
               type="button"
               className="navbar-toggler"
               style={{ position: "relative", zIndex: 99999 }}
@@ -19,13 +19,14 @@ export default function Navbar(props) {
               <span className="navbar-toggler-bar bar1" />
               <span className="navbar-toggler-bar bar2" />
               <span className="navbar-toggler-bar bar3" />
-            </button>
+            </Button>
           </div>
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
           <a className="navbar-brand" style={{ marginRight: "1rem" }}>
             {title}
           </a>
         </div>
-        <button
+        <Button
           className="navbar-toggler"
           type="button"
           data-toggle="collapse"
@@ -37,19 +38,18 @@ export default function Navbar(props) {
           <span className="navbar-toggler-bar navbar-kebab" />
           <span className="navbar-toggler-bar navbar-kebab" />
           <span className="navbar-toggler-bar navbar-kebab" />
-        </button>
+        </Button>
         <div
           className="collapse navbar-collapse justify-content-end"
           id="navigation"
         >
-          <form>
+          <BaseForm formId="navbar_search" initialValues={{ search: "" }}>
             <div className="input-group no-border">
-              <input
-                type="text"
-                value=""
+              <BaseFormInput
                 className="form-control"
+                formId="navbar_search"
+                formKey="search"
                 placeholder="Search..."
-                onChange={handleSetSearch}
               />
               <div className="input-group-append">
                 <div className="input-group-text">
@@ -57,15 +57,16 @@ export default function Navbar(props) {
                 </div>
               </div>
             </div>
-          </form>
+          </BaseForm>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link btn-rotate">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <Link className="nav-link btn-rotate" to="/profile">
                 <i className="nc-icon nc-single-02" />
                 <p>
                   <span className="d-lg-none d-md-block">Account</span>
                 </p>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
