@@ -1,5 +1,4 @@
 import pkg from "mongoose";
-// import uniqueValidator from "mongoose-unique-validator";
 
 const { model, Schema } = pkg;
 const SettlementSchema = new Schema(

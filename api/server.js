@@ -4,6 +4,7 @@ import Debug from "debug";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import accountRoutes from "./routes/account";
 import accountingRoutes from "./routes/accounting";
 import settleUpRoutes from "./routes/settleUp";
 
@@ -45,6 +46,7 @@ mongoose.connection.on("error", (err) => {
   debug("Error emmited from MongoDB:\n%O", err);
 });
 
+app.use("/api/account", accountRoutes);
 app.use("/api", accountingRoutes);
 app.use("/api", settleUpRoutes);
 
