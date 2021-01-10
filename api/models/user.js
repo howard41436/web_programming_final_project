@@ -21,6 +21,10 @@ export const pairIdParams = {
 const { model, Schema } = pkg;
 const UserSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     username: {
       type: String,
       required: true,
@@ -43,6 +47,7 @@ const UserSchema = new Schema(
     inviteCode: {
       type: String,
       required: true,
+      unique: true,
       validate: {
         validator(v) {
           return (

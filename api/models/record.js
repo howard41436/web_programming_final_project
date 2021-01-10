@@ -12,6 +12,7 @@ const RecordSchema = new Schema(
     category: {
       type: String,
       required: true,
+      enum: ["food", "transportation", "education", "others"],
     },
     // `owner = -1` indicates owned by the couple
     owner: {

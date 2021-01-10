@@ -18,6 +18,7 @@ const dboptions = {
   useCreateIndex: true,
   auto_reconnect: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
   poolSize: 10,
 };
 

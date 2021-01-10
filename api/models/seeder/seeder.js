@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import seedRecord from "./recordSeeder";
 import seedSettlement from "./settlementSeeder";
 import seedUser from "./userSeeder";
+import seedProfile from "./profileSeeder";
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ async function main() {
     debug("Error emmited from MongoDB:\n%O", err);
   });
 
-  const collectionNames = ["record", "settlement", "user"];
+  const collectionNames = ["record", "settlement", "user", "profile"];
   collectionNames.forEach(async (collectionName) => {
     try {
       await mongoose.connection.db.dropCollection(collectionName);
@@ -43,6 +44,7 @@ async function main() {
   await seedRecord();
   await seedSettlement();
   await seedUser();
+  await seedProfile();
 
   await mongoose.disconnect();
 }

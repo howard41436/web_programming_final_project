@@ -9,12 +9,14 @@ export default async function seedUser() {
   try {
     const doc = await User.create([
       {
+        name: "Howard",
         username: "howard41436",
         passwordHash: await bcrypt.hash("admin", saltRounds),
         matched: false,
         inviteCode: 41436,
       },
       {
+        name: "Peipei",
         username: "wujun_pei",
         passwordHash: await bcrypt.hash("jim", saltRounds),
         matched: true,
@@ -22,6 +24,7 @@ export default async function seedUser() {
         inviteCode: 89890,
       },
       {
+        name: "Fiona",
         username: "fionahsu_1004",
         passwordHash: await bcrypt.hash("fiona", saltRounds),
         matched: true,
