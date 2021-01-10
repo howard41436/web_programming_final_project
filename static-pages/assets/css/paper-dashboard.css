@@ -3122,7 +3122,7 @@ License - nucleoapp.com/license/
   .off-canvas-sidebar .logo {
     position: relative;
     padding: 7px 0.7rem;
-    z-index: 4; }
+    z-index: 4;}
     .sidebar .logo a.logo-mini,
     .off-canvas-sidebar .logo a.logo-mini {
       opacity: 1;
@@ -3340,6 +3340,7 @@ License - nucleoapp.com/license/
   position: relative;
   float: right;
   width: calc(100% - 260px);
+  min-height: 100vh;
   background-color: #f4f3ef;
   transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1); }
   .main-panel > .content {
@@ -4220,9 +4221,206 @@ License - nucleoapp.com/license/
 }
 
 .logo-list {
-  display: inline;
+  display: inline !important
+  margin-right: 10px !important;
 }
-.logo-list img {
-  max-width: 15%
+.logo-list > a > img {
+  max-width: 4%;
+  opacity: 0.3
+}
+
+.logo-list > a > img:hover, .logo-list > a > img .active {
+  max-width: 4%;
+  opacity: 1;
+}
+
+
+.logo-list li {
+  display: inline !important
+}
+
+.modal {
+  padding: 20px;
+  max-width: 50vw;
+
+}
+
+.modal-content {
+  background-color: unset !important; 
+  border: unset !important; 
+}
+
+.close-modal {
+  position: absolute;
+  text-align: right;
+  top: 25px;
+  right: 25px;
+  width: 75px;
+  height: 75px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.close-modal:hover {
+  opacity: 0.3;
+}
+
+.close-modal .lr {
+  z-index: 1051;
+  width: 1px;
+  height: 75px;
+  margin-left: 35px;
+}
+
+.close-modal .lr .rl {
+  z-index: 1052;
+  width: 1px;
+  height: 75px;
+}
+
+.center {
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+}
+.icon-set {
+  font-size: large;
+}
+
+.icon-set .fa-trash-alt{
+  color: #eb6532 !important;
+}
+
+
+/* table style */
+
+.selected {
+  background-color: #f4f3ef
+}
+
+.archived {
+  opacity: 0.3;
+}
+
+/* table style end */
+
+.sidebar-footer {
+  position: absolute !important;
+  width: 100% !important;
+  bottom: 0 !important;
+  display: inline !important;
+
+}
+
+.sidebar-footer > a {
+  flex-grow: 1;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  position: relative;
+}
+
+.sidebar-footer > a .notification {
+  position: absolute;
+  top: 0;
+}
+
+.menu {
+  position: absolute;
+  text-align: right;
+  display: inline;
+  font-size: small;
+  padding-right: 20px;
+}
+
+.login-panel {
+  background-color: #f4f3ef;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.login-panel .title{
+  text-align: center;
+  bottom: 0;
+}
+
+.login-panel > .login-container {
+  width: 30vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-panel .card .card-header {
+  text-align: center;
+}
+.login-panel .card > .card-body h5 {
+  text-align: left;
+}
+.mydropdown-menu {
+  box-shadow: 1px 2px 7px 1px rgba(0, 0, 0, 0.125);
+}
+
+
+/* midCard flip */
+#midCard {
+    position: absolute;
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    -o-transition: -o-transform 1s;
+    transition: transform 1s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+}
+#midCard div {
+    position: absolute;
+    text-align: center;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+#midCard .front {
+}
+#midCard .back {
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+#midCard.flipped {
+    -webkit-transform: rotateY( 180deg );
+    -moz-transform: rotateY( 180deg );
+    -o-transform: rotateY( 180deg );
+    transform: rotateY( 180deg );
+}
+
+.invitation-code {
+  border-style: groove;
+  background: gainsboro;
+  font-family: Andale Mono;
+  padding: 5px;
+}
+
+.logo-form {
+  text-align: -webkit-center;
+}
+
+.settle-arrow {
+  text-align: -webkit-center;
+  margin-top: 20px; 
+  color: gray
+}
+
+.settle-arrow > a:hover {
+  color: black
+
 }
 /*# sourceMappingURL=paper-dashboard.css.map */
+

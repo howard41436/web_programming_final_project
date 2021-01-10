@@ -1,46 +1,32 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import BaseForm, { BaseFormInput } from "./BaseForm";
+import { Button } from "./BaseTags";
 
-export default function Navbar() {
-  const { pathname } = useLocation();
+export default function Navbar(props) {
+  const { title } = props;
 
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent"
-      style={{ zIndex: 99999 }}
-    >
+    <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
       <div className="container-fluid">
         <div className="navbar-wrapper">
           <div className="navbar-toggle">
-            <button type="button" className="navbar-toggler">
+            <Button
+              type="button"
+              className="navbar-toggler"
+              style={{ position: "relative", zIndex: 99999 }}
+            >
               <span className="navbar-toggler-bar bar1" />
               <span className="navbar-toggler-bar bar2" />
               <span className="navbar-toggler-bar bar3" />
-            </button>
+            </Button>
           </div>
-          {pathname === "/" && (
-            <>
-              <a
-                className="navbar-brand"
-                href="#"
-                style={{ marginRight: "1rem" }}
-              >
-                Our Expenses
-              </a>
-              <Link to="/newitems">
-                <button
-                  className="btn btn-outline-success btn-round btn-icon"
-                  style={{ margin: "1px 1px" }}
-                  type="button"
-                >
-                  <i className="nc-icon nc-simple-add" />
-                </button>
-              </Link>
-            </>
-          )}
+          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <a className="navbar-brand" style={{ marginRight: "1rem" }}>
+            {title}
+          </a>
         </div>
-        <button
+        <Button
           className="navbar-toggler"
           type="button"
           data-toggle="collapse"
@@ -52,19 +38,18 @@ export default function Navbar() {
           <span className="navbar-toggler-bar navbar-kebab" />
           <span className="navbar-toggler-bar navbar-kebab" />
           <span className="navbar-toggler-bar navbar-kebab" />
-        </button>
+        </Button>
         <div
           className="collapse navbar-collapse justify-content-end"
           id="navigation"
         >
-          <form>
+          <BaseForm formId="navbar_search" initialValues={{ search: "" }}>
             <div className="input-group no-border">
-              <input
-                type="text"
-                value=""
+              <BaseFormInput
                 className="form-control"
+                formId="navbar_search"
+                formKey="search"
                 placeholder="Search..."
-                onChange={() => {}}
               />
               <div className="input-group-append">
                 <div className="input-group-text">
@@ -72,15 +57,16 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
-          </form>
+          </BaseForm>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link btn-rotate" href="#">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <Link className="nav-link btn-rotate" to="/profile">
                 <i className="nc-icon nc-single-02" />
                 <p>
                   <span className="d-lg-none d-md-block">Account</span>
                 </p>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

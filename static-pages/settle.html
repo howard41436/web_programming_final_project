@@ -18,6 +18,7 @@
   <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 </head>
 
 <body class="">
@@ -35,10 +36,16 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
-            <a href="./tables.html">
+          <li>
+            <a href="./expense.html">
               <i class="nc-icon nc-money-coins"></i>
               <p>Our Expenses</p>
+            </a>
+          </li>
+          <li  class="active ">
+            <a href="./settle.html">
+              <i class="fas fa-hand-holding-usd"></i>
+              <p>Settle Up</p>
             </a>
           </li>
           <li>
@@ -48,20 +55,80 @@
             </a>
           </li>
         </ul>
-        <ul class="nav logo-list">
-          <p class="nav-link">Display Option:</p>
-          <li>
-            <a href="javascript:;"><img src="assets/img/boy.png"></a>
-          </li>
-          <li>
-            <a href="javascript:;"><img src="assets/img/girl.png"></a>
-          </li>
-          <li>
-            <a href="javascript:;"><img src="assets/img/both.png"></a>
-          </li>
-        </ul>
       </div>
     </div>
+
+    <!-- settle with amount-->
+    <div class="content modal fade center" id="settleMoney">
+      <div class="row modal-dialog modal-content" role="document">
+        <div class="col-md-12">
+          <div class="card card-user">
+            <div class="card-header">
+              <h5 class="card-title">Settle with amount</h5>
+            </div>
+            <div class="close-modal"><a data-dismiss="modal"><i class="fas fa-times" ></i></a></div>
+            <div class="card-body">
+              <form>
+                <div class="row">
+                  <div class="col-md-4 pr-1" >
+                    <div class="logo logo-form">
+                      <a class="simple-text logo-mini">
+                        <div class="">
+                          <img src="assets/img/girl.png">
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1" >
+                    <h1 class="settle-arrow">
+                      <a class="simple-text">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                      </a>
+                      <br>
+                      <a class="simple-text">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                      </a>
+                    </h1>
+                  </div>
+                  <div class="col-md-4 pl-1" >
+                    <div class="logo logo-form">
+                      <a class="simple-text logo-mini">
+                        <div class="">
+                          <img src="assets/img/boy.png">
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Amount</label>
+                      <input type="text" class="form-control" placeholder="Amount">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Description</label>
+                      <textarea class="form-control"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="update ml-auto mr-auto">
+                    <button type="submit" class="btn btn-primary btn-round">Add</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="main-panel">
       <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -74,12 +141,7 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:;">Our Expenses</a>
-            <a href="./newItem.html">
-              <btn class="btn btn-outline-success btn-round btn-icon" style="margin: 1px 1px">
-                <i class="nc-icon nc-simple-add"></i>
-              </btn>
-            </a>
+            <a class="navbar-brand" href="javascript:;">Settle Up</a>
             
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +163,7 @@
             </form>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
+                <a class="nav-link btn-rotate" href="./profile.html">
                   <i class="nc-icon nc-single-02"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Account</span>
@@ -114,21 +176,25 @@
       </nav>
       <!-- End Navbar -->
       <div class="content">
-
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="col-md-4">
             <div class="card card-stats">
               <div class="card-body ">
                 <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-shop text-warning"></i>
+                  <div class="col-7 col-md-5">
+                    <div class="text-center">
+                      <a href="javascript:;"><img src="assets/img/girl.png"></a>
                     </div>
                   </div>
-                  <div class="col-7 col-md-8">
+                  <div class="col-5 col-md-6">
                     <div class="numbers">
-                      <p class="card-category">Food</p>
-                      <p class="card-title">$ 350<p>
+                      <p class="card-category">Unpaid Debt</p>
+                      <p class="card-title">$310<p>
+                    </div>
+                    <br>
+                    <div class="numbers">
+                      <p class="card-category">History Debt</p>
+                      <p class="card-title">$3000<p>
                     </div>
                   </div>
                 </div>
@@ -136,51 +202,45 @@
               <div class="card-footer ">
                 <hr>
                 <div class="stats">
-                  <i class="nc-icon nc-chart-pie-36"></i>
-                  15%
+                  <i class="fa fa-refresh"></i>
+                  Update Now
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="col-md-4">
             <div class="card card-stats">
+              <!-- <div class="card-header">
+                <h5 class="card-title" style="text-align: center">Amy owes Tom $210</h5>
+              </div> -->
               <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-bus-front-12 text-success"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Transportation</p>
-                      <p class="card-title">$ 1,345<p>
-                    </div>
-                  </div>
-                </div>
+                <canvas id="chartDebt"></canvas>
               </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar-o"></i>
-                  Last day
-                </div>
+              <div class="card-footer" style="text-align: center;">
+                <a data-toggle="modal" data-target="#settleMoney">
+                  <button class="btn btn-primary">Settle with amount</button>
+                </a>
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="col-md-4">
             <div class="card card-stats">
               <div class="card-body ">
                 <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-cart-simple text-danger"></i>
+                  <div class="col-7 col-md-5">
+                    <div class="text-center">
+                      <a href="javascript:;"><img src="assets/img/boy.png"></a>
                     </div>
                   </div>
-                  <div class="col-7 col-md-8">
+                  <div class="col-5 col-md-6">
                     <div class="numbers">
-                      <p class="card-category">Groceries</p>
-                      <p class="card-title">$ 23<p>
+                      <p class="card-category">Unpaid Debt</p>
+                      <p class="card-title">$100<p>
+                    </div>
+                    <br>
+                    <div class="numbers">
+                      <p class="card-category">History Debt</p>
+                      <p class="card-title">$2000<p>
                     </div>
                   </div>
                 </div>
@@ -194,44 +254,38 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-5 col-md-4">
-                    <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-hat-3 text-primary"></i>
-                    </div>
-                  </div>
-                  <div class="col-7 col-md-8">
-                    <div class="numbers">
-                      <p class="card-category">Education</p>
-                      <p class="card-title">$ 20<p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-refresh"></i>
-                  Update now
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="row">
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Daily Expenses</h4>
+                <h4 class="card-title">Debt Details
+                  <span class="menu">
+                    <span class="logo-list">
+                      <a href="javascript:;" class="active"><img src="assets/img/boy.png"></a>
+                      <a href="javascript:;"><img src="assets/img/girl.png"></a>
+                    </span>
+                    <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 10px;">
+                      <i class="fas fa-list"></i>
+                      <span class="d-lg-none d-md-block">Choose Display</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="chooseBudgeType">
+                      <a class="dropdown-item" href="#">All</a>
+                      <a class="dropdown-item" href="#">Unpaid Debt</a>
+                      <a class="dropdown-item" href="#">History Debt</a>
+                    </div>
+                  </span>
+                </h4>
               </div>
               
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table">
                     <thead class=" text-primary">
+                      <th></th>
+                      <th>
+                        Date <i class="fas fa-sort"></i>
+                      </th>
                       <th>
                         Category
                       </th>
@@ -241,12 +295,23 @@
                       <th>
                         Descriptions
                       </th>
-                      <th class="text-right">
-                        Amount
+                      <th>
+                        Creditor
                       </th>
+                      <th class="text-right">
+                        Owed
+                      </th>
+                      <th></th>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr class="selected">
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                        <td>
+                          <span>Oct. 11</span>
+                        </td>
                         <td>
                           <span class="icon-big text-center icon-warning">
                             <i class="nc-icon nc-shop text-warning"></i>
@@ -255,17 +320,30 @@
                         </td>
                         <td>
                           <div class="logo-image-small" >
-                            <img src="assets/img/both.png">
+                            <img src="assets/img/boy_girl.png">
                           </div>
                         </td>
                         <td>
                           Oud-Turnhout
                         </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/boy.png">
+                          </div>
+                        </td>
                         <td class="text-right">
                           $36,738
                         </td>
+                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
                       </tr>
                       <tr>
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                        <td>
+                          Oct. 11
+                        </td>
                         <td>
                           <span class="text-center icon-warning">
                             <i class="nc-icon nc-bus-front-12 text-success"></i>
@@ -280,45 +358,29 @@
                         <td>
                           Sinaai-Waas
                         </td>
+                        <td>
+                          <div class="logo-image-small" >
+                            <img src="assets/img/girl.png">
+                          </div>
+                        </td>
                         <td class="text-right">
                           $23,789
                         </td>
+                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
                       </tr>
-                      <tr>
-                        <td>
-                          Sage Rodriguez
+                      <tr class="archived">
+                        <td class="icon-set">
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
                         </td>
                         <td>
-                          <div class="logo-image-small" >
-                            <img src="assets/img/both.png">
-                          </div>
+                          Oct. 11
                         </td>
                         <td>
-                          Baileux
-                        </td>
-                        <td class="text-right">
-                          $56,142
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Philip Chaney
-                        </td>
-                        <td>
-                          <div class="logo-image-small" >
-                            <img src="assets/img/girl.png">
-                          </div>
-                        </td>
-                        <td>
-                          Overland Park
-                        </td>
-                        <td class="text-right">
-                          $38,735
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Doris Greene
+                          <span class="text-center icon-warning">
+                            <i class="nc-icon nc-bus-front-12 text-success"></i>
+                          </span>
+                          Transportation
                         </td>
                         <td>
                           <div class="logo-image-small" >
@@ -326,43 +388,17 @@
                           </div>
                         </td>
                         <td>
-                          Feldkirchen in Kärnten
-                        </td>
-                        <td class="text-right">
-                          $63,542
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Mason Porter
+                          Sinaai-Waas
                         </td>
                         <td>
                           <div class="logo-image-small" >
                             <img src="assets/img/girl.png">
                           </div>
                         </td>
-                        <td>
-                          Gloucester
-                        </td>
                         <td class="text-right">
-                          $78,615
+                          $23,789
                         </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          Jon Porter
-                        </td>
-                        <td>
-                          <div class="logo-image-small" >
-                            <img src="assets/img/boy.png">
-                          </div>
-                        </td>
-                        <td>
-                          Gloucester
-                        </td>
-                        <td class="text-right">
-                          $98,615
-                        </td>
+                        <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -388,6 +424,13 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+      demo.initSettlePages();
+      demo.showDebtNotification('bottom','left');
+    });
+  </script>
 </body>
 
 </html>

@@ -93,7 +93,74 @@ demo = {
     });
 
   },
+  initExpensePages: function() {
+  // '#e3e3e3',
+  // '#4acccd',
+  // '#ef8157',
+  // '#fcc468',
+  // '#6bd098'
+  
+  var ctx = document.getElementById("myBudget");
+    var myChart = new Chart(ctx, {
+      type: 'horizontalBar',
+      data: {
+        labels: ["Total Budget", "Total Expenses"],
+        datasets: [{
+            label: 'Budget',
+            data: [30, 0],
+            backgroundColor: '#e3e3e3',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Food',
+            data: [0, 19],
+            backgroundColor: '#4acccd',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Transportation',
+            data: [0, 3],
+            backgroundColor: '#ef8157',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Education',
+            data: [0, 2],
+            backgroundColor: '#fcc468',
+            borderColor: 'transparent',
+            borderWidth: 2
+          },
+          {
+            label: 'Others',
+            data: [0, 5],
+            backgroundColor: '#6bd098',
+            borderColor: 'transparent',
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            stacked: true,
+            gridLines: {
+              display: false
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            gridLines: {
+              display: false
+            }
+          }]
 
+        }
+      }
+    });
+  },
   initChartsPages: function() {
     chartColor = "#FFFFFF";
 
@@ -284,6 +351,75 @@ demo = {
     });
   },
 
+  initSettlePages: function() {
+    chartColor = "#FFFFFF";
+
+    ctx = document.getElementById('chartDebt').getContext("2d");
+
+    myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["Amy", "Tom"],
+        datasets: [{
+          label: "Debt",
+          pointRadius: 0,
+          pointHoverRadius: 0,
+          backgroundColor: [
+            '#ED7B8F',
+            '#5A586B'
+          ],
+          borderWidth: 0,
+          data: [310, 100]
+        }]
+      },
+
+      options: {
+
+        legend: {
+          display: true
+        },
+
+        pieceLabel: {
+          render: 'percentage',
+          fontColor: ['white'],
+          precision: 2
+        },
+
+        tooltips: {
+          enabled: true
+        },
+
+        scales: {
+          yAxes: [{
+
+            ticks: {
+              display: false
+            },
+            gridLines: {
+              drawBorder: false,
+              zeroLineColor: "transparent",
+              color: 'rgba(255,255,255,0.05)'
+            }
+
+          }],
+
+          xAxes: [{
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(255,255,255,0.1)',
+              zeroLineColor: "transparent"
+            },
+            ticks: {
+              display: false,
+            }
+          }]
+        },
+      }
+    });
+
+  },
+
   initGoogleMaps: function() {
     var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
     var mapOptions = {
@@ -388,12 +524,12 @@ demo = {
     marker.setMap(map);
   },
 
-  showNotification: function(from, align) {
+  showDebtNotification: function(from, align) {
     color = 'primary';
 
     $.notify({
       icon: "nc-icon nc-bell-55",
-      message: "Welcome to <b>Paper Dashboard</b> - a beautiful bootstrap dashboard for every web developer."
+      message: "Amy owes Tom $210"
 
     }, {
       type: color,
@@ -403,6 +539,37 @@ demo = {
         align: align
       }
     });
-  }
+  },
+  showInviteNotification: function(from, align) {
+    color = 'warning';
 
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: 'There is an invitation from Amy.  <button type="submit" class="btn btn-primary btn-round">Confirm</button>'
+
+    }, {
+      type: color,
+      timer: 12000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+  },
+  showRemoveNotification: function(from, align) {
+    color = 'danger';
+
+    $.notify({
+      icon: "nc-icon nc-bell-55",
+      message: 'Remove the record?  <button type="submit" class="btn btn-danger btn-round">Remove</button>'
+
+    }, {
+      type: color,
+      timer: 12000,
+      placement: {
+        from: from,
+        align: align
+      }
+    });
+  }
 };
