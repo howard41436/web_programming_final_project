@@ -9,7 +9,8 @@
   <title>
     App's name
   </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+    name='viewport' />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -42,7 +43,7 @@
               <p>Our Expenses</p>
             </a>
           </li>
-          <li  class="active ">
+          <li class="active ">
             <a href="./settle.html">
               <i class="fas fa-hand-holding-usd"></i>
               <p>Settle Up</p>
@@ -66,11 +67,11 @@
             <div class="card-header">
               <h5 class="card-title">Settle with amount</h5>
             </div>
-            <div class="close-modal"><a data-dismiss="modal"><i class="fas fa-times" ></i></a></div>
+            <div class="close-modal"><a data-dismiss="modal"><i class="fas fa-times"></i></a></div>
             <div class="card-body">
               <form>
                 <div class="row">
-                  <div class="col-md-4 pr-1" >
+                  <div class="col-md-4 pr-1">
                     <div class="logo logo-form">
                       <a class="simple-text logo-mini">
                         <div class="">
@@ -79,18 +80,18 @@
                       </a>
                     </div>
                   </div>
-                  <div class="col-md-4 px-1" >
+                  <div class="col-md-4 px-1">
                     <h1 class="settle-arrow">
                       <a class="simple-text">
                         <i class="fas fa-long-arrow-alt-right"></i>
                       </a>
-                      <br>
+                      <!-- <br>
                       <a class="simple-text">
                         <i class="fas fa-long-arrow-alt-left"></i>
-                      </a>
+                      </a> -->
                     </h1>
                   </div>
-                  <div class="col-md-4 pl-1" >
+                  <div class="col-md-4 pl-1">
                     <div class="logo logo-form">
                       <a class="simple-text logo-mini">
                         <div class="">
@@ -108,7 +109,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
@@ -142,9 +143,10 @@
               </button>
             </div>
             <a class="navbar-brand" href="javascript:;">Settle Up</a>
-            
+
           </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -189,12 +191,14 @@
                   <div class="col-5 col-md-6">
                     <div class="numbers">
                       <p class="card-category">Unpaid Debt</p>
-                      <p class="card-title">$310<p>
+                      <p class="card-title">$310
+                      <p>
                     </div>
                     <br>
                     <div class="numbers">
                       <p class="card-category">History Debt</p>
-                      <p class="card-title">$3000<p>
+                      <p class="card-title">$3000
+                      <p>
                     </div>
                   </div>
                 </div>
@@ -214,7 +218,11 @@
                 <h5 class="card-title" style="text-align: center">Amy owes Tom $210</h5>
               </div> -->
               <div class="card-body ">
-                <canvas id="chartDebt"></canvas>
+                <!-- <canvas id="chartDebt"></canvas> -->
+                <h3 class="settle-arrow" style="margin: 0px;">$60</h3>
+                <h1 class="settle-arrow" style="margin: 0px;">
+                  <i class="fas fa-long-arrow-alt-right fa-2x" style="transform: scale(2,1);"></i>
+                </h1>
               </div>
               <div class="card-footer" style="text-align: center;">
                 <a data-toggle="modal" data-target="#settleMoney">
@@ -235,12 +243,14 @@
                   <div class="col-5 col-md-6">
                     <div class="numbers">
                       <p class="card-category">Unpaid Debt</p>
-                      <p class="card-title">$100<p>
+                      <p class="card-title">$100
+                      <p>
                     </div>
                     <br>
                     <div class="numbers">
                       <p class="card-category">History Debt</p>
-                      <p class="card-title">$2000<p>
+                      <p class="card-title">$2000
+                      <p>
                     </div>
                   </div>
                 </div>
@@ -259,13 +269,14 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Debt Details
+                <h4 class="card-title">Settlement Record
                   <span class="menu">
                     <span class="logo-list">
                       <a href="javascript:;" class="active"><img src="assets/img/boy.png"></a>
                       <a href="javascript:;"><img src="assets/img/girl.png"></a>
                     </span>
-                    <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin: 10px;">
+                    <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false" style="margin: 10px;">
                       <i class="fas fa-list"></i>
                       <span class="d-lg-none d-md-block">Choose Display</span>
                     </a>
@@ -277,7 +288,7 @@
                   </span>
                 </h4>
               </div>
-              
+
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table">
@@ -306,8 +317,9 @@
                     <tbody>
                       <tr class="selected">
                         <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
+                              class="far fa-trash-alt"></i></a>
                         </td>
                         <td>
                           <span>Oct. 11</span>
@@ -319,7 +331,7 @@
                           Food
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/boy_girl.png">
                           </div>
                         </td>
@@ -327,19 +339,21 @@
                           Oud-Turnhout
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/boy.png">
                           </div>
                         </td>
                         <td class="text-right">
                           $36,738
                         </td>
-                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
+                        <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
+                            Settle</button></td> -->
                       </tr>
                       <tr>
                         <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
+                              class="far fa-trash-alt"></i></a>
                         </td>
                         <td>
                           Oct. 11
@@ -351,7 +365,7 @@
                           Transportation
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/boy.png">
                           </div>
                         </td>
@@ -359,19 +373,21 @@
                           Sinaai-Waas
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/girl.png">
                           </div>
                         </td>
                         <td class="text-right">
                           $23,789
                         </td>
-                        <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i> Settle</button></td>
+                        <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
+                            Settle</button></td> -->
                       </tr>
                       <tr class="archived">
                         <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a> 
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i class="far fa-trash-alt"></i></a>
+                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
+                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
+                              class="far fa-trash-alt"></i></a>
                         </td>
                         <td>
                           Oct. 11
@@ -383,7 +399,7 @@
                           Transportation
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/boy.png">
                           </div>
                         </td>
@@ -391,14 +407,14 @@
                           Sinaai-Waas
                         </td>
                         <td>
-                          <div class="logo-image-small" >
+                          <div class="logo-image-small">
                             <img src="assets/img/girl.png">
                           </div>
                         </td>
                         <td class="text-right">
                           $23,789
                         </td>
-                        <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td>
+                        <!-- <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -422,13 +438,14 @@
   <!--  Notifications Plugin    -->
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
+  <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
       demo.initSettlePages();
-      demo.showDebtNotification('bottom','left');
+      demo.showDebtNotification('bottom', 'left');
     });
   </script>
 </body>
