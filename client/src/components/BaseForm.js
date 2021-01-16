@@ -40,13 +40,14 @@ const handleSetFormValues = (dispatch, formId, formKey, formValues, val) => {
 export default function BaseForm(props) {
   const {
     formId = "", // Should be unique
-    initialValues = { Default: "default" },
+    initialValues = {},
     updater = [],
     children,
     allowSubmit = false,
     submitText = "Submit",
     onSubmit = () => {},
     otherFooter = <></>,
+    otherFooter2 = <></>,
   } = props;
   const dispatch = useDispatch();
 
@@ -87,6 +88,7 @@ export default function BaseForm(props) {
               {submitText}
             </Button>
           </div>
+          {otherFooter2}
         </Row>
       )}
     </form>

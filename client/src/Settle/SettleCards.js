@@ -28,7 +28,7 @@ const CenterCard = styled.div`
 `;
 
 export default function SettleCards() {
-  const { pairId, boyName, girlName } = useSelector(selectUser);
+  const { pairId, name0, name1 } = useSelector(selectUser);
   const { ownerIcon } = useSelector(selectInfo);
   const { debt } = useSelector(selectExpenses);
 
@@ -101,8 +101,8 @@ export default function SettleCards() {
       <Col size={4}>
         <BaseCard className="card-stats">
           <CenterCard>
-            {debt.debtOfUser0 >= 0 ? boyName : girlName} owes{" "}
-            {debt.debtOfUser0 >= 0 ? girlName : boyName}{" "}
+            {debt.debtOfUser0 >= 0 ? name0 : name1} owes{" "}
+            {debt.debtOfUser0 >= 0 ? name1 : name0}{" "}
             <strong style={{ fontSize: "16px" }}>$ {debt.debtOfUser0}</strong>
             <br />
             <Button theme="primary" type="button" onClick={handleSetShow}>
