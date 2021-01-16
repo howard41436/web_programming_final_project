@@ -86,7 +86,7 @@ const ProfileSchema = new Schema(
   },
   { timestamps: true, collection: "profile" }
 );
-ProfileSchema.index({ pairId: 1, date: 1 });
+ProfileSchema.index({ pairId: 1 });
 
 const Profile = model("profile", ProfileSchema);
 
