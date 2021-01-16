@@ -27,8 +27,8 @@ router.post("/newRecord", async (req, res) => {
 
 router.post("/editRecord", async (req, res) => {
   const record = req.body;
-  const pairId = parseInt(record.pairId, 10);
-  let { _id } = req.query;
+  let { pairId, _id } = req.query;
+  pairId = parseInt(pairId, 10);
   _id = mongoose.Types.ObjectId(_id);
   debug("Edit record %O for pairId %d:\n%O", _id, pairId, record);
   if (Number.isNaN(pairId)) {
@@ -37,7 +37,7 @@ router.post("/editRecord", async (req, res) => {
     return;
   }
   try {
-    const doc = await Record.findOneAndReplace({ _id, pairId }, record, {
+    const doc = await Record.findOneAndUpdate({ _id, pairId }, record, {
       new: true,
     });
     if (doc === null) {

@@ -77,10 +77,12 @@ router.get("/debt", async (req, res) => {
     res.status(403).send();
     return;
   }
-  const allRecordsWrapped = allRecords.map((record) => ({
-    type: "record",
-    content: record,
-  }));
+  const allRecordsWrapped = allRecords
+    .filter((record) => !!(record.owed.user0 - record.paid.user0))
+    .map((record) => ({
+      type: "record",
+      content: record,
+    }));
   const allSettlementsWrapped = allSettlements.map((settlement) => ({
     type: "settlement",
     content: settlement,
