@@ -5,7 +5,7 @@ import { selectInfo } from "../redux/infoSlice";
 
 import BaseCard from "../components/BaseCard";
 import { Col, Row } from "../components/BaseTags";
-import { BASENAME } from "../constants";
+import { PUBLIC_URL } from "../constants";
 
 const PictureCard = styled(BaseCard)`
   .card-header {
@@ -21,7 +21,7 @@ export default function ProfileCard() {
 
   const CardHeader = () => (
     <div className="image">
-      <img src={`${BASENAME}img/damir-bosnjak.jpg`} alt="profile-header" />
+      <img src={PUBLIC_URL("/img/damir-bosnjak.jpg")} alt="profile-header" />
     </div>
   );
 
@@ -43,7 +43,7 @@ export default function ProfileCard() {
           <h5>
             100
             <br />
-            <small>Days </small>
+            <small>Days</small>
           </h5>
         </Col>
         <Col otherSize={{ lg: 3 }} className="mr-auto">

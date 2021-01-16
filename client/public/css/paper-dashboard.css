@@ -6321,3 +6321,58 @@ License - nucleoapp.com/license/
   color: black;
 }
 /*# sourceMappingURL=paper-dashboard.css.map */
+
+/*Styling Selectbox*/
+.dropdown {
+  height: 100%;
+  text-align: left;
+}
+.dropdown .select {
+  cursor: pointer;
+  display: block;
+}
+.dropdown .select > i {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  float: right;
+  line-height: 20px;
+}
+.dropdown:hover {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+}
+.dropdown:active {
+  background-color: #f8f8f8;
+}
+.dropdown.active:hover,
+.dropdown.active {
+  box-shadow: 0 0 4px rgb(204, 204, 204);
+  border-radius: 2px 2px 0 0;
+  background-color: #f8f8f8;
+}
+.dropdown.active .select > i {
+  transform: rotate(-90deg);
+}
+.dropdown .dropdown-menu {
+  position: absolute;
+  background-color: #fff;
+  width: 100%;
+  margin-top: 1px;
+  box-shadow: 0 1px 2px rgb(204, 204, 204);
+  border-radius: 0 1px 2px 2px;
+  display: none;
+}
+.dropdown .dropdown-menu li {
+  padding: 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.dropdown .dropdown-menu {
+  padding: 0;
+  list-style: none;
+}
+.dropdown .dropdown-menu li:hover {
+  background-color: #f2f2f2;
+}
+.dropdown .dropdown-menu li:active {
+  background-color: #e2e2e2;
+}

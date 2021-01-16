@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import BasePage from "../components/BasePage";
 import { Row, Col } from "../components/BaseTags";
 import SettleCards from "./SettleCards";
-import DebtDetails from "./DebtDetails";
+import SettlementRecord from "./SettlementRecord";
 
 export default function SettlePage() {
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function SettlePage() {
       </Row>
       <Row>
         <Col>
-          <DebtDetails />
+          <SettlementRecord />
         </Col>
       </Row>
     </BasePage>

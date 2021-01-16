@@ -1,19 +1,26 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectInfo } from "../redux/infoSlice";
+
 import BaseCard from "../components/BaseCard";
 import BaseForm, {
   BaseFormGroup,
   BaseFormInput,
   BaseFormSelect,
 } from "../components/BaseForm";
-import { Row, Col } from "../components/BaseTags";
+import { Row, Col, IconRadio } from "../components/BaseTags";
 
 export default function EditProfile() {
+  const { ownerIcon } = useSelector(selectInfo);
   // YYYY-MM-DD
+
   const formatDate = (date) => {
     return `${new Date(date).toISOString().split("T")[0]}`;
   };
 
   const initialProfile = {
+    avatar: -1,
     username: "tom123",
     email: "tom123@gmail.com",
     firstName: "Tom",
@@ -42,6 +49,63 @@ export default function EditProfile() {
         allowSubmit
         submitText="Update Profile"
       >
+        <Row>
+          <Col>
+            <BaseFormGroup label="Profile Picture">
+              <span className="logo-list">
+                {" "}
+                <BaseFormInput
+                  id="avatar_radio_boy"
+                  formId="edit_profile_form"
+                  formKey="avatar"
+                  type="radio"
+                  name="avatar"
+                  inputValue={0}
+                  CustomInput={IconRadio}
+                />
+                <label htmlFor="avatar_radio_boy">
+                  <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+                </label>{" "}
+                <BaseFormInput
+                  id="avatar_radio_boy2"
+                  formId="edit_profile_form"
+                  formKey="avatar"
+                  type="radio"
+                  name="avatar"
+                  inputValue={2}
+                  CustomInput={IconRadio}
+                />
+                <label htmlFor="avatar_radio_boy2">
+                  <img src={ownerIcon["2"].src} alt={ownerIcon["2"].src} />
+                </label>{" "}
+                <BaseFormInput
+                  id="avatar_radio_girl"
+                  formId="edit_profile_form"
+                  formKey="avatar"
+                  type="radio"
+                  name="avatar"
+                  inputValue={1}
+                  CustomInput={IconRadio}
+                />
+                <label htmlFor="avatar_radio_girl">
+                  <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
+                </label>{" "}
+                <BaseFormInput
+                  id="avatar_radio_girl2"
+                  formId="edit_profile_form"
+                  formKey="avatar"
+                  type="radio"
+                  name="avatar"
+                  inputValue={3}
+                  CustomInput={IconRadio}
+                />
+                <label htmlFor="avatar_radio_girl2">
+                  <img src={ownerIcon["3"].src} alt={ownerIcon["3"].src} />
+                </label>
+              </span>
+            </BaseFormGroup>
+          </Col>
+        </Row>
         <Row>
           <Col size={6} className="pr-1">
             <BaseFormGroup label="Username (disabled)">

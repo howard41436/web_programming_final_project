@@ -56,9 +56,6 @@ export default function MonthlyExpenses(props) {
     )
   );
 
-  const shouldBeSettled = (exp) =>
-    exp.paid.user0 !== exp.owed.user0 || exp.paid.user1 !== exp.owed.user1;
-
   const formatDate = (date) => {
     return `${new Date(date).toLocaleString("en", {
       month: "short",
@@ -147,7 +144,6 @@ export default function MonthlyExpenses(props) {
         <tr
           // eslint-disable-next-line dot-notation
           key={exp["_id"]}
-          className={shouldBeSettled(exp) ? "selected" : null}
         >
           <td className="icon-set">
             <a
@@ -179,10 +175,11 @@ export default function MonthlyExpenses(props) {
             {row[2]}
           </td>
           <td>
-            <div className="logo-image-small">
+            <div style={{ height: "40px", textAlign: "center", width: "60px" }}>
               <img
                 src={ownerIcon[String(row[3])].src}
                 alt={ownerIcon[String(row[3])].alt}
+                style={{ height: "35px" }}
               />
             </div>
           </td>

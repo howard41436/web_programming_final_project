@@ -144,7 +144,7 @@ export default function SettleCards() {
                     <img
                       src={`${ownerIcon["1"].src}`}
                       alt={`${ownerIcon["1"].alt}`}
-                      style={{ marginTop: "12px", marginBottom: "18px" }}
+                      style={{ marginTop: "14px", marginBottom: "21px" }}
                     />
                   </label>
                 </a>
@@ -199,7 +199,7 @@ export default function SettleCards() {
                     <img
                       src={`${ownerIcon["0"].src}`}
                       alt={`${ownerIcon["0"].alt}`}
-                      style={{ marginTop: "12px", marginBottom: "18px" }}
+                      style={{ marginTop: "14px", marginBottom: "21px" }}
                     />
                   </label>
                 </a>

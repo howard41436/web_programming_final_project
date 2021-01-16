@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { BASENAME } from "../constants";
+import { PUBLIC_URL } from "../constants";
 
 export const infoSlice = createSlice({
   name: "info",
@@ -28,16 +28,24 @@ export const infoSlice = createSlice({
     },
     ownerIcon: {
       "-1": {
-        src: `${BASENAME}img/both1.png`,
-        alt: "both",
+        src: PUBLIC_URL("/img/boy_girl.png"),
+        alt: "boy_girl",
       },
       0: {
-        src: `${BASENAME}img/boy.png`,
+        src: PUBLIC_URL("/img/boy.png"),
         alt: "boy",
       },
       1: {
-        src: `${BASENAME}img/girl.png`,
+        src: PUBLIC_URL("/img/girl.png"),
         alt: "girl",
+      },
+      2: {
+        src: PUBLIC_URL("/img/boy2.png"),
+        alt: "boy2",
+      },
+      3: {
+        src: PUBLIC_URL("/img/girl2.png"),
+        alt: "girl2",
       },
     },
   },

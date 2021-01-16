@@ -2,7 +2,7 @@ import React from "react";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import styled from "styled-components";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setToast, selectToast } from "../redux/toastSlice";
 import { Button } from "./BaseTags";
 
@@ -119,13 +119,6 @@ export const baseToast = (toastInner, options) => {
     ...toastOptions
   } = options;
 
-  if (backdrop) {
-    dispatch(setToast({ backdrop: true }));
-  }
-
-  const closeBackdrop = () =>
-    backdrop ? dispatch(setToast({ backdrop: false })) : null;
-
   const bodyStyle = {
     primary: { background: "#65d1d4", color: "white" },
     alert: { background: "#f1926e", color: "white" },
@@ -136,16 +129,20 @@ export const baseToast = (toastInner, options) => {
     alert: { background: "rgba(255, 255, 255, 0.7)" },
   };
 
-  toast(toastInner, {
+  const toastId = toast(toastInner, {
     ...toastOptions,
-    onClose: closeBackdrop,
     style: bodyStyle[type],
     progressStyle: progressStyle[type],
     transition: Slide,
   });
+
+  if (backdrop) {
+    dispatch(setToast({ backdrop: toastId }));
+  }
 };
 
 export default function BaseToast() {
+  const dispatch = useDispatch();
   const { backdrop } = useSelector(selectToast);
 
   const CloseButton = ({ closeToast }) => (
@@ -154,10 +151,14 @@ export default function BaseToast() {
     </ToastClose>
   );
 
+  toast.onChange(() =>
+    dispatch(setToast({ backdrop: toast.isActive(backdrop) ? backdrop : "" }))
+  );
+
   return (
     <>
       <ToastContainerCustom closeButton={<CloseButton />} />
-      {backdrop && <ToastBackdrop show={backdrop} />}
+      <ToastBackdrop show={backdrop !== ""} />
     </>
   );
 }

@@ -16,11 +16,11 @@ import BaseForm, {
 } from "../components/BaseForm";
 import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
-import { BASENAME, INSTANCE } from "../constants";
+import { INSTANCE } from "../constants";
 
 export default function FormModal(props) {
   const dispatch = useDispatch();
-  const { categoryInfo } = useSelector(selectInfo);
+  const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const categoryList = Object.keys(categoryInfo);
   const { expenses } = useSelector(selectExpenses);
   const { pairId } = useSelector(selectUser);
@@ -93,10 +93,14 @@ export default function FormModal(props) {
 
   const handleSubmit = (type) => (formValues) => {
     if (type === "add") {
-      INSTANCE.post("/api/newRecord", {
-        ...formValues,
-        date: new Date().toISOString(),
-      })
+      INSTANCE.post(
+        "/api/newRecord",
+        {
+          ...formValues,
+          date: new Date().toISOString(),
+        },
+        { params: { pairId } }
+      )
         .then((res) => {
           if (res.status === 200) {
             setInfo((s) => {
@@ -130,6 +134,7 @@ export default function FormModal(props) {
       INSTANCE.post("/api/editRecord", formValues, {
         params: {
           _id: formValues["_id"],
+          pairId,
         },
       })
         .then((res) => {
@@ -211,7 +216,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_boy`}>
-                <img src={`${BASENAME}img/boy.png`} alt="boy" />
+                <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_girl`}
@@ -223,7 +228,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_girl`}>
-                <img src={`${BASENAME}img/girl.png`} alt="girl" />
+                <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_both`}
@@ -235,7 +240,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_both`}>
-                <img src={`${BASENAME}img/both1.png`} alt="both" />
+                <img src={ownerIcon["-1"].src} alt={ownerIcon["-1"].src} />
               </label>
             </span>
           </BaseFormGroup>

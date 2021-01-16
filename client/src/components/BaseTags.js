@@ -63,7 +63,10 @@ export const Button = React.forwardRef((props, ref) => {
 
 export const IconFilter = styled.a`
   img {
+    height: 35px !important;
+    max-width: 100% !important;
     opacity: ${({ selected }) => (selected ? "1" : "0.3")} !important;
+    width: auto;
   }
 `;
 
@@ -123,8 +126,10 @@ export const IconRadio = styled.input.attrs(() => ({
     background: ${({ checked }) =>
       checked ? "rgba(81, 203, 206, 0.6)" : "transparent"};
     border-radius: 5px;
-    max-width: 8%;
+    max-width: 100% !important;
+    height: 35px !important;
     padding: ${({ checked }) => (checked ? "1px" : 0)};
+    width: auto;
   }
 
   &:hover + label img {

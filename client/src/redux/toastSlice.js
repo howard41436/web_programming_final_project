@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const toastSlice = createSlice({
   name: "toast",
   initialState: {
-    backdrop: false,
+    backdrop: "",
   },
   reducers: {
     setToast: (state, action) => {

@@ -6,7 +6,7 @@ import { selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
 
-export default function DebtDetails() {
+export default function SettlementRecord() {
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const { debt } = useSelector(selectExpenses);
 
@@ -97,19 +97,21 @@ export default function DebtDetails() {
             {row[2]}
           </td>
           <td>
-            <div className="logo-image-small">
+            <div style={{ height: "40px", textAlign: "center", width: "60px" }}>
               <img
                 src={ownerIcon[String(row[3])].src}
                 alt={ownerIcon[String(row[3])].alt}
+                style={{ height: "35px" }}
               />
             </div>
           </td>
           <td style={{ textTransform: "capitalize" }}>{row[4]}</td>
           <td>
-            <div className="logo-image-small">
+            <div style={{ height: "40px", textAlign: "center", width: "60px" }}>
               <img
                 src={ownerIcon[String(row[5])].src}
                 alt={ownerIcon[String(row[5])].alt}
+                style={{ height: "35px" }}
               />
             </div>
           </td>
@@ -122,7 +124,7 @@ export default function DebtDetails() {
   return (
     <BaseCard
       allowHeader
-      title="Debt Details"
+      title="Settlement Record"
       allowFilter
       filters={[0, 1]}
       filterDisplay={filterDisplay}

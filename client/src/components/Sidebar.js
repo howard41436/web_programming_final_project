@@ -2,10 +2,11 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
-import { BASENAME } from "../constants";
+import { selectInfo } from "../redux/infoSlice";
 
 export default function Sidebar() {
   const { boyName, girlName } = useSelector(selectUser);
+  const { ownerIcon } = useSelector(selectInfo);
   const { pathname } = useLocation();
 
   return (
@@ -14,7 +15,7 @@ export default function Sidebar() {
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="simple-text logo-mini">
           <div className="logo-image-small">
-            <img src={`${BASENAME}img/boy.png`} alt="boy" />
+            <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
           </div>
         </a>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
+import { useSelector } from "react-redux";
+import { selectInfo } from "../redux/infoSlice";
 import { IconFilter, IconSelector, IconOption } from "./BaseTags";
-import { BASENAME } from "../constants";
 
 const Title = ({ size, children, ...restProps }) => {
   if (size === 1) return <h1 {...restProps}>{children}</h1>;
@@ -14,6 +15,7 @@ const Title = ({ size, children, ...restProps }) => {
 };
 
 export default function BaseCard(props) {
+  const { ownerIcon } = useSelector(selectInfo);
   const {
     className = "",
     allowHeader = false,
@@ -77,90 +79,96 @@ export default function BaseCard(props) {
     <div className={`card ${className}`}>
       {allowHeader && (
         <div className="card-header">
-          <Title size={titleSize} className="card-title" style={headerStyle}>
-            {title} {otherHeader}
-            {(allowFilter || allowSelector) && (
-              <span className="menu">
-                {allowFilter && (
-                  <span className="logo-list">
-                    {filters.includes(0) && (
-                      <IconFilter
-                        onClick={handleSetFilterDisplay("0")}
-                        selected={filterDisplay["0"]}
-                      >
-                        <img src={`${BASENAME}img/boy.png`} alt="boy" />
-                      </IconFilter>
-                    )}{" "}
-                    {filters.includes(1) && (
-                      <IconFilter
-                        onClick={handleSetFilterDisplay("1")}
-                        selected={filterDisplay["1"]}
-                      >
-                        <img src={`${BASENAME}img/girl.png`} alt="girl" />
-                      </IconFilter>
-                    )}{" "}
-                    {filters.includes(-1) && (
-                      <IconFilter
-                        onClick={handleSetFilterDisplay("-1")}
-                        selected={filterDisplay["-1"]}
-                      >
-                        <img src={`${BASENAME}img/both1.png`} alt="both" />
-                      </IconFilter>
-                    )}
-                  </span>
-                )}
-                {allowSelector && (
-                  <>
-                    <IconSelector
-                      className="dropdown-toggle"
-                      id="chooseBudgeType"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
+          {(allowFilter || allowSelector) && (
+            <span
+              className="menu"
+              style={{ paddingRight: "30px", width: "100%" }}
+            >
+              {allowFilter && (
+                <span className="logo-list">
+                  {filters.includes(0) && (
+                    <IconFilter
+                      onClick={handleSetFilterDisplay("0")}
+                      selected={filterDisplay["0"]}
                     >
-                      <i className="fas fa-list" />{" "}
-                      <span className="d-lg-none d-md-block">
-                        Choose Category
-                      </span>
-                    </IconSelector>
-                    <div
-                      className="dropdown-menu dropdown-menu-right mydropdown-menu"
-                      aria-labelledby="chooseBudgeType"
-                      onClick={handleDropdownClick}
-                      onKeyDown={handleDropdownClick}
-                      role="button"
-                      style={{ outline: "none" }}
-                      tabIndex={0}
+                      <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+                    </IconFilter>
+                  )}{" "}
+                  {filters.includes(1) && (
+                    <IconFilter
+                      onClick={handleSetFilterDisplay("1")}
+                      selected={filterDisplay["1"]}
                     >
-                      <IconOption className="dropdown-item">
-                        <label htmlFor="all_selected">
-                          Select All
+                      <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
+                    </IconFilter>
+                  )}{" "}
+                  {filters.includes(-1) && (
+                    <IconFilter
+                      onClick={handleSetFilterDisplay("-1")}
+                      selected={filterDisplay["-1"]}
+                    >
+                      <img
+                        src={ownerIcon["-1"].src}
+                        alt={ownerIcon["-1"].alt}
+                      />
+                    </IconFilter>
+                  )}
+                </span>
+              )}
+              {allowSelector && (
+                <>
+                  <IconSelector
+                    className="dropdown-toggle"
+                    id="chooseBudgeType"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <i className="fas fa-list" />{" "}
+                    <span className="d-lg-none d-md-block">
+                      Choose Category
+                    </span>
+                  </IconSelector>
+                  <div
+                    className="dropdown-menu dropdown-menu-right mydropdown-menu"
+                    aria-labelledby="chooseBudgeType"
+                    onClick={handleDropdownClick}
+                    onKeyDown={handleDropdownClick}
+                    role="button"
+                    style={{ outline: "none" }}
+                    tabIndex={0}
+                  >
+                    <IconOption className="dropdown-item">
+                      <label htmlFor="all_selected">
+                        Select All
+                        <input
+                          checked={allSelected}
+                          id="all_selected"
+                          type="checkbox"
+                          onChange={handleSetAllSelected}
+                        />
+                      </label>
+                    </IconOption>
+                    {selectorOptions.map((opt) => (
+                      <IconOption key={opt} className="dropdown-item">
+                        <label htmlFor={opt}>
+                          {opt}
                           <input
-                            checked={allSelected}
-                            id="all_selected"
+                            checked={selectorDisplay[opt]}
+                            id={opt}
                             type="checkbox"
-                            onChange={handleSetAllSelected}
+                            onChange={handleSetSelectorDisplay(opt)}
                           />
                         </label>
                       </IconOption>
-                      {selectorOptions.map((opt) => (
-                        <IconOption key={opt} className="dropdown-item">
-                          <label htmlFor={opt}>
-                            {opt}
-                            <input
-                              checked={selectorDisplay[opt]}
-                              id={opt}
-                              type="checkbox"
-                              onChange={handleSetSelectorDisplay(opt)}
-                            />
-                          </label>
-                        </IconOption>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </span>
-            )}
+                    ))}
+                  </div>
+                </>
+              )}
+            </span>
+          )}
+          <Title size={titleSize} className="card-title" style={headerStyle}>
+            {title} {otherHeader}
           </Title>
         </div>
       )}
