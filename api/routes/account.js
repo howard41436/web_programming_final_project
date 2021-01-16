@@ -89,6 +89,32 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/getUser", async (req, res) => {
+  const { username } = req.query;
+  const user = await User.findOne({ username }).exec();
+  if (user === null) {
+    res.status(403).send("Username or password is incorrect.");
+    return;
+  }
+  if (user.matched) {
+    res.status(200).json({
+      name: user.name,
+      icon: user.icon,
+      username,
+      matched: true,
+      pairId: user.pairId,
+    });
+  } else {
+    res.status(200).json({
+      name: user.name,
+      icon: user.icon,
+      username,
+      matched: false,
+      inviteCode: user.inviteCode,
+    });
+  }
+});
+
 router.post("/match", async (req, res) => {
   const { username, inviteCode } = req.body;
   if (typeof username !== "string" || typeof inviteCode !== "string") {

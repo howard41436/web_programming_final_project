@@ -83,6 +83,7 @@ const ProfileSchema = new Schema(
         },
       },
     },
+    anniversary: Date,
   },
   { timestamps: true, collection: "profile" }
 );
