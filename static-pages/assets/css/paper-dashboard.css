@@ -4244,13 +4244,13 @@ License - nucleoapp.com/license/
 }
 
 .select-logo a > img {
-  transition: transform .5s ease;
+  /*transition: transform .5s ease;*/
   transform: scale(3);
 }
 
-.select-logo a > img:hover {
-  transform: scale(4);
-}
+/*.select-logo a > img:hover {
+  transform: scale(3.5);
+}*/
 
 .update-logo a {
   padding: 20px;
@@ -4403,7 +4403,7 @@ License - nucleoapp.com/license/
 
 .settle-arrow {
   text-align: -webkit-center;
-  margin-top: 20px; 
+  vertical-align: -webkit-baseline-middle;
   color: gray
 }
 
@@ -4467,4 +4467,8 @@ License - nucleoapp.com/license/
 .select-dropdown .select-dropdown-menu li:active {
     background-color: #e2e2e2
     border: 0px;
+}
+
+td .row {
+  margin-left: 0px
 }
