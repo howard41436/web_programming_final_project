@@ -25,7 +25,7 @@
   <div class="wrapper ">
     <div class="sidebar" data-color="white" data-active-color="danger">
       <div class="logo">
-        <a class="simple-text logo-mini">
+        <a class="simple-text logo-mini" href="./profile.html">
           <div class="logo-image-small">
             <img src="assets/img/boy.png">
           </div>
@@ -89,13 +89,16 @@
               </div>
             </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link btn-rotate" href="./profile.html">
+              <li class="nav-item btn-rotate dropdown">
+                <a class="nav-link btn-rotate dropdown-toggle" id="accountOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="nc-icon nc-single-02"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Account</span>
-                  </p>
+                  <span class="d-lg-none d-md-block">Account</span>
                 </a>
+
+                <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="accountOption">
+                  <a class="dropdown-item" href="./profile.html">Profile</a>
+                  <a class="dropdown-item" href="./login.html">Log Out</a>
+                </div>
               </li>
             </ul>
           </div>

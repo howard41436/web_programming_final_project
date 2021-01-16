@@ -26,7 +26,7 @@
   <div class="wrapper ">
     <div class="sidebar" data-color="white" data-active-color="danger">
       <div class="logo">
-        <a class="simple-text logo-mini">
+        <a class="simple-text logo-mini" href="./profile.html">
           <div class="logo-image-small">
             <img src="assets/img/boy.png">
           </div>
@@ -92,14 +92,16 @@
                       <!-- <input type="text" class="form-control" placeholder="Category"> -->
 
 
-                      <div class="dropdown form-control">
-                        <div class="select">
+                      <div class="select-dropdown form-control" style="padding: 0">
+                        <div class="select" style="padding:10px">
                           <span>Select a Category</span>
                           <i class="fa fa-chevron-left"></i>
                         </div>
-                        <ul class="dropdown-menu">
-                          <li id="male">Male</li>
-                          <li id="female">Female</li>
+                        <ul class="select-dropdown-menu form-control" style="border: 0px; margin-bottom:0px">
+                          <li id="food"><span class="icon-big text-center icon-warning">
+                            <i class="nc-icon nc-shop text-warning"></i></span> Food</li>
+                          <li id="transportation"><span class="text-center icon-warning"><i class="nc-icon nc-bus-front-12 text-success"></i></span> Transportation</li>
+                          <li id="others">Others</li>
                         </ul>
                       </div>
 
@@ -109,7 +111,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Amount</label>
-                      <input type="text" class="form-control" placeholder="Amount">
+                      <input type="number" class="form-control" placeholder="Amount">
                     </div>
                   </div>
                 </div>
@@ -192,13 +194,16 @@
               </div>
             </form>
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link btn-rotate" href="./profile.html">
+              <li class="nav-item btn-rotate dropdown">
+                <a class="nav-link btn-rotate dropdown-toggle" id="accountOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="nc-icon nc-single-02"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Account</span>
-                  </p>
+                  <span class="d-lg-none d-md-block">Account</span>
                 </a>
+
+                <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="accountOption">
+                  <a class="dropdown-item" href="./profile.html">Profile</a>
+                  <a class="dropdown-item" href="./login.html">Log Out</a>
+                </div>
               </li>
             </ul>
           </div>
@@ -223,8 +228,8 @@
                       <span class="d-lg-none d-md-block">Choose Category</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="chooseBudgeType">
-                      <a class="dropdown-item" href="#">Food</a>
-                      <a class="dropdown-item" href="#">Transportation</a>
+                      <a class="dropdown-item" href="#"><span class="icon-big text-center icon-warning"><i class="nc-icon nc-shop text-warning"></i></span> Food</a>
+                      <a class="dropdown-item" href="#"><span class="text-center icon-warning"><i class="nc-icon nc-bus-front-12 text-success"></i></span> Transportation</a>
                       <a class="dropdown-item" href="#">Others</a>
                     </div>
                   </span>
@@ -260,8 +265,8 @@
                       <span class="d-lg-none d-md-block">Choose Category</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="chooseBudgeType">
-                      <a class="dropdown-item" href="#">Food</a>
-                      <a class="dropdown-item" href="#">Transportation</a>
+                      <a class="dropdown-item" href="#"><span class="icon-big text-center icon-warning"><i class="nc-icon nc-shop text-warning"></i></span> Food</a>
+                      <a class="dropdown-item" href="#"><span class="text-center icon-warning"><i class="nc-icon nc-bus-front-12 text-success"></i></span> Transportation</a>
                       <a class="dropdown-item" href="#">Others</a>
                     </div>
                   </span>
@@ -375,18 +380,18 @@
       demo.initExpensePages();
     });
     /*Dropdown Menu*/
-    $('.dropdown').click(function () {
+    $('.select-dropdown').click(function () {
       $(this).attr('tabindex', 1).focus();
       $(this).toggleClass('active');
-      $(this).find('.dropdown-menu').slideToggle(300);
+      $(this).find('.select-dropdown-menu').slideToggle(300);
     });
-    $('.dropdown').focusout(function () {
-      $(this).removeClass('active');
-      $(this).find('.dropdown-menu').slideUp(300);
-    });
-    $('.dropdown .dropdown-menu li').click(function () {
-      $(this).parents('.dropdown').find('span').text($(this).text());
-      $(this).parents('.dropdown').find('input').attr('value', $(this).attr('id'));
+    // $('.select-dropdown').focusout(function () {
+    //   $(this).removeClass('active');
+    //   $(this).find('.select-dropdown-menu').slideUp(300);
+    // });
+    $('.select-dropdown .select-dropdown-menu li').click(function () {
+      $(this).parents('.select-dropdown').find('span').text($(this).text());
+      $(this).parents('.select-dropdown').find('input').attr('value', $(this).attr('id'));
     });
     /*End Dropdown Menu*/
   </script>
