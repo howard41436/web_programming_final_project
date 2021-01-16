@@ -10,10 +10,12 @@ export default async function seedProfile() {
         pairId: 0,
         user0: {
           name: "Peipei",
+          icon: 0,
           username: "wujun_pei",
         },
         user1: {
           name: "Fiona",
+          icon: 2,
           username: "fionahsu_1004",
         },
         budget: {

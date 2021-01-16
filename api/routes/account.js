@@ -11,7 +11,7 @@ const { inviteCodeMin, inviteCodeRange } = inviteCodeParams;
 const { pairIdMin, pairIdRange } = pairIdParams;
 
 router.post("/register", async (req, res) => {
-  const { name, username, password } = req.body;
+  const { name, icon, username, password } = req.body;
   if (typeof username !== "string" || typeof password !== "string") {
     res.status(403).send("Username and password must be strings.");
     return;
@@ -31,16 +31,24 @@ router.post("/register", async (req, res) => {
     // eslint-disable-next-line no-await-in-loop
     userWithInviteCode = await User.findOne({ inviteCode }).exec();
   } while (userWithInviteCode);
-  const newUser = await User.create({
-    name,
-    username,
-    passwordHash,
-    matched: false,
-    inviteCode,
-  });
-  debug("New user created:\n%O", newUser);
+  try {
+    const newUser = await User.create({
+      name,
+      icon,
+      username,
+      passwordHash,
+      matched: false,
+      inviteCode,
+    });
+    debug("New user created:\n%O", newUser);
+  } catch (err) {
+    debug("Error:\n%O", err);
+    res.status(403).send();
+    return;
+  }
   res.status(200).json({
     name,
+    icon,
     username,
     matched: false,
     inviteCode,
@@ -65,6 +73,7 @@ router.post("/login", async (req, res) => {
   if (user.matched) {
     res.status(200).json({
       name: user.name,
+      icon: user.icon,
       username,
       matched: true,
       pairId: user.pairId,
@@ -72,6 +81,7 @@ router.post("/login", async (req, res) => {
   } else {
     res.status(200).json({
       name: user.name,
+      icon: user.icon,
       username,
       matched: false,
       inviteCode: user.inviteCode,
@@ -136,10 +146,12 @@ router.post("/match", async (req, res) => {
         pairId,
         user0: {
           name: user0.name,
+          icon: user0.icon,
           username: user0.username,
         },
         user1: {
           name: user1.name,
+          icon: user1.icon,
           username: user1.username,
         },
       });

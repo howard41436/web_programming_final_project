@@ -22,6 +22,10 @@ const ProfileSchema = new Schema(
         type: String,
         required: true,
       },
+      icon: {
+        type: Number,
+        required: true,
+      },
       username: {
         type: String,
         required: true,
@@ -30,6 +34,10 @@ const ProfileSchema = new Schema(
     user1: {
       name: {
         type: String,
+        required: true,
+      },
+      icon: {
+        type: Number,
         required: true,
       },
       username: {

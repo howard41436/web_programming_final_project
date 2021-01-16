@@ -25,6 +25,10 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    icon: {
+      type: Number,
+      required: true,
+    },
     username: {
       type: String,
       required: true,
