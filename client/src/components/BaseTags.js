@@ -128,14 +128,13 @@ export const IconRadio = styled.input.attrs(() => ({
     border-radius: 5px;
     max-width: 100% !important;
     height: 35px !important;
-    padding: ${({ checked }) => (checked ? "1px" : 0)};
+    opacity: ${({ checked }) => (checked ? 1 : 0.6)};
     width: auto;
   }
 
   &:hover + label img {
     background: ${({ checked }) =>
       checked ? "rgba(81, 203, 206, 0.6)" : "rgba(81, 203, 206, 0.2)"};
-    padding: 2px;
   }
 `;
 
@@ -145,7 +144,6 @@ export const IconRadioBig = styled.input.attrs(() => ({
   display: none;
 
   & + label {
-    cursor: pointer;
     display: contents;
   }
 
@@ -165,7 +163,6 @@ export const IconArrow = styled.input.attrs(() => ({
 
   & + label {
     color: ${({ checked }) => (checked ? "black" : "#888")};
-    cursor: pointer;
     display: contents;
     font-size: ${({ checked }) => (checked ? "59px" : "49px")};
     margin-bottom: 8px;

@@ -12,6 +12,7 @@ import BaseForm, {
   BaseFormInput,
   BaseFormTextarea,
   BaseFormSelect,
+  BaseFormOption,
   baseFormReset,
 } from "../components/BaseForm";
 import { baseToast, BaseToastInner } from "../components/BaseToast";
@@ -34,7 +35,7 @@ export default function FormModal(props) {
 
   const initialExpenses = {
     pairId,
-    category: "food",
+    category: "",
     owner: -2,
     price: 0,
     name: "",
@@ -177,15 +178,24 @@ export default function FormModal(props) {
       <Row>
         <Col>
           <BaseFormGroup formId={formId} label="Category">
-            <BaseFormSelect formId={formId} formKey="category">
+            <BaseFormSelect
+              formId={formId}
+              formKey="category"
+              placeholder="Select a Category"
+            >
               {categoryList.map((cat) => (
-                <option
+                <BaseFormOption
                   key={cat}
-                  style={{ textTransform: "capitalize" }}
+                  formId={formId}
+                  formKey="category"
                   value={cat}
+                  hidden={(v) => v === cat}
                 >
+                  <span className="icon-big text-center icon-warning">
+                    <i className={categoryInfo[cat].icon} />
+                  </span>{" "}
                   {cat}
-                </option>
+                </BaseFormOption>
               ))}
             </BaseFormSelect>
           </BaseFormGroup>
@@ -204,7 +214,7 @@ export default function FormModal(props) {
       <Row>
         <Col>
           <BaseFormGroup formId={formId} label="Member">
-            <span className="logo-list">
+            <span className="logo-list select-logo">
               {" "}
               <BaseFormInput
                 id={`${type}_radio_boy`}
@@ -216,7 +226,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_boy`}>
-                <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+                <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_girl`}
@@ -228,7 +238,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_girl`}>
-                <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
+                <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_both`}

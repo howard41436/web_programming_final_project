@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
@@ -11,6 +11,10 @@ import { INSTANCE } from "../constants";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "App's name";
+  }, []);
 
   const SignUpButton = () => (
     <div className="update ml-auto mr-auto">

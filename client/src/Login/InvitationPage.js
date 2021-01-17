@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/userSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
+import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col } from "../components/BaseTags";
-import { getCookie, setCookie } from "../cookieHelper";
+import { getCookie, setCookie, deleteCookie } from "../cookieHelper";
 import { INSTANCE } from "../constants";
 
 export default function InvitationPage() {
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "Invitation | App's name";
+  }, []);
 
   const getUserJSON = (str) => {
     let obj;
@@ -28,15 +35,49 @@ export default function InvitationPage() {
     INSTANCE.post("/api/account/match", {
       username,
       inviteCode: code,
-    }).then((res) => {
-      const accessToken = {
-        pairId: res.data.pairId,
-        username: res.data.username,
-      };
-      setCookie("accessToken", JSON.stringify(accessToken));
-      dispatch(setUser(res.data));
-    });
+    })
+      .then((res) => {
+        const accessToken = {
+          pairId: res.data.pairId,
+          username: res.data.username,
+        };
+        setCookie("accessToken", JSON.stringify(accessToken));
+        dispatch(setUser(res.data));
+      })
+      .catch((err) =>
+        baseToast(
+          <BaseToastInner
+            icon="nc-icon nc-bell-55"
+            title="Match failed."
+            message={err.response.data}
+          />,
+          {
+            position: "top-center",
+            autoClose: 6000,
+            type: "alert",
+          }
+        )
+      );
   };
+
+  const handleLogOut = (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+    deleteCookie();
+    dispatch(setUser({ login: false }));
+    history.push("/");
+  };
+
+  const LogOutButton = () => (
+    <div className="update ml-auto mr-auto">
+      <button
+        type="button"
+        className="btn btn-primary btn-round"
+        onClick={handleLogOut}
+      >
+        Log Out
+      </button>
+    </div>
+  );
 
   return (
     <div className="wrapper">
@@ -50,19 +91,12 @@ export default function InvitationPage() {
               allowSubmit
               submitText="Confirm"
               onSubmit={handleMatch}
+              otherFooter2={<LogOutButton />}
             >
               <Row>
                 <Col>
                   <h2 style={{ textAlign: "center" }}>
-                    <span
-                      style={{
-                        backgroundColor: "grey",
-                        color: "white",
-                        padding: "5px",
-                      }}
-                    >
-                      {inviteCode}
-                    </span>
+                    <span className="invitation-code">{inviteCode}</span>
                   </h2>
                 </Col>
                 <Col>

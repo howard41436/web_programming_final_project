@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import SlideToggle from "react-slide-toggle";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm, selectForm } from "../redux/formSlice";
 import { Row, Button } from "./BaseTags";
@@ -226,18 +227,21 @@ export const BaseFormTextarea = (props) => {
 };
 
 export const BaseFormSelect = (props) => {
-  const dispatch = useDispatch();
   const {
     className = "",
     formId = "",
     formKey = "",
     children = <></>,
+    placeholder = "",
     style = {},
     hidden = false, // Boolean or Function
-    validator = (value) => value,
     CustomSelect = null, // Custom Component
   } = props;
   const { [formId]: formValues } = useSelector(selectForm(formId));
+
+  const [tabIndex, setTabIndex] = useState(null);
+  const [active, setActive] = useState(false);
+  const selectRef = useRef();
 
   const selectHidden = () => {
     if (typeof hidden === "boolean") return hidden;
@@ -248,21 +252,19 @@ export const BaseFormSelect = (props) => {
     );
   };
 
-  const handleValidateUpdate = (e) => {
-    handleSetFormValues(
-      dispatch,
-      formId,
-      formKey,
-      formValues,
-      validator(e.target.value)
-    );
+  const handleClick = (toggle) => () => {
+    setTabIndex(1);
+    selectRef.current.focus();
+    setActive((a) => !a);
+    toggle();
   };
 
   const selectProps = {
-    className: `form-control ${className}`,
-    value: String(getFieldValue(formKey, formValues)) || "",
-    onChange: handleValidateUpdate,
+    className: `select-dropdown form-control ${
+      active ? "active" : ""
+    } ${className}`,
     style: {
+      padding: 0,
       textTransform: "capitalize",
       ...style,
       display: selectHidden() ? "none" : null,
@@ -272,5 +274,80 @@ export const BaseFormSelect = (props) => {
   if (CustomSelect)
     return <CustomSelect {...selectProps}>{children}</CustomSelect>;
 
-  return <select {...selectProps}>{children}</select>;
+  return (
+    <SlideToggle duration={300} collapsed>
+      {({ toggle, setCollapsibleElement }) => (
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+        <div
+          {...selectProps}
+          role="button"
+          onClick={handleClick(toggle)}
+          ref={selectRef}
+          tabIndex={tabIndex}
+        >
+          <div className="select" style={{ padding: "10px" }}>
+            <span>{getFieldValue(formKey, formValues) || placeholder}</span>
+            <i className="fa fa-chevron-left" />
+          </div>
+          <ul
+            className="select-dropdown-menu form-control"
+            ref={setCollapsibleElement}
+            style={{ border: 0, marginBottom: 0 }}
+          >
+            {children}
+          </ul>
+        </div>
+      )}
+    </SlideToggle>
+  );
+};
+
+export const BaseFormOption = (props) => {
+  const dispatch = useDispatch();
+  const {
+    className = "",
+    formId = "",
+    formKey = "",
+    children = <></>,
+    value = "",
+    style = {},
+    hidden = false, // Boolean or Function
+    validator = (v) => v,
+    CustomOption = null, // Custom Component
+  } = props;
+  const { [formId]: formValues } = useSelector(selectForm(formId));
+
+  const optionHidden = () => {
+    if (typeof hidden === "boolean") return hidden;
+    return hidden(
+      getFieldValue(formKey, formValues),
+      formValues,
+      getFieldValue
+    );
+  };
+
+  const handleValidateUpdate = () => {
+    handleSetFormValues(
+      dispatch,
+      formId,
+      formKey,
+      formValues,
+      validator(value)
+    );
+  };
+
+  const optionProps = {
+    className,
+    onClick: handleValidateUpdate,
+    style: {
+      textTransform: "capitalize",
+      ...style,
+      display: optionHidden() ? "none" : null,
+    },
+  };
+
+  if (CustomOption)
+    return <CustomOption {...optionProps}>{children}</CustomOption>;
+
+  return <li {...optionProps}>{children}</li>;
 };
