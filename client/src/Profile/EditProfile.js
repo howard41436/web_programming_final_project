@@ -64,7 +64,7 @@ export default function EditProfile() {
                   CustomInput={IconRadio}
                 />
                 <label htmlFor="avatar_radio_boy">
-                  <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+                  <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
                 </label>{" "}
                 <BaseFormInput
                   id="avatar_radio_boy2"
@@ -88,7 +88,7 @@ export default function EditProfile() {
                   CustomInput={IconRadio}
                 />
                 <label htmlFor="avatar_radio_girl">
-                  <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
+                  <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
                 </label>{" "}
                 <BaseFormInput
                   id="avatar_radio_girl2"

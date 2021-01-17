@@ -6142,6 +6142,32 @@ License - nucleoapp.com/license/
   display: inline !important;
 }
 
+.select-logo a {
+  padding: 20px;
+}
+
+.select-logo a > img {
+  /*transition: transform .5s ease;*/
+  transform: scale(3);
+}
+
+/*.select-logo a > img:hover {
+  transform: scale(3.5);
+}*/
+
+.update-logo a {
+  padding: 20px;
+}
+
+.update-logo a > img {
+  transition: transform 0.5s ease;
+  transform: scale(3);
+}
+
+.update-logo a > img:hover {
+  transform: scale(4);
+}
+
 .modal {
   padding: 20px;
   max-width: 50vw;
@@ -6263,47 +6289,9 @@ License - nucleoapp.com/license/
   box-shadow: 1px 2px 7px 1px rgba(0, 0, 0, 0.125);
 }
 
-/* midCard flip */
-#midCard {
-  position: absolute;
-  -webkit-transition: -webkit-transform 1s;
-  -moz-transition: -moz-transform 1s;
-  -o-transition: -o-transform 1s;
-  transition: transform 1s;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-transform-origin: 50% 50%;
-}
-#midCard div {
-  position: absolute;
-  text-align: center;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-#midCard .front {
-}
-#midCard .back {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-
-#midCard.flipped {
-  -webkit-transform: rotateY(180deg);
-  -moz-transform: rotateY(180deg);
-  -o-transform: rotateY(180deg);
-  transform: rotateY(180deg);
-}
-
 .invitation-code {
-  border-style: groove;
-  background: gainsboro;
-  font-family: Andale Mono;
+  background-color: grey;
+  color: white;
   padding: 5px;
 }
 
@@ -6313,66 +6301,70 @@ License - nucleoapp.com/license/
 
 .settle-arrow {
   text-align: -webkit-center;
-  margin-top: 20px;
+  vertical-align: -webkit-baseline-middle;
   color: gray;
 }
 
 .settle-arrow > a:hover {
   color: black;
 }
+
 /*# sourceMappingURL=paper-dashboard.css.map */
 
 /*Styling Selectbox*/
-.dropdown {
+.select-dropdown {
   height: 100%;
   text-align: left;
 }
-.dropdown .select {
+.select-dropdown .select {
   cursor: pointer;
   display: block;
 }
-.dropdown .select > i {
+.select-dropdown .select > i {
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   float: right;
-  line-height: 20px;
 }
-.dropdown:hover {
+.select-dropdown:hover {
   box-shadow: 0 0 4px rgb(204, 204, 204);
 }
-.dropdown:active {
+.select-dropdown:active {
   background-color: #f8f8f8;
 }
-.dropdown.active:hover,
-.dropdown.active {
+.select-dropdown.active:hover,
+.select-dropdown.active {
   box-shadow: 0 0 4px rgb(204, 204, 204);
   border-radius: 2px 2px 0 0;
   background-color: #f8f8f8;
 }
-.dropdown.active .select > i {
+.select-dropdown.active .select > i {
   transform: rotate(-90deg);
 }
-.dropdown .dropdown-menu {
-  position: absolute;
+.select-dropdown .select-dropdown-menu {
+  /*position: absolute;*/
   background-color: #fff;
   width: 100%;
-  margin-top: 1px;
   box-shadow: 0 1px 2px rgb(204, 204, 204);
   border-radius: 0 1px 2px 2px;
   display: none;
 }
-.dropdown .dropdown-menu li {
+.select-dropdown .select-dropdown-menu li {
   padding: 10px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
-.dropdown .dropdown-menu {
+.select-dropdown .select-dropdown-menu {
   padding: 0;
   list-style: none;
 }
-.dropdown .dropdown-menu li:hover {
+.select-dropdown .select-dropdown-menu li:hover {
   background-color: #f2f2f2;
 }
-.dropdown .dropdown-menu li:active {
+.select-dropdown .select-dropdown-menu li:active {
   background-color: #e2e2e2;
+  border: 0px;
+}
+
+td .row {
+  margin-left: 0px;
 }

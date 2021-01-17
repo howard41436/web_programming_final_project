@@ -80,7 +80,7 @@ export default function BaseModal(props) {
               title={title}
               otherHeader={<CloseButton />}
             >
-              {children}
+              {show && children}
             </BaseCard>
           </Col>
         </Row>

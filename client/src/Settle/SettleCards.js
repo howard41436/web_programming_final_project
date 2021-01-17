@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useImmer } from "use-immer";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
@@ -22,8 +21,9 @@ import {
   IconArrow,
 } from "../components/BaseTags";
 
-const CenterCard = styled.div`
-  padding-bottom: 15px;
+const Footer = styled.div.attrs({
+  className: "card-footer",
+})`
   text-align: center;
 `;
 
@@ -34,7 +34,7 @@ export default function SettleCards() {
 
   const initialSettlement = {
     pairId,
-    payer: 0,
+    payer: -Math.sign(debt.debtOfUser0),
     name: "",
     receivedMoneyOfUser0: 0,
   };
@@ -50,69 +50,76 @@ export default function SettleCards() {
     setShow((s) => !s);
   };
 
-  const getLastSettlement = (type) => {
-    const tmpDebt = debt.recordsAndSettlements.map((d) => d).reverse();
-    const minus = type === 0 ? -1 : 1;
+  // const renderSideCard = (type) => (
+  // );
 
-    const result = tmpDebt.find(
-      (set) =>
-        set.type === "settlement" &&
-        set.content.receivedMoneyOfUser0 * minus > 0
-    );
-
-    return result === undefined
-      ? null
-      : result.content.receivedMoneyOfUser0 * -1;
-  };
-
-  const [lastSettlement] = useImmer({
-    0: getLastSettlement(0),
-    1: getLastSettlement(1),
-  });
-
-  const renderSideCard = (type) => (
-    <Row style={{ paddingBottom: "15px" }}>
-      <Col size={5} otherSize={{ default: 7 }}>
-        <div className="text-center">
-          <a>
-            <img
-              src={ownerIcon[String(type)].src}
-              alt={ownerIcon[String(type)].alt}
-            />
-          </a>
-        </div>
-      </Col>
-      <Col size={6} otherSize={{ default: 5 }}>
-        <div className="numbers">
-          <p className="card-category">Last Settlement</p>
-          <p className="card-title">
-            {lastSettlement[type] ? `$ ${lastSettlement[type]}` : "No Record"}
-          </p>
-        </div>
-      </Col>
-    </Row>
+  const CardHeader = () => (
+    <div style={{ textAlign: "center" }}>
+      <Row>
+        <Col size={4}>
+          <h5 className="card-title settle-arrow">{name0}</h5>
+        </Col>
+        <Col size={4}>
+          <h5 className="card-title">Summary</h5>
+        </Col>
+        <Col size={4}>
+          <h5 className="card-title settle-arrow">{name1}</h5>
+        </Col>
+      </Row>
+    </div>
   );
 
   return (
     <>
-      <Col size={4}>
-        <BaseCard className="card-stats">{renderSideCard(1)}</BaseCard>
-      </Col>
-      <Col size={4}>
-        <BaseCard className="card-stats">
-          <CenterCard>
-            {debt.debtOfUser0 >= 0 ? name0 : name1} owes{" "}
-            {debt.debtOfUser0 >= 0 ? name1 : name0}{" "}
-            <strong style={{ fontSize: "16px" }}>$ {debt.debtOfUser0}</strong>
-            <br />
-            <Button theme="primary" type="button" onClick={handleSetShow}>
-              Settle with amount
-            </Button>
-          </CenterCard>
+      <Col>
+        <BaseCard
+          className="card-stats"
+          allowHeader
+          titleSize={0}
+          otherHeader={<CardHeader />}
+        >
+          <Row>
+            <Col size={4}>
+              <div className="text-center">
+                <a>
+                  <img
+                    src={ownerIcon[0].src}
+                    alt={ownerIcon[0].alt}
+                    style={{ width: "50%" }}
+                  />
+                </a>
+              </div>
+            </Col>
+            <Col size={4} style={{ textAlign: "center", paddingTop: "20px" }}>
+              <h2 className="settle-arrow" style={{ margin: 0 }}>
+                $ {Math.abs(debt.debtOfUser0)}
+              </h2>
+              <h1 className="settle-arrow" style={{ margin: 0 }}>
+                <i
+                  className={`fas fa-long-arrow-alt-${
+                    initialSettlement.payer === -1 ? "right" : "left"
+                  } fa-3x`}
+                  style={{ transform: "scale(2,1)", lineHeight: "30%" }}
+                />
+              </h1>
+              <Button theme="primary" type="button" onClick={handleSetShow}>
+                Settle with amount
+              </Button>
+            </Col>
+            <Col size={4}>
+              <div className="text-center">
+                <a>
+                  <img
+                    src={ownerIcon[1].src}
+                    alt={ownerIcon[1].alt}
+                    style={{ width: "50%" }}
+                  />
+                </a>
+              </div>
+            </Col>
+          </Row>
+          <Footer />
         </BaseCard>
-      </Col>
-      <Col size={4}>
-        <BaseCard className="card-stats">{renderSideCard(0)}</BaseCard>
       </Col>
 
       <BaseModal
@@ -125,65 +132,10 @@ export default function SettleCards() {
           formId="settle_with_amount_form"
           initialValues={initialSettlement}
           allowSubmit
-          submitText="Add"
+          submitText="Settle"
         >
           <Row>
             <Col size={4} className="pr-1">
-              <div className="logo logo-form">
-                <a className="simple-text logo-mini">
-                  <BaseFormInput
-                    id="settle_radio_girl"
-                    formId="settle_with_amount_form"
-                    formKey="payer"
-                    type="radio"
-                    name="payer"
-                    inputValue={1}
-                    CustomInput={IconRadioBig}
-                  />
-                  <label htmlFor="settle_radio_girl">
-                    <img
-                      src={`${ownerIcon["1"].src}`}
-                      alt={`${ownerIcon["1"].alt}`}
-                      style={{ marginTop: "14px", marginBottom: "21px" }}
-                    />
-                  </label>
-                </a>
-              </div>
-            </Col>
-            <Col size={4} className="px-1">
-              <h1 className="settle-arrow">
-                <a className="simple-text">
-                  <BaseFormInput
-                    id="settle_radio_right"
-                    formId="settle_with_amount_form"
-                    formKey="payer"
-                    type="radio"
-                    name="payer"
-                    inputValue={1}
-                    CustomInput={IconArrow}
-                  />
-                  <label htmlFor="settle_radio_right">
-                    <i className="fas fa-long-arrow-alt-right" />
-                  </label>
-                </a>
-                <br />
-                <a className="simple-text">
-                  <BaseFormInput
-                    id="settle_radio_left"
-                    formId="settle_with_amount_form"
-                    formKey="payer"
-                    type="radio"
-                    name="payer"
-                    inputValue={-1}
-                    CustomInput={IconArrow}
-                  />
-                  <label htmlFor="settle_radio_left">
-                    <i className="fas fa-long-arrow-alt-left" />
-                  </label>
-                </a>
-              </h1>
-            </Col>
-            <Col size={4} className="pl-1">
               <div className="logo logo-form">
                 <a className="simple-text logo-mini">
                   <BaseFormInput
@@ -195,10 +147,81 @@ export default function SettleCards() {
                     inputValue={-1}
                     CustomInput={IconRadioBig}
                   />
-                  <label htmlFor="settle_radio_boy">
+                  <label
+                    htmlFor="settle_radio_boy"
+                    style={{
+                      pointerEvents:
+                        initialSettlement.payer === -1 ? null : "none",
+                    }}
+                  >
                     <img
-                      src={`${ownerIcon["0"].src}`}
-                      alt={`${ownerIcon["0"].alt}`}
+                      src={`${ownerIcon[0].src}`}
+                      alt={`${ownerIcon[0].alt}`}
+                      style={{ marginTop: "14px", marginBottom: "21px" }}
+                    />
+                  </label>
+                </a>
+              </div>
+            </Col>
+            <Col size={4} className="px-1">
+              <h1 className="settle-arrow">
+                <br />
+                {initialSettlement.payer === -1 && (
+                  <a className="simple-text">
+                    <BaseFormInput
+                      id="settle_radio_right"
+                      formId="settle_with_amount_form"
+                      formKey="payer"
+                      type="radio"
+                      name="payer"
+                      inputValue={-1}
+                      CustomInput={IconArrow}
+                    />
+                    <label htmlFor="settle_radio_right">
+                      <i className="fas fa-long-arrow-alt-right" />
+                    </label>
+                  </a>
+                )}
+                {initialSettlement.payer === 1 && (
+                  <a className="simple-text">
+                    <BaseFormInput
+                      id="settle_radio_left"
+                      formId="settle_with_amount_form"
+                      formKey="payer"
+                      type="radio"
+                      name="payer"
+                      inputValue={1}
+                      CustomInput={IconArrow}
+                    />
+                    <label htmlFor="settle_radio_left">
+                      <i className="fas fa-long-arrow-alt-left" />
+                    </label>
+                  </a>
+                )}
+              </h1>
+            </Col>
+            <Col size={4} className="pl-1">
+              <div className="logo logo-form">
+                <a className="simple-text logo-mini">
+                  <BaseFormInput
+                    id="settle_radio_girl"
+                    formId="settle_with_amount_form"
+                    formKey="payer"
+                    type="radio"
+                    name="payer"
+                    inputValue={1}
+                    CustomInput={IconRadioBig}
+                  />
+                  <label
+                    htmlFor="settle_radio_girl"
+                    style={{
+                      pointerEvents:
+                        initialSettlement.payer === 1 ? null : "none",
+                    }}
+                  >
+                    <img
+                      src={`${ownerIcon[1].src}`}
+                      alt={`${ownerIcon[1].alt}`}
                       style={{ marginTop: "14px", marginBottom: "21px" }}
                     />
                   </label>

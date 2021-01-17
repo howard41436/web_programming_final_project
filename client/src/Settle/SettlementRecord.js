@@ -107,10 +107,27 @@ export default function SettlementRecord() {
           </td>
           <td style={{ textTransform: "capitalize" }}>{row[4]}</td>
           <td>
-            <div style={{ height: "40px", textAlign: "center", width: "60px" }}>
+            <div style={{ height: "40px", textAlign: "center", width: "96px" }}>
               <img
-                src={ownerIcon[String(row[5])].src}
-                alt={ownerIcon[String(row[5])].alt}
+                src={ownerIcon[0].src}
+                alt={ownerIcon[0].alt}
+                style={{ height: "35px" }}
+              />
+              <span className="settle-arrow">
+                <i
+                  className={`fas fa-long-arrow-alt-${
+                    row[5] === 0 ? "right" : "left"
+                  }`}
+                  style={{
+                    verticalAlign: "-webkit-baseline-middle",
+                    padding: "5px",
+                    height: "35px",
+                  }}
+                />
+              </span>
+              <img
+                src={ownerIcon[1].src}
+                alt={ownerIcon[1].alt}
                 style={{ height: "35px" }}
               />
             </div>
@@ -121,6 +138,16 @@ export default function SettlementRecord() {
     );
   };
 
+  const [selectorDisplay, setSelectorDisplay] = useImmer({
+    settlements: true,
+    expenses: true,
+  });
+
+  const selectorOptions = [
+    { content: "settlements", value: "settlements" },
+    { content: "expenses", value: "expenses" },
+  ];
+
   return (
     <BaseCard
       allowHeader
@@ -129,6 +156,10 @@ export default function SettlementRecord() {
       filters={[0, 1]}
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
+      allowSelector
+      selectorOptions={selectorOptions}
+      selectorDisplay={selectorDisplay}
+      setSelectorDisplay={setSelectorDisplay}
     >
       <BaseTable
         columns={columns}

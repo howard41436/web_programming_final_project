@@ -1,10 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
 import BaseForm, { BaseFormInput } from "./BaseForm";
 import { Button } from "./BaseTags";
+import { deleteCookie } from "../cookieHelper";
 
 export default function Navbar(props) {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const { title } = props;
+
+  const handleLogOut = (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+    deleteCookie();
+    dispatch(setUser({ login: false }));
+    history.push("/");
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
@@ -59,14 +71,36 @@ export default function Navbar(props) {
             </div>
           </BaseForm>
           <ul className="navbar-nav">
-            <li className="nav-item">
+            <li className="nav-item btn-rotate dropdown">
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link className="nav-link btn-rotate" to="/profile">
+              <a
+                className="nav-link btn-rotate dropdown-toggle"
+                id="accountOption"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
                 <i className="nc-icon nc-single-02" />
-                <p>
-                  <span className="d-lg-none d-md-block">Account</span>
-                </p>
-              </Link>
+                <span className="d-lg-none d-md-block">Account</span>
+              </a>
+              <div
+                className="dropdown-menu dropdown-menu-right mydropdown-menu"
+                aria-labelledby="accountOption"
+              >
+                <Link className="dropdown-item" to="/profile">
+                  Profile
+                </Link>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a
+                  className="dropdown-item"
+                  onClick={handleLogOut}
+                  onKeyDown={handleLogOut}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Log Out
+                </a>
+              </div>
             </li>
           </ul>
         </div>

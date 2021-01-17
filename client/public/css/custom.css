@@ -4,6 +4,14 @@
   max-width: 100vw !important;
 }
 
+.modal .close-modal {
+  height: 0;
+}
+
 .center {
   top: 50% !important;
+}
+
+.select-dropdown .select-dropdown-menu {
+  display: block;
 }

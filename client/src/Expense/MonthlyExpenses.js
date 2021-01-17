@@ -210,6 +210,15 @@ export default function MonthlyExpenses(props) {
     </a>
   );
 
+  const selectorOptions = Object.entries(categoryInfo).map(([key, v]) => ({
+    content: (
+      <span className="icon-big text-center icon-warning">
+        <i className={v.icon} /> {key}
+      </span>
+    ),
+    value: key,
+  }));
+
   return (
     <BaseCard
       allowHeader
@@ -221,7 +230,7 @@ export default function MonthlyExpenses(props) {
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
       allowSelector
-      selectorOptions={Object.keys(categoryInfo)}
+      selectorOptions={selectorOptions}
       selectorDisplay={selectorDisplay}
       setSelectorDisplay={setSelectorDisplay}
     >

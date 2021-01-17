@@ -11,7 +11,8 @@ const Title = ({ size, children, ...restProps }) => {
   if (size === 3) return <h3 {...restProps}>{children}</h3>;
   if (size === 4) return <h4 {...restProps}>{children}</h4>;
   if (size === 5) return <h5 {...restProps}>{children}</h5>;
-  return <h6 {...restProps}>{children}</h6>;
+  if (size === 6) return <h6 {...restProps}>{children}</h6>;
+  return <>{children}</>;
 };
 
 export default function BaseCard(props) {
@@ -91,7 +92,7 @@ export default function BaseCard(props) {
                       onClick={handleSetFilterDisplay("0")}
                       selected={filterDisplay["0"]}
                     >
-                      <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+                      <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
                     </IconFilter>
                   )}{" "}
                   {filters.includes(1) && (
@@ -99,7 +100,7 @@ export default function BaseCard(props) {
                       onClick={handleSetFilterDisplay("1")}
                       selected={filterDisplay["1"]}
                     >
-                      <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
+                      <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
                     </IconFilter>
                   )}{" "}
                   {filters.includes(-1) && (
@@ -150,14 +151,14 @@ export default function BaseCard(props) {
                       </label>
                     </IconOption>
                     {selectorOptions.map((opt) => (
-                      <IconOption key={opt} className="dropdown-item">
-                        <label htmlFor={opt}>
-                          {opt}
+                      <IconOption key={opt.value} className="dropdown-item">
+                        <label htmlFor={opt.value}>
+                          {opt.content}
                           <input
-                            checked={selectorDisplay[opt]}
-                            id={opt}
+                            checked={selectorDisplay[opt.value]}
+                            id={opt.value}
                             type="checkbox"
-                            onChange={handleSetSelectorDisplay(opt)}
+                            onChange={handleSetSelectorDisplay(opt.value)}
                           />
                         </label>
                       </IconOption>

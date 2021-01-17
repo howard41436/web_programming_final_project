@@ -12,12 +12,11 @@ export default function Sidebar() {
   return (
     <div className="sidebar" data-color="white" data-active-color="danger">
       <div className="logo">
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a className="simple-text logo-mini">
+        <Link className="simple-text logo-mini" to="/profile">
           <div className="logo-image-small">
-            <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
+            <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
           </div>
-        </a>
+        </Link>
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a className="simple-text logo-normal">
           {name0} & {name1}
