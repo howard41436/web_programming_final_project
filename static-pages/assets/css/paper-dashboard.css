@@ -4392,9 +4392,28 @@ License - nucleoapp.com/license/
 
 
 .invitation-code {
-  background-color: grey; 
-  color: white; 
-  padding: 5px
+  background-color: #f4f3ef; 
+  border-radius: 5px;
+  color: #34b5b8; 
+  padding: 20px;
+  text-align: center;
+  font: 2.5rem 'DM Mono', monospace;
+}
+
+.invitation-code-input {
+  display: inline-block;
+  margin: 1.2rem auto;
+  border: none;
+  padding: 0;
+  width: 7.5ch;
+  background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 1.5ch) 0 100%/ 10ch 2px no-repeat;
+  font: 2.5rem 'DM Mono', monospace;
+  letter-spacing: 0.5ch;
+}
+
+.invitation-code-input input:active,:focus {
+  color: grey;
+  outline: none;
 }
 
 .logo-form {

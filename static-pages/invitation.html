@@ -51,19 +51,24 @@
             <form>
               <div class="row">
                 <div class="col-md-12">
-                  <h2 style="text-align: center;"><span class="invitation-code">12345</span>
+                  <h2 class="invitation-code">12345
                   </h2>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Partner's Invitation Code</label>
-                    <input type="text" class="form-control" placeholder="Invitation Code">
+                    <h2 style="text-align: center;">
+                      <input class="invitation-code-input" maxlength="5">  
+                    </h2>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="update ml-auto mr-auto">
                   <button type="submit" class="btn btn-primary btn-round">Confirm</button>
+                </div>
+                <div class="update ml-auto mr-auto">
+                  <button type="submit" class="btn btn-primary btn-round">Log Out</button>
                 </div>
               </div>
             </form>
