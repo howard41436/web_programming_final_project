@@ -22,6 +22,10 @@ const ProfileSchema = new Schema(
         type: String,
         required: true,
       },
+      icon: {
+        type: Number,
+        required: true,
+      },
       username: {
         type: String,
         required: true,
@@ -30,6 +34,10 @@ const ProfileSchema = new Schema(
     user1: {
       name: {
         type: String,
+        required: true,
+      },
+      icon: {
+        type: Number,
         required: true,
       },
       username: {
@@ -75,10 +83,11 @@ const ProfileSchema = new Schema(
         },
       },
     },
+    anniversary: Date,
   },
   { timestamps: true, collection: "profile" }
 );
-ProfileSchema.index({ pairId: 1, date: 1 });
+ProfileSchema.index({ pairId: 1 });
 
 const Profile = model("profile", ProfileSchema);
 

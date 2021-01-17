@@ -10,6 +10,7 @@ export default async function seedUser() {
     const doc = await User.create([
       {
         name: "Howard",
+        icon: 0,
         username: "howard41436",
         passwordHash: await bcrypt.hash("admin", saltRounds),
         matched: false,
@@ -17,6 +18,7 @@ export default async function seedUser() {
       },
       {
         name: "Peipei",
+        icon: 0,
         username: "wujun_pei",
         passwordHash: await bcrypt.hash("jim", saltRounds),
         matched: true,
@@ -25,6 +27,7 @@ export default async function seedUser() {
       },
       {
         name: "Fiona",
+        icon: 2,
         username: "fionahsu_1004",
         passwordHash: await bcrypt.hash("fiona", saltRounds),
         matched: true,
