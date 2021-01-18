@@ -92,7 +92,7 @@ export default function BaseCard(props) {
                       onClick={handleSetFilterDisplay("0")}
                       selected={filterDisplay["0"]}
                     >
-                      <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
+                      <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
                     </IconFilter>
                   )}{" "}
                   {filters.includes(1) && (
@@ -100,7 +100,7 @@ export default function BaseCard(props) {
                       onClick={handleSetFilterDisplay("1")}
                       selected={filterDisplay["1"]}
                     >
-                      <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
+                      <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
                     </IconFilter>
                   )}{" "}
                   {filters.includes(-1) && (

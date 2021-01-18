@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 
@@ -15,13 +16,16 @@ import { INSTANCE } from "../constants";
 
 export default function MonthlyExpenses(props) {
   const dispatch = useDispatch();
+  const { user } = useSelector(selectUser);
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const { expenses } = useSelector(selectExpenses);
 
   const { setModalInfo } = props;
-  const handleSetModalInfo = (type, show, exp) => () => {
+  const handleSetModalInfo = (type, exp) => (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+
     setModalInfo((info) => {
-      info.show[type] = show;
+      info.show[type] = true;
       info.data = exp;
     });
   };
@@ -45,8 +49,8 @@ export default function MonthlyExpenses(props) {
 
   const [filterDisplay, setFilterDisplay] = useImmer({
     "-1": true,
-    0: true,
-    1: false,
+    0: user === "0",
+    1: user === "1",
   });
 
   const [selectorDisplay, setSelectorDisplay] = useImmer(
@@ -147,8 +151,8 @@ export default function MonthlyExpenses(props) {
         >
           <td className="icon-set">
             <a
-              onClick={handleSetModalInfo("edit", true, exp)}
-              onKeyDown={handleSetModalInfo("edit", true, exp)}
+              onClick={handleSetModalInfo("edit", exp)}
+              onKeyDown={handleSetModalInfo("edit", exp)}
               style={{ cursor: "pointer", outline: "none" }}
               role="button"
               tabIndex={0}
@@ -192,8 +196,8 @@ export default function MonthlyExpenses(props) {
 
   const IconAdd = () => (
     <a
-      onClick={handleSetModalInfo("add", true, null)}
-      onKeyDown={handleSetModalInfo("add", true, null)}
+      onClick={handleSetModalInfo("add", null)}
+      onKeyDown={handleSetModalInfo("add", null)}
       style={{ outline: "none" }}
       role="button"
       tabIndex={0}

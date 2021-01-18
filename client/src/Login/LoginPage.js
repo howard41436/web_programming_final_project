@@ -30,13 +30,8 @@ export default function LoginPage() {
     INSTANCE.post("/api/account/login", formValues)
       .then((res) => {
         if (res.status === 200) {
-          const accesToken = {
-            pairId: res.data.pairId,
-            username: res.data.username,
-            inviteCode: res.data.inviteCode,
-          };
-          setCookie("accessToken", JSON.stringify(accesToken));
-          dispatch(setUser(res.data));
+          setCookie("accessToken", res.data.username);
+          dispatch(setUser({ ...res.data, login: true }));
         }
       })
       .catch((err) => {

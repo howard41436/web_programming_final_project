@@ -1,14 +1,29 @@
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
-import { selectExpenses } from "../redux/expenseSlice";
+import { setDebt, setExpenses, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
+import { baseToast, BaseToastInner } from "../components/BaseToast";
+import { INSTANCE } from "../constants";
 
-export default function SettlementRecord() {
+export default function SettlementRecord(props) {
+  const dispatch = useDispatch();
+  const { user } = useSelector(selectUser);
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
-  const { debt } = useSelector(selectExpenses);
+  const { expenses, debt } = useSelector(selectExpenses);
+  const { setModalInfo } = props;
+
+  const handleSetModalInfo = (exp) => (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+
+    setModalInfo((info) => {
+      info.show.edit = true;
+      info.data = exp;
+    });
+  };
 
   const columns = [
     "",
@@ -21,9 +36,6 @@ export default function SettlementRecord() {
   ];
   const [data, setData] = useImmer([]);
 
-  const shouldBeSettled = (exp) =>
-    exp.paid.user0 !== exp.owed.user0 || exp.paid.user1 !== exp.owed.user1;
-
   const formatDate = (date) => {
     return `${new Date(date).toLocaleString("en", {
       month: "short",
@@ -33,46 +45,191 @@ export default function SettlementRecord() {
   const commaNumber = (num) =>
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+  const getSettler = (exp) => (exp.receivedMoneyOfUser0 < 0 ? 0 : 1);
   const getCreditor = (exp) => (exp.paid.user0 < exp.owed.user0 ? 0 : 1);
   const getOwed = (exp) => Math.abs(exp.owed.user0 - exp.paid.user0);
 
   useEffect(() => {
     setData(() => {
-      const settledRecord = debt.recordsAndSettlements.filter(
-        (deb) => deb.type === "record" && shouldBeSettled(deb.content)
+      return Object.values(debt.recordsAndSettlements).map(({ content: exp }) =>
+        exp.receivedMoneyOfUser0 === undefined
+          ? [
+              null,
+              exp.date,
+              exp.category,
+              exp.owner,
+              exp.name,
+              getCreditor(exp),
+              getOwed(exp),
+              exp,
+            ]
+          : [
+              null,
+              exp.date,
+              null,
+              null,
+              null,
+              getSettler(exp),
+              Math.abs(exp.receivedMoneyOfUser0),
+              exp,
+            ]
       );
-
-      return settledRecord.map(({ content: exp }) => [
-        null,
-        exp.date,
-        exp.category,
-        exp.owner,
-        exp.name,
-        getCreditor(exp),
-        getOwed(exp),
-        exp,
-      ]);
     });
   }, [debt]);
 
   const [filterDisplay, setFilterDisplay] = useImmer({
-    0: true,
-    1: false,
+    0: user === "0",
+    1: user === "1",
   });
+
+  const [selectorDisplay, setSelectorDisplay] = useImmer({
+    settlements: true,
+    expenses: true,
+  });
+
+  const handleDeleteSettle = async (_id, pairId, money) => {
+    await INSTANCE.post(
+      "/api/deleteSettlement",
+      {},
+      { params: { _id, pairId } }
+    ).then((res) => {
+      if (res.status === 200) {
+        const { debtOfUser0 } = debt;
+        const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
+        dispatch(
+          setDebt({
+            debt: {
+              debtOfUser0: debtOfUser0 - money,
+              recordsAndSettlements: newRec,
+            },
+          })
+        );
+      }
+    });
+  };
+
+  const handleDeleteRecord = async (_id, pairId, money) => {
+    await INSTANCE.post(
+      "/api/deleteRecord",
+      {},
+      { params: { _id, pairId } }
+    ).then((res) => {
+      if (res.status === 200) {
+        const { debtOfUser0 } = debt;
+        const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
+        dispatch(
+          setDebt({
+            debt: {
+              debtOfUser0: debtOfUser0 - money,
+              recordsAndSettlements: newRec,
+            },
+          })
+        );
+        const { [_id]: __, ...newExpenses } = expenses;
+        dispatch(
+          setExpenses({
+            expenses: newExpenses,
+          })
+        );
+      }
+    });
+  };
+
+  const DeleteToast = ({
+    exp,
+    type,
+    ...toastProps // From react-toastify
+  }) => {
+    const { closeToast } = toastProps;
+    const message =
+      type === "settlements"
+        ? `($ ${Math.abs(exp.receivedMoneyOfUser0)}, ${formatDate(exp.date)})`
+        : `(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`;
+
+    const handleDelete = async () => {
+      if (type === "settlements")
+        await handleDeleteSettle(
+          // eslint-disable-next-line dot-notation
+          exp["_id"],
+          exp.pairId,
+          exp.receivedMoneyOfUser0
+        );
+      else
+        await handleDeleteRecord(
+          // eslint-disable-next-line dot-notation
+          exp["_id"],
+          exp.pairId,
+          exp.owed.user0 - exp.paid.user0
+        );
+      closeToast();
+
+      baseToast(
+        <BaseToastInner
+          icon="nc-icon nc-check-2"
+          title="Delete successfully."
+          message={message}
+        />,
+        {
+          autoClose: 6000,
+          position: "top-center",
+        }
+      );
+    };
+
+    return (
+      <BaseToastInner
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...toastProps}
+        icon="nc-icon nc-bell-55"
+        title="Remove this record?"
+        message={message}
+        allowButton
+        buttonAction={handleDelete}
+        buttonRound
+        buttonTheme="danger"
+        buttonText="Remove"
+      />
+    );
+  };
+
+  const handleShowToast = (exp, type) => (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+
+    baseToast(<DeleteToast exp={exp} type={type} />, {
+      backdrop: true,
+      dispatch,
+      autoClose: 12000,
+      closeOnClick: false,
+      draggable: false,
+      position: "top-center",
+      type: "alert",
+    });
+  };
 
   const renderRow = (row) => {
     const creditor = row[5];
     const exp = row[7];
+    const type =
+      exp.receivedMoneyOfUser0 === undefined ? "expenses" : "settlements";
+
     return (
-      filterDisplay[creditor] && (
+      filterDisplay[creditor] &&
+      selectorDisplay[type] && (
         <tr
           // eslint-disable-next-line dot-notation
           key={exp["_id"]}
+          className={`${type === "settlements" ? "selected" : ""}`}
         >
           <td className="icon-set">
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
-              style={{ cursor: "pointer", outline: "none" }}
+              onClick={handleSetModalInfo(exp)}
+              onKeyDown={handleSetModalInfo(exp)}
+              style={{
+                cursor: "pointer",
+                outline: "none",
+                visibility: type === "settlements" ? "hidden" : null,
+              }}
               role="button"
               tabIndex={0}
             >
@@ -80,6 +237,8 @@ export default function SettlementRecord() {
             </a>{" "}
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
+              onClick={handleShowToast(exp, type)}
+              onKeyDown={handleShowToast(exp, type)}
               style={{ cursor: "pointer", outline: "none" }}
               role="button"
               tabIndex={0}
@@ -92,31 +251,33 @@ export default function SettlementRecord() {
           </td>
           <td style={{ textTransform: "capitalize" }}>
             <span className="icon-big text-center icon-warning">
-              <i className={categoryInfo[row[2]].icon} />
+              <i className={row[2] && categoryInfo[row[2]].icon} />
             </span>{" "}
             {row[2]}
           </td>
           <td>
             <div style={{ height: "40px", textAlign: "center", width: "60px" }}>
-              <img
-                src={ownerIcon[String(row[3])].src}
-                alt={ownerIcon[String(row[3])].alt}
-                style={{ height: "35px" }}
-              />
+              {row[3] !== null && (
+                <img
+                  src={ownerIcon[String(row[3])].src}
+                  alt={ownerIcon[String(row[3])].alt}
+                  style={{ height: "35px" }}
+                />
+              )}
             </div>
           </td>
           <td style={{ textTransform: "capitalize" }}>{row[4]}</td>
           <td>
             <div style={{ height: "40px", textAlign: "center", width: "96px" }}>
               <img
-                src={ownerIcon[0].src}
-                alt={ownerIcon[0].alt}
+                src={ownerIcon["0"].src}
+                alt={ownerIcon["0"].alt}
                 style={{ height: "35px" }}
               />
               <span className="settle-arrow">
                 <i
                   className={`fas fa-long-arrow-alt-${
-                    row[5] === 0 ? "right" : "left"
+                    row[5] === 0 ? "right girl" : "left boy"
                   }`}
                   style={{
                     verticalAlign: "-webkit-baseline-middle",
@@ -126,8 +287,8 @@ export default function SettlementRecord() {
                 />
               </span>
               <img
-                src={ownerIcon[1].src}
-                alt={ownerIcon[1].alt}
+                src={ownerIcon["1"].src}
+                alt={ownerIcon["1"].alt}
                 style={{ height: "35px" }}
               />
             </div>
@@ -137,11 +298,6 @@ export default function SettlementRecord() {
       )
     );
   };
-
-  const [selectorDisplay, setSelectorDisplay] = useImmer({
-    settlements: true,
-    expenses: true,
-  });
 
   const selectorOptions = [
     { content: "settlements", value: "settlements" },

@@ -29,7 +29,7 @@ export const infoSlice = createSlice({
     ownerIcon: {
       "-1": {
         src: PUBLIC_URL("/img/boy_girl.png"),
-        alt: "boy_girl",
+        alt: "both",
       },
       0: {
         src: PUBLIC_URL("/img/boy.png"),
@@ -49,7 +49,14 @@ export const infoSlice = createSlice({
       },
     },
   },
-  reducers: {},
+  reducers: {
+    setIcon: (state, action) => {
+      state.ownerIcon["-1"].src = action.payload["-1"];
+      state.ownerIcon["0"].src = action.payload["0"];
+      state.ownerIcon["1"].src = action.payload["1"];
+    },
+  },
 });
+export const { setIcon } = infoSlice.actions;
 export default infoSlice.reducer;
 export const selectInfo = (state) => state.info;

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useImmer } from "use-immer";
 import { HorizontalBar } from "react-chartjs-2";
 import { useSelector } from "react-redux";
+import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 import { selectExpenses } from "../redux/expenseSlice";
 
@@ -24,6 +25,7 @@ const ColorBox = styled.span`
 `;
 
 export default function ExpenseCard() {
+  const { user } = useSelector(selectUser);
   const { categoryInfo } = useSelector(selectInfo);
   const { expenses } = useSelector(selectExpenses);
 
@@ -63,8 +65,8 @@ export default function ExpenseCard() {
   });
 
   const [filterDisplay, setFilterDisplay] = useImmer({
-    0: true, // Boy
-    1: false, // Girl
+    0: user === "0",
+    1: user === "1",
   });
 
   const [legendDisplay, setLegendDisplay] = useImmer(

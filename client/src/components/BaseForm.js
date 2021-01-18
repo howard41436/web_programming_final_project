@@ -133,6 +133,7 @@ export const BaseFormInput = (props) => {
     hidden = false, // Boolean or Function
     validator = (value) => value,
     CustomInput = null, // Custom Component
+    ...restProps
   } = props;
   const { [formId]: formValues } = useSelector(selectForm(formId));
 
@@ -156,6 +157,7 @@ export const BaseFormInput = (props) => {
   };
 
   const inputProps = {
+    ...restProps,
     id: id || null,
     className: `form-control ${className}`,
     type,

@@ -1,31 +1,41 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectInfo } from "../redux/infoSlice";
-
+import { selectUser } from "../redux/userSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, {
   BaseFormGroup,
   BaseFormInput,
   BaseFormSelect,
+  BaseFormOption,
 } from "../components/BaseForm";
 import { Row, Col, IconRadio } from "../components/BaseTags";
+import { AVATAR } from "../constants";
 
 export default function EditProfile() {
-  const { ownerIcon } = useSelector(selectInfo);
-  // YYYY-MM-DD
+  const {
+    name,
+    name1,
+    username,
+    icon,
+    icon1,
+    user,
+    budget,
+    defaultExpenseAllocation,
+  } = useSelector(selectUser);
+  console.log(defaultExpenseAllocation);
 
+  // YYYY-MM-DD
   const formatDate = (date) => {
     return `${new Date(date).toISOString().split("T")[0]}`;
   };
 
   const initialProfile = {
-    avatar: -1,
-    username: "tom123",
-    email: "tom123@gmail.com",
-    firstName: "Tom",
+    icon: user === "0" ? icon : icon1,
+    username,
+    name: user === "0" ? name : name1,
     lastName: "Cruise",
-    budget: 1050,
+    budget: user === "0" ? budget.user0.total : budget.user1.total,
     partitionRule: "even split",
     anniversary: formatDate(new Date(2019, 0, 2)),
   };
@@ -55,52 +65,52 @@ export default function EditProfile() {
               <span className="logo-list">
                 {" "}
                 <BaseFormInput
-                  id="avatar_radio_boy"
+                  id="icon_radio_boy"
                   formId="edit_profile_form"
-                  formKey="avatar"
+                  formKey="icon"
                   type="radio"
-                  name="avatar"
-                  inputValue={0}
+                  name="icon"
+                  inputValue="0"
                   CustomInput={IconRadio}
                 />
-                <label htmlFor="avatar_radio_boy">
-                  <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
+                <label htmlFor="icon_radio_boy">
+                  <img src={AVATAR["0"]} alt="boy" />
                 </label>{" "}
                 <BaseFormInput
-                  id="avatar_radio_boy2"
+                  id="icon_radio_boy2"
                   formId="edit_profile_form"
-                  formKey="avatar"
+                  formKey="icon"
                   type="radio"
-                  name="avatar"
-                  inputValue={2}
+                  name="icon"
+                  inputValue="1"
                   CustomInput={IconRadio}
                 />
-                <label htmlFor="avatar_radio_boy2">
-                  <img src={ownerIcon["2"].src} alt={ownerIcon["2"].src} />
+                <label htmlFor="icon_radio_boy2">
+                  <img src={AVATAR["1"]} alt="boy2" />
                 </label>{" "}
                 <BaseFormInput
-                  id="avatar_radio_girl"
+                  id="icon_radio_girl"
                   formId="edit_profile_form"
-                  formKey="avatar"
+                  formKey="icon"
                   type="radio"
-                  name="avatar"
-                  inputValue={1}
+                  name="icon"
+                  inputValue="2"
                   CustomInput={IconRadio}
                 />
-                <label htmlFor="avatar_radio_girl">
-                  <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
+                <label htmlFor="icon_radio_girl">
+                  <img src={AVATAR["2"]} alt="girl" />
                 </label>{" "}
                 <BaseFormInput
-                  id="avatar_radio_girl2"
+                  id="icon_radio_girl2"
                   formId="edit_profile_form"
-                  formKey="avatar"
+                  formKey="icon"
                   type="radio"
-                  name="avatar"
-                  inputValue={3}
+                  name="icon"
+                  inputValue="3"
                   CustomInput={IconRadio}
                 />
-                <label htmlFor="avatar_radio_girl2">
-                  <img src={ownerIcon["3"].src} alt={ownerIcon["3"].src} />
+                <label htmlFor="icon_radio_girl2">
+                  <img src={AVATAR["3"]} alt="girl2" />
                 </label>
               </span>
             </BaseFormGroup>
@@ -118,32 +128,11 @@ export default function EditProfile() {
             </BaseFormGroup>
           </Col>
           <Col size={6} className="pl-1">
-            <BaseFormGroup label="Email address">
+            <BaseFormGroup label="Nickname">
               <BaseFormInput
                 formId="edit_profile_form"
-                formKey="email"
-                placeholder="Email"
-                type="email"
-              />
-            </BaseFormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col size={6} className="pr-1">
-            <BaseFormGroup label="First Name">
-              <BaseFormInput
-                formId="edit_profile_form"
-                formKey="firstName"
-                placeholder="First Name"
-              />
-            </BaseFormGroup>
-          </Col>
-          <Col size={6} className="pl-1">
-            <BaseFormGroup label="Last Name">
-              <BaseFormInput
-                formId="edit_profile_form"
-                formKey="lastName"
-                placeholder="Last Name"
+                formKey="name"
+                placeholder="Nickname"
               />
             </BaseFormGroup>
           </Col>
@@ -168,12 +157,13 @@ export default function EditProfile() {
                 formId="edit_profile_form"
                 formKey="partitionRule"
               >
-                <option
-                  style={{ textTransform: "capitalize" }}
+                <BaseFormOption
+                  formId="edit_profile_form"
+                  formKey="partitionRule"
                   value="even split"
                 >
                   even split
-                </option>
+                </BaseFormOption>
               </BaseFormSelect>
             </BaseFormGroup>
           </Col>

@@ -3,6 +3,7 @@ import { useImmer } from "use-immer";
 import { Switch, Route, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, selectUser } from "./redux/userSlice";
+import { setIcon } from "./redux/infoSlice";
 import { setExpenses, setDebt } from "./redux/expenseSlice";
 
 import LoginPage from "./Login/LoginPage";
@@ -14,30 +15,18 @@ import ChartPage from "./Chart/ChartPage";
 import ProfilePage from "./Profile/ProfilePage";
 import BaseToast from "./components/BaseToast";
 
-import { INSTANCE } from "./constants";
+import { INSTANCE, AVATAR } from "./constants";
 import { getCookie } from "./cookieHelper";
 
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { pairId, matched, login } = useSelector(selectUser);
+  const { pairId, icon, icon1, matched, login } = useSelector(selectUser);
   const [readyRender, setReadyRender] = useImmer({
     user: false,
     expenses: false,
     debt: false,
   });
-
-  const getUserJSON = (str) => {
-    let obj;
-    try {
-      obj = JSON.parse(str);
-    } catch {
-      obj = {};
-    } finally {
-      if (obj === null) obj = {};
-    }
-    return obj;
-  };
 
   useEffect(() => {
     setReadyRender((ready) => {
@@ -46,42 +35,66 @@ function App() {
       ready.debt = false;
     });
 
-    const { pairId: pairId2, username } = getUserJSON(getCookie());
-    INSTANCE.get("/api/account/getProfile", {
-      params: { pairId: pairId2 },
+    const username = getCookie();
+    INSTANCE.get("/api/account/getUser", {
+      params: { username },
     })
-      .then((res) => {
-        const { user0, user1, budget, defaultExpenseAllocation } = res.data;
-        if (username !== user0.username && username !== user1.username) {
-          dispatch(setUser({ login: false }));
-        } else {
+      .then(async (res) => {
+        const { matched: _matched, pairId: _pairId, inviteCode } = res.data;
+        if (!_matched) {
           dispatch(
             setUser({
-              pairId: String(pairId2),
-              name0: user0.username === username ? user0.name : user1.name,
-              name1: user0.username === username ? user1.name : user0.name,
               username,
-              matched: true,
-              budget,
-              defaultExpenseAllocation,
+              matched: false,
+              inviteCode,
               login: true,
             })
           );
-        }
-      })
-      .catch(() => {
-        if (typeof username === "string") {
-          dispatch(setUser({ matched: false, login: true }));
         } else {
-          dispatch(setUser({ login: false }));
+          await INSTANCE.get("/api/account/getProfile", {
+            params: { pairId: _pairId },
+          }).then((_res) => {
+            const {
+              user0,
+              user1,
+              budget,
+              defaultExpenseAllocation,
+            } = _res.data;
+            dispatch(
+              setUser({
+                pairId: String(_pairId),
+                name: user0.name,
+                name1: user1.name,
+                username,
+                icon: String(user0.icon),
+                icon1: String(user1.icon),
+                user: user0.username === username ? "0" : "1",
+                matched: true,
+                budget,
+                defaultExpenseAllocation,
+                login: true,
+              })
+            );
+          });
         }
       })
-      .finally(() =>
+      .catch(() => dispatch(setUser({ login: false })))
+      .finally(() => {
         setReadyRender((ready) => {
           ready.user = true;
-        })
-      );
+        });
+      });
   }, [getCookie()]);
+
+  useEffect(() => {
+    dispatch(
+      setIcon({
+        "-1": AVATAR[`${icon}${icon1}`],
+        0: AVATAR[icon],
+        1: AVATAR[icon1],
+      })
+    );
+  }, [icon, icon1]);
 
   useEffect(() => {
     if (readyRender.user && login && matched) {
@@ -106,12 +119,21 @@ function App() {
 
       INSTANCE.get("/api/debt", { params: { pairId } })
         .then((res) => {
-          if (res.status === 200)
+          if (res.status === 200) {
+            const { debtOfUser0, recordsAndSettlements } = res.data;
             dispatch(
               setDebt({
-                debt: res.data,
+                debt: {
+                  debtOfUser0,
+                  recordsAndSettlements: recordsAndSettlements.reduce(
+                    // eslint-disable-next-line dot-notation
+                    (obj, cur) => ({ ...obj, [cur.content["_id"]]: cur }),
+                    {}
+                  ),
+                },
               })
             );
+          }
         })
         .finally(() =>
           setReadyRender((ready) => {

@@ -4,13 +4,12 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, selectUser } from "../redux/userSlice";
-import { selectInfo } from "../redux/infoSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
 import { Row, Col, IconRadio } from "../components/BaseTags";
 import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { setCookie } from "../cookieHelper";
-import { INSTANCE } from "../constants";
+import { INSTANCE, AVATAR } from "../constants";
 
 const RadioRow = styled.div`
   display: inline-block;
@@ -25,7 +24,6 @@ export default function SignUpPage() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { login } = useSelector(selectUser);
-  const { ownerIcon } = useSelector(selectInfo);
 
   useEffect(() => {
     document.title = "Sign Up | App's name";
@@ -54,12 +52,8 @@ export default function SignUpPage() {
       INSTANCE.post("/api/account/register", restValues)
         .then((res) => {
           if (res.status === 200) {
-            const accesToken = {
-              username: res.data.username,
-              inviteCode: res.data.inviteCode,
-            };
-            setCookie("accessToken", JSON.stringify(accesToken));
-            dispatch(setUser(res.data));
+            setCookie("accessToken", res.data.username);
+            dispatch(setUser({ ...res.data, login: true }));
           }
         })
         .catch((err) => {
@@ -98,6 +92,7 @@ export default function SignUpPage() {
             <BaseForm
               formId="sign_up_form"
               initialValues={{
+                icon: -1,
                 name: "",
                 username: "",
                 password: "",
@@ -114,52 +109,52 @@ export default function SignUpPage() {
                     <span className="logo-list select-logo">
                       <RadioRow>
                         <BaseFormInput
-                          id="radio_boy1"
+                          id="radio_boy"
                           formId="sign_up_form"
-                          formKey="owner"
+                          formKey="icon"
                           type="radio"
-                          name="owner"
-                          inputValue={0}
+                          name="icon"
+                          inputValue="0"
                           CustomInput={IconRadio}
                         />
-                        <label htmlFor="radio_boy1">
-                          <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
+                        <label htmlFor="radio_boy">
+                          <img src={AVATAR["0"]} alt="boy" />
                         </label>
                         <BaseFormInput
                           id="radio_boy2"
                           formId="sign_up_form"
-                          formKey="owner"
+                          formKey="icon"
                           type="radio"
-                          name="owner"
-                          inputValue={2}
+                          name="icon"
+                          inputValue="1"
                           CustomInput={IconRadio}
                         />
                         <label htmlFor="radio_boy2">
-                          <img src={ownerIcon[2].src} alt={ownerIcon[2].alt} />
+                          <img src={AVATAR["1"]} alt="boy2" />
                         </label>
                         <BaseFormInput
-                          id="radio_girl1"
+                          id="radio_girl"
                           formId="sign_up_form"
-                          formKey="owner"
+                          formKey="icon"
                           type="radio"
-                          name="owner"
-                          inputValue={1}
+                          name="icon"
+                          inputValue="2"
                           CustomInput={IconRadio}
                         />
-                        <label htmlFor="radio_girl1">
-                          <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
+                        <label htmlFor="radio_girl">
+                          <img src={AVATAR["2"]} alt="girl" />
                         </label>
                         <BaseFormInput
                           id="radio_girl2"
                           formId="sign_up_form"
-                          formKey="owner"
+                          formKey="icon"
                           type="radio"
-                          name="owner"
-                          inputValue={3}
+                          name="icon"
+                          inputValue="3"
                           CustomInput={IconRadio}
                         />
                         <label htmlFor="radio_girl2">
-                          <img src={ownerIcon[3].src} alt={ownerIcon[3].alt} />
+                          <img src={AVATAR["3"]} alt="girl2" />
                         </label>
                       </RadioRow>
                     </span>

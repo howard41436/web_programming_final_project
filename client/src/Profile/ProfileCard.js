@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { selectInfo } from "../redux/infoSlice";
+import { selectUser } from "../redux/userSlice";
 
 import BaseCard from "../components/BaseCard";
 import { Col, Row } from "../components/BaseTags";
-import { PUBLIC_URL } from "../constants";
+import { PUBLIC_URL, AVATAR } from "../constants";
 
 const PictureCard = styled(BaseCard)`
   .card-header {
@@ -17,7 +17,7 @@ const PictureCard = styled(BaseCard)`
 `;
 
 export default function ProfileCard() {
-  const { ownerIcon } = useSelector(selectInfo);
+  const { name, name1, username, user, icon, icon1 } = useSelector(selectUser);
 
   const CardHeader = () => (
     <div className="image">
@@ -71,18 +71,18 @@ export default function ProfileCard() {
         <a href="#">
           <img
             className="avatar border-gray"
-            src={ownerIcon[0].src}
-            alt={ownerIcon[0].alt}
+            src={AVATAR[user === "0" ? icon : icon1]}
+            alt="avatar"
           />
-          <h5 className="title">Tom</h5>
+          <h5 className="title">{user === "0" ? name : name1}</h5>
         </a>
-        <p className="description">@tom123</p>
+        <p className="description">@{username}</p>
         <p className="description text-center">
-          In a relationship with Amy{" "}
+          In a relationship with {user === "0" ? name1 : name}{" "}
           <img
             className="logo-image-small"
-            src={ownerIcon[-1].src}
-            alt={ownerIcon[-1].alt}
+            src={AVATAR[`${icon}${icon1}`]}
+            alt="both"
           />
           <br />
           Since 2019 / 01 / 01

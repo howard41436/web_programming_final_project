@@ -2,16 +2,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
-import { selectExpenses } from "../redux/expenseSlice";
+import { setDebt, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
-import BaseForm, {
-  BaseFormGroup,
-  BaseFormInput,
-  BaseFormTextarea,
-} from "../components/BaseForm";
+import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
 import BaseModal from "../components/BaseModal";
 import {
   Row,
@@ -20,6 +16,7 @@ import {
   IconRadioBig,
   IconArrow,
 } from "../components/BaseTags";
+import { INSTANCE } from "../constants";
 
 const Footer = styled.div.attrs({
   className: "card-footer",
@@ -28,20 +25,20 @@ const Footer = styled.div.attrs({
 `;
 
 export default function SettleCards() {
-  const { pairId, name0, name1 } = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const { pairId, name, name1 } = useSelector(selectUser);
   const { ownerIcon } = useSelector(selectInfo);
   const { debt } = useSelector(selectExpenses);
 
   const initialSettlement = {
     pairId,
     payer: -Math.sign(debt.debtOfUser0),
-    name: "",
-    receivedMoneyOfUser0: 0,
+    receivedMoneyOfUser0: Math.abs(debt.debtOfUser0),
   };
 
   const validator = (value) => {
     const tmp = parseInt(value, 10);
-    const result = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
+    const result = Number.isNaN(tmp) || tmp < 1 ? 1 : tmp;
     return result;
   };
 
@@ -50,14 +47,11 @@ export default function SettleCards() {
     setShow((s) => !s);
   };
 
-  // const renderSideCard = (type) => (
-  // );
-
   const CardHeader = () => (
     <div style={{ textAlign: "center" }}>
       <Row>
         <Col size={4}>
-          <h5 className="card-title settle-arrow">{name0}</h5>
+          <h5 className="card-title settle-arrow">{name}</h5>
         </Col>
         <Col size={4}>
           <h5 className="card-title">Summary</h5>
@@ -68,6 +62,31 @@ export default function SettleCards() {
       </Row>
     </div>
   );
+
+  const handleSettle = (formValues) => {
+    const { payer } = formValues;
+    const receivedMoneyOfUser0 = payer * formValues.receivedMoneyOfUser0;
+    INSTANCE.post("/api/newSettlement", {
+      pairId,
+      receivedMoneyOfUser0,
+      date: new Date().toISOString(),
+    })
+      .then((res) => {
+        dispatch(
+          setDebt({
+            debt: {
+              debtOfUser0: debt.debtOfUser0 + res.data.receivedMoneyOfUser0,
+              recordsAndSettlements: {
+                ...debt.recordsAndSettlements,
+                // eslint-disable-next-line dot-notation
+                [res.data["_id"]]: { type: "settlement", content: res.data },
+              },
+            },
+          })
+        );
+      })
+      .finally(() => setShow(false));
+  };
 
   return (
     <>
@@ -83,26 +102,40 @@ export default function SettleCards() {
               <div className="text-center">
                 <a>
                   <img
-                    src={ownerIcon[0].src}
-                    alt={ownerIcon[0].alt}
+                    src={ownerIcon["0"].src}
+                    alt={ownerIcon["0"].alt}
                     style={{ width: "50%" }}
                   />
                 </a>
               </div>
             </Col>
             <Col size={4} style={{ textAlign: "center", paddingTop: "20px" }}>
-              <h2 className="settle-arrow" style={{ margin: 0 }}>
+              <h2
+                className={`settle-arrow ${
+                  initialSettlement.payer === -1 ? "girl" : "boy"
+                }`}
+                style={{ margin: 0 }}
+              >
                 $ {Math.abs(debt.debtOfUser0)}
               </h2>
               <h1 className="settle-arrow" style={{ margin: 0 }}>
                 <i
                   className={`fas fa-long-arrow-alt-${
-                    initialSettlement.payer === -1 ? "right" : "left"
+                    initialSettlement.payer === -1 ? "right girl" : "left boy"
                   } fa-3x`}
-                  style={{ transform: "scale(2,1)", lineHeight: "30%" }}
+                  style={{
+                    display: debt.debtOfUser0 === 0 ? "none" : null,
+                    lineHeight: "30%",
+                    transform: "scale(2,1)",
+                  }}
                 />
               </h1>
-              <Button theme="primary" type="button" onClick={handleSetShow}>
+              <Button
+                disabled={debt.debtOfUser0 === 0}
+                theme="primary"
+                type="button"
+                onClick={handleSetShow}
+              >
                 Settle with amount
               </Button>
             </Col>
@@ -110,8 +143,8 @@ export default function SettleCards() {
               <div className="text-center">
                 <a>
                   <img
-                    src={ownerIcon[1].src}
-                    alt={ownerIcon[1].alt}
+                    src={ownerIcon["1"].src}
+                    alt={ownerIcon["1"].alt}
                     style={{ width: "50%" }}
                   />
                 </a>
@@ -133,6 +166,7 @@ export default function SettleCards() {
           initialValues={initialSettlement}
           allowSubmit
           submitText="Settle"
+          onSubmit={handleSettle}
         >
           <Row>
             <Col size={4} className="pr-1">
@@ -155,8 +189,8 @@ export default function SettleCards() {
                     }}
                   >
                     <img
-                      src={`${ownerIcon[0].src}`}
-                      alt={`${ownerIcon[0].alt}`}
+                      src={`${ownerIcon["0"].src}`}
+                      alt={`${ownerIcon["0"].alt}`}
                       style={{ marginTop: "14px", marginBottom: "21px" }}
                     />
                   </label>
@@ -220,8 +254,8 @@ export default function SettleCards() {
                     }}
                   >
                     <img
-                      src={`${ownerIcon[1].src}`}
-                      alt={`${ownerIcon[1].alt}`}
+                      src={`${ownerIcon["1"].src}`}
+                      alt={`${ownerIcon["1"].alt}`}
                       style={{ marginTop: "14px", marginBottom: "21px" }}
                     />
                   </label>
@@ -236,16 +270,6 @@ export default function SettleCards() {
                   formId="settle_with_amount_form"
                   formKey="receivedMoneyOfUser0"
                   validator={validator}
-                />
-              </BaseFormGroup>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <BaseFormGroup label="Description">
-                <BaseFormTextarea
-                  formId="settle_with_amount_form"
-                  formKey="name"
                 />
               </BaseFormGroup>
             </Col>

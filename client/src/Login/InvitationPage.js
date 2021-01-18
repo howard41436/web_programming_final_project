@@ -1,35 +1,34 @@
 import React, { useEffect } from "react";
+import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, selectUser } from "../redux/userSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
 import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col } from "../components/BaseTags";
-import { getCookie, setCookie, deleteCookie } from "../cookieHelper";
+import { setCookie, deleteCookie } from "../cookieHelper";
 import { INSTANCE } from "../constants";
+
+const CodeInput = styled.input`
+  color: black;
+  padding: 0 !important;
+
+  :focus {
+    border: none;
+    box-shadow: none;
+    color: gray;
+  }
+`;
 
 export default function InvitationPage() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { username, inviteCode } = useSelector(selectUser);
 
   useEffect(() => {
     document.title = "Invitation | App's name";
   }, []);
-
-  const getUserJSON = (str) => {
-    let obj;
-    try {
-      obj = JSON.parse(str);
-    } catch {
-      obj = {};
-    } finally {
-      if (obj === null) obj = {};
-    }
-    return obj;
-  };
-
-  const { username, inviteCode } = getUserJSON(getCookie());
 
   const handleMatch = ({ inviteCode: code }) => {
     INSTANCE.post("/api/account/match", {
@@ -37,12 +36,8 @@ export default function InvitationPage() {
       inviteCode: code,
     })
       .then((res) => {
-        const accessToken = {
-          pairId: res.data.pairId,
-          username: res.data.username,
-        };
-        setCookie("accessToken", JSON.stringify(accessToken));
-        dispatch(setUser(res.data));
+        setCookie("accessToken", res.data.username);
+        dispatch(setUser({ ...res.data, login: true }));
       })
       .catch((err) =>
         baseToast(
@@ -95,17 +90,19 @@ export default function InvitationPage() {
             >
               <Row>
                 <Col>
-                  <h2 style={{ textAlign: "center" }}>
-                    <span className="invitation-code">{inviteCode}</span>
-                  </h2>
+                  <h2 className="invitation-code">{inviteCode}</h2>
                 </Col>
                 <Col>
                   <BaseFormGroup label="Partner's Invitation Code">
-                    <BaseFormInput
-                      formId="invitation_form"
-                      formKey="inviteCode"
-                      placeholder="Invitation Code"
-                    />
+                    <h2 style={{ textAlign: "center" }}>
+                      <BaseFormInput
+                        formId="invitation_form"
+                        formKey="inviteCode"
+                        className="invitation-code-input"
+                        maxLength="5"
+                        CustomInput={CodeInput}
+                      />
+                    </h2>
                   </BaseFormGroup>
                 </Col>
               </Row>

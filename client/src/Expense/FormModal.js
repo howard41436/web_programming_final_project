@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
-import { setExpenses, selectExpenses } from "../redux/expenseSlice";
+import { setDebt, setExpenses, selectExpenses } from "../redux/expenseSlice";
 
 import BaseModal from "../components/BaseModal";
 import BaseForm, {
@@ -23,7 +23,7 @@ export default function FormModal(props) {
   const dispatch = useDispatch();
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const categoryList = Object.keys(categoryInfo);
-  const { expenses } = useSelector(selectExpenses);
+  const { expenses, debt } = useSelector(selectExpenses);
   const { pairId } = useSelector(selectUser);
 
   const { info, setInfo } = props;
@@ -69,12 +69,12 @@ export default function FormModal(props) {
       all.owed.user0 = 0;
       all.owed.user1 = all.price;
     }
-
     return all;
   };
 
   const allUpdater = [
     { depend: "owner", update: updater },
+    { depend: "price", update: updater },
     { depend: ["paid", "user0"], update: updater },
     { depend: ["paid", "user1"], update: updater },
     { depend: ["owed", "user0"], update: updater },
@@ -112,6 +112,23 @@ export default function FormModal(props) {
                 expenses: { ...expenses, [res.data["_id"]]: res.data },
               })
             );
+            dispatch(
+              setDebt({
+                debt: {
+                  debtOfUser0:
+                    debt.debtOfUser0 +
+                    (res.data.owed.user0 - res.data.paid.user0),
+                  recordsAndSettlements: {
+                    ...debt.recordsAndSettlements,
+                    // eslint-disable-next-line dot-notation
+                    [res.data["_id"]]: {
+                      type: "record",
+                      content: res.data,
+                    },
+                  },
+                },
+              })
+            );
           }
           return res.data;
         })
@@ -140,12 +157,34 @@ export default function FormModal(props) {
       })
         .then((res) => {
           if (res.status === 200) {
+            const originDebtUser0 =
+              expenses[res.data["_id"]].owed.user0 -
+              expenses[res.data["_id"]].paid.user0;
+
             setInfo((s) => {
               s.show[type] = false; // Close Modal
             });
             dispatch(
               setExpenses({
                 expenses: { ...expenses, [res.data["_id"]]: res.data },
+              })
+            );
+            dispatch(
+              setDebt({
+                debt: {
+                  debtOfUser0:
+                    debt.debtOfUser0 -
+                    originDebtUser0 +
+                    (res.data.owed.user0 - res.data.paid.user0),
+                  recordsAndSettlements: {
+                    ...debt.recordsAndSettlements,
+                    // eslint-disable-next-line dot-notation
+                    [res.data["_id"]]: {
+                      type: "record",
+                      content: res.data,
+                    },
+                  },
+                },
               })
             );
           }
@@ -226,7 +265,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_boy`}>
-                <img src={ownerIcon[0].src} alt={ownerIcon[0].alt} />
+                <img src={ownerIcon["0"].src} alt={ownerIcon["0"].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_girl`}
@@ -238,7 +277,7 @@ export default function FormModal(props) {
                 CustomInput={IconRadio}
               />
               <label htmlFor={`${type}_radio_girl`}>
-                <img src={ownerIcon[1].src} alt={ownerIcon[1].alt} />
+                <img src={ownerIcon["1"].src} alt={ownerIcon["1"].alt} />
               </label>{" "}
               <BaseFormInput
                 id={`${type}_radio_both`}
