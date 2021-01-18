@@ -4392,9 +4392,44 @@ License - nucleoapp.com/license/
 
 
 .invitation-code {
-  background-color: grey; 
-  color: white; 
-  padding: 5px
+  background-color: #f4f3ef; 
+  border-radius: 5px;
+  color: #34b5b8; 
+  padding: 20px;
+  text-align: center;
+  font: 2.5rem 'DM Mono', monospace;
+}
+
+.invitation-code-input {
+  display: inline-block;
+  margin: 1.2rem auto;
+  border: none;
+  padding: 0;
+  width: 7.5ch;
+  background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 1.5ch) 0 100%/ 10ch 2px no-repeat;
+  font: 2.5rem 'DM Mono', monospace;
+  letter-spacing: 0.5ch;
+}
+
+.invitation-code-input input:active,:focus {
+  color: grey;
+  outline: none;
+}
+
+.partition-input {
+  display: inline-block;
+  margin: 1.2rem auto;
+  border: none;
+  padding: 0;
+  width: 3ch;
+  background: repeating-linear-gradient(90deg, dimgrey 0, dimgrey 1ch, transparent 0, transparent 1.5ch) 0 100%/ 10ch 2px no-repeat;
+  font: 2rem 'DM Mono', monospace;
+  letter-spacing: 0.5ch;
+}
+
+.partition-input input:active,:focus {
+  color: grey;
+  outline: none;
 }
 
 .logo-form {
@@ -4409,9 +4444,30 @@ License - nucleoapp.com/license/
 
 .settle-arrow > a:hover {
   color: black
-
 }
 
+/*
+"boy": '#5A586B',
+"boy2": '#B67F6D',
+"girl": '#ED7B8F',
+"girl2": '#DFB374'
+*/
+
+.boy {
+  color: #5A586B !important
+}
+
+.boy2 {
+  color: #B67F6D !important
+}
+
+.girl {
+  color: #ED7B8F !important
+}
+
+.girl2 {
+  color: #DFB374 !important
+}
 
 /*# sourceMappingURL=paper-dashboard.css.map */
 
