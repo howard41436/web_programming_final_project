@@ -4418,7 +4418,6 @@ License - nucleoapp.com/license/
 
 .partition-input-percentage {
   display: inline-block;
-  margin: 1.2rem auto;
   border: none;
   padding: 0;
   width: 3ch;
@@ -4435,7 +4434,6 @@ License - nucleoapp.com/license/
 .partition-input-dollar {
   text-align: center;
   display: inline-block;
-  margin: 1.2rem auto;
   border: none;
   padding: 0;
   width: 5ch;
@@ -4707,3 +4705,7 @@ td .row {
  .can-toggle.can-toggle--size-small label .can-toggle__switch:hover:after {
    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
 }
+
+ .line-break {
+  border-top: 1px solid #8c8b8b;
+ }
