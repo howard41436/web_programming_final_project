@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 import { setDebt, setExpenses, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
@@ -11,7 +10,6 @@ import { INSTANCE } from "../constants";
 
 export default function SettlementRecord(props) {
   const dispatch = useDispatch();
-  const { user } = useSelector(selectUser);
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const { expenses, debt } = useSelector(selectExpenses);
   const { setModalInfo } = props;
@@ -21,7 +19,13 @@ export default function SettlementRecord(props) {
 
     setModalInfo((info) => {
       info.show.edit = true;
-      info.data = exp;
+      info.data = {
+        ...exp,
+        owedPercent: {
+          user0: Math.floor((exp.owed.user0 / exp.price) * 100),
+          user1: 100 - Math.floor((exp.owed.user0 / exp.price) * 100),
+        },
+      };
     });
   };
 
@@ -78,8 +82,8 @@ export default function SettlementRecord(props) {
   }, [debt]);
 
   const [filterDisplay, setFilterDisplay] = useImmer({
-    0: user === "0",
-    1: user === "1",
+    0: true,
+    1: true,
   });
 
   const [selectorDisplay, setSelectorDisplay] = useImmer({
@@ -214,7 +218,8 @@ export default function SettlementRecord(props) {
 
     return (
       filterDisplay[creditor] &&
-      selectorDisplay[type] && (
+      selectorDisplay[type] &&
+      row[6] !== 0 && (
         <tr
           // eslint-disable-next-line dot-notation
           key={exp["_id"]}
@@ -313,6 +318,7 @@ export default function SettlementRecord(props) {
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
       allowSelector
+      multiSelect
       selectorOptions={selectorOptions}
       selectorDisplay={selectorDisplay}
       setSelectorDisplay={setSelectorDisplay}

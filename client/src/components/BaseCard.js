@@ -29,6 +29,8 @@ export default function BaseCard(props) {
     filterDisplay = {},
     setFilterDisplay = () => null,
     allowSelector = false,
+    multiSelect = false,
+    selectorName = null,
     selectorOptions = [],
     selectorDisplay = {},
     setSelectorDisplay = () => null,
@@ -37,26 +39,34 @@ export default function BaseCard(props) {
     footer = <></>,
   } = props;
 
-  const handleSetFilterDisplay = (owner) => () => {
+  const handleSetFilterDisplay = (filt) => () => {
     setFilterDisplay((dis) => {
-      dis[owner] = !dis[owner];
+      dis[filt] = !dis[filt];
     });
   };
 
   const handleDropdownClick = (e) => e.stopPropagation();
 
-  const handleSetSelectorDisplay = (cat) => () => {
+  const handleSetSelectorDisplay = (sel) => () => {
     setSelectorDisplay((dis) => {
-      dis[cat] = !dis[cat];
+      if (!multiSelect) {
+        dis = Object.keys(dis).reduce((a, b) => {
+          return { ...a, [b]: false };
+        }, {});
+      }
+      dis[sel] = !dis[sel];
+      return dis;
     });
   };
 
   const [allSelected, setAllSelected] = useImmer(true);
 
   useEffect(() => {
-    setAllSelected(() =>
-      Object.values(selectorDisplay).reduce((a, b) => a && b, true)
-    );
+    if (multiSelect) {
+      setAllSelected(() =>
+        Object.values(selectorDisplay).reduce((a, b) => a && b, true)
+      );
+    }
   }, [selectorDisplay]);
 
   const handleSetAllSelected = () => {
@@ -139,25 +149,28 @@ export default function BaseCard(props) {
                     style={{ outline: "none" }}
                     tabIndex={0}
                   >
-                    <IconOption className="dropdown-item">
-                      <label htmlFor="all_selected">
-                        Select All
-                        <input
-                          checked={allSelected}
-                          id="all_selected"
-                          type="checkbox"
-                          onChange={handleSetAllSelected}
-                        />
-                      </label>
-                    </IconOption>
+                    {multiSelect && (
+                      <IconOption className="dropdown-item">
+                        <label htmlFor="all_selected">
+                          Select All
+                          <input
+                            checked={allSelected}
+                            id="all_selected"
+                            type="checkbox"
+                            onChange={handleSetAllSelected}
+                          />
+                        </label>
+                      </IconOption>
+                    )}
                     {selectorOptions.map((opt) => (
                       <IconOption key={opt.value} className="dropdown-item">
-                        <label htmlFor={opt.value}>
+                        <label htmlFor={`${opt.value}_${selectorName}`}>
                           {opt.content}
                           <input
                             checked={selectorDisplay[opt.value]}
-                            id={opt.value}
-                            type="checkbox"
+                            id={`${opt.value}_${selectorName}`}
+                            type={multiSelect ? "checkbox" : "radio"}
+                            name={selectorName}
                             onChange={handleSetSelectorDisplay(opt.value)}
                           />
                         </label>

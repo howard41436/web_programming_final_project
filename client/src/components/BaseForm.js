@@ -65,7 +65,8 @@ export default function BaseForm(props) {
             formId,
             form: upd.update(
               upd.depend,
-              JSON.parse(JSON.stringify(formValues))
+              JSON.parse(JSON.stringify(formValues)),
+              getFieldValue(upd.depend, formValues)
             ),
           })
         );

@@ -26,7 +26,13 @@ export default function MonthlyExpenses(props) {
 
     setModalInfo((info) => {
       info.show[type] = true;
-      info.data = exp;
+      info.data = {
+        ...exp,
+        owedPercent: {
+          user0: exp ? Math.floor((exp.owed.user0 / exp.price) * 100) : 0,
+          user1: exp ? 100 - Math.floor((exp.owed.user0 / exp.price) * 100) : 0,
+        },
+      };
     });
   };
 
@@ -234,6 +240,7 @@ export default function MonthlyExpenses(props) {
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
       allowSelector
+      multiSelect
       selectorOptions={selectorOptions}
       selectorDisplay={selectorDisplay}
       setSelectorDisplay={setSelectorDisplay}

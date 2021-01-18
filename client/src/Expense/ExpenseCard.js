@@ -25,7 +25,7 @@ const ColorBox = styled.span`
 `;
 
 export default function ExpenseCard() {
-  const { user } = useSelector(selectUser);
+  const { user, budget } = useSelector(selectUser);
   const { categoryInfo } = useSelector(selectInfo);
   const { expenses } = useSelector(selectExpenses);
 
@@ -33,59 +33,48 @@ export default function ExpenseCard() {
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   const capitalize = (word) => word.replace(/^./, word[0].toUpperCase());
-  const deCapitalize = (word) => word.replace(/^./, word[0].toLowerCase());
 
-  // Temporary fake data
-  const [budget, setBudget] = useImmer({
-    food: {
-      user0: 350,
-      user1: 250,
-      total: 600,
-    },
-    transportation: {
-      user0: 250,
-      user1: 300,
-      total: 550,
-    },
-    education: {
-      user0: 150,
-      user1: 150,
-      total: 300,
-    },
-    others: {
-      user0: 300,
-      user1: 250,
-      total: 550,
-    },
-    all: {
-      user0: 1050,
-      user1: 950,
-      total: 2000,
-    },
-  });
+  const [budgetDisplay, setBudgetDisplay] = useState(
+    user === "0" ? budget.user0.total : budget.user1.total
+  );
 
   const [filterDisplay, setFilterDisplay] = useImmer({
     0: user === "0",
     1: user === "1",
   });
 
-  const [legendDisplay, setLegendDisplay] = useImmer(
-    Object.keys(categoryInfo).reduce(
-      (obj, cur) => ({ ...obj, [cur]: true }),
+  const [selectorDisplay, setSelectorDisplay] = useImmer({
+    total: true,
+    ...Object.keys(categoryInfo).reduce(
+      (obj, cur) => ({ ...obj, [cur]: false }),
       {}
-    )
-  );
+    ),
+  });
+
+  const selectorOptions = [
+    {
+      content: "total",
+      value: "total",
+    },
+    ...Object.entries(categoryInfo).map(([key, v]) => ({
+      content: (
+        <span className="icon-big text-center icon-warning">
+          <i className={v.icon} /> {key}
+        </span>
+      ),
+      value: key,
+    })),
+  ];
 
   const [data, setData] = useImmer({
     labels: ["Total Budget", "Total Expenses"],
     datasets: [
       {
         label: capitalize("budget"),
-        data: [budget.all.total, 0],
+        data: [budgetDisplay, 0],
         backgroundColor: "#e3e3e3",
         borderColor: "transparent",
         borderWidth: 2,
-        hidden: budget.all.total === 0,
       },
       ...Object.entries(categoryInfo).map(([label, info]) => ({
         label: capitalize(label),
@@ -93,66 +82,27 @@ export default function ExpenseCard() {
         backgroundColor: info.color,
         borderColor: "transparent",
         borderWidth: 2,
-        hidden: false,
       })),
     ],
   });
 
   const [totalExpenses, setTotalExpenses] = useState(0);
 
-  const renderData = () => {
-    const newDataset = data.datasets
-      .map((d, index, all) => {
-        // if (index === 0 && budget.all.total === 0) return null;
-        // if (index !== 0 && d.data[0] + d.data[1] === 0) return null;
-
-        if (all[0].hidden || budget.all.total === 0) {
-          return {
-            ...d,
-            data: [d.data[1]],
-          };
-        }
-        if (index === 0) return { ...d, data: [budget.all.total, 0] };
-        return d;
-      })
-      .filter((d) => d);
-
-    const expensesHidden =
-      newDataset.length > 1
-        ? newDataset.slice(1).reduce((a, b) => {
-            return { hidden: a.hidden && b.hidden };
-          }).hidden
-        : true;
-
-    const newLabels = [];
-    if (!data.datasets[0].hidden && !expensesHidden)
-      newLabels.push("Total Budget");
-    if (!expensesHidden) newLabels.push("Total Expenses");
-
-    const newData = {
-      ...data,
-      labels: newLabels,
-      datasets: newDataset,
-    };
-    return JSON.parse(JSON.stringify(newData));
-  };
-
   // Init / Filter / Selector
   useEffect(() => {
-    setBudget((bud) => {
-      bud.all.user0 = 0;
-      bud.all.user1 = 0;
-
-      Object.keys(categoryInfo).forEach((info) => {
-        bud[info].total = filterDisplay["0"] ? bud[info].user0 : 0;
-        bud[info].total += filterDisplay["1"] ? bud[info].user1 : 0;
-
-        bud.all.user0 += legendDisplay[info] && bud[info].user0;
-        bud.all.user1 += legendDisplay[info] && bud[info].user1;
+    setBudgetDisplay((bud) => {
+      bud = 0;
+      Object.keys({ ...categoryInfo, total: {} }).forEach((cat) => {
+        bud +=
+          filterDisplay["0"] && selectorDisplay[cat]
+            ? budget.user0[cat] || 0
+            : 0;
+        bud +=
+          filterDisplay["1"] && selectorDisplay[cat]
+            ? budget.user1[cat] || 0
+            : 0;
       });
-
-      bud.all.total = filterDisplay["0"] ? bud.all.user0 : 0;
-      bud.all.total += filterDisplay["1"] ? bud.all.user1 : 0;
+      return bud;
     });
 
     setData((d) => {
@@ -165,24 +115,50 @@ export default function ExpenseCard() {
           (filterDisplay["1"] ? exp.owed.user1 : 0);
         const { index } = categoryInfo[exp.category];
 
-        d.datasets[index].data[1] += filtered;
-        total += legendDisplay[exp.category] && filtered;
+        d.datasets[index].data[1] +=
+          selectorDisplay[exp.category] || selectorDisplay.total ? filtered : 0;
+        total +=
+          selectorDisplay[exp.category] || selectorDisplay.total ? filtered : 0;
       });
 
       setTotalExpenses(total);
     });
-  }, [expenses, filterDisplay, legendDisplay]);
+  }, [expenses, filterDisplay, selectorDisplay]);
 
-  // Legends
-  const legendOption = {
-    onClick: (_, item) => {
-      setLegendDisplay((dis) => {
-        dis[deCapitalize(item.text)] = item.hidden;
-      });
-      setData((d) => {
-        d.datasets[item.datasetIndex].hidden = !item.hidden;
-      });
-    },
+  const renderData = () => {
+    const newDataset = data.datasets
+      .map((d, index) => {
+        if (budgetDisplay === 0) {
+          return {
+            ...d,
+            data: [d.data[1]],
+          };
+        }
+        if (index === 0) return { ...d, data: [budgetDisplay, 0] };
+        return d;
+      })
+      .filter((d) => d);
+
+    const expensesHidden =
+      newDataset.slice(1).reduce((a, b) => {
+        return {
+          data: [
+            0,
+            b.data.length === 2 ? a.data[1] + b.data[1] : a.data[0] + b.data[0],
+          ],
+        };
+      }).data[1] === 0;
+
+    const newLabels = [];
+    if (budgetDisplay !== 0) newLabels.push("Total Budget");
+    if (!expensesHidden) newLabels.push("Total Expenses");
+
+    const newData = {
+      ...data,
+      labels: newLabels,
+      datasets: newDataset,
+    };
+    return JSON.parse(JSON.stringify(newData));
   };
 
   // Tooltips
@@ -210,7 +186,7 @@ export default function ExpenseCard() {
   };
 
   const options = {
-    legend: legendOption,
+    legend: false,
     scales: {
       yAxes: [
         {
@@ -237,22 +213,19 @@ export default function ExpenseCard() {
 
   useEffect(() => {
     setTooltips((tip) => {
-      tip.content = data.datasets.map(
-        ({ label, data: d, backgroundColor, hidden }) => {
-          if (tip.title === "") return null;
-          if (hidden) return null;
-          if (tip.title === "Total Budget" && label !== "Budget") return null;
-          if (tip.title === "Total Expenses" && label === "Budget") return null;
-          if (d[0] + d[1] === 0 && label !== "Budget") return null;
-          if (budget.all.total === 0 && label === "Budget") return null;
+      tip.content = data.datasets.map(({ label, data: d, backgroundColor }) => {
+        if (tip.title === "") return null;
+        if (tip.title === "Total Budget" && label !== "Budget") return null;
+        if (tip.title === "Total Expenses" && label === "Budget") return null;
+        if (d[0] + d[1] === 0 && label !== "Budget") return null;
+        if (budgetDisplay === 0 && label === "Budget") return null;
 
-          return {
-            background: backgroundColor,
-            label: capitalize(label),
-            price: label === "Budget" ? budget.all.total : d[0] + d[1],
-          };
-        }
-      );
+        return {
+          background: backgroundColor,
+          label: capitalize(label),
+          price: label === "Budget" ? budgetDisplay : d[0] + d[1],
+        };
+      });
     });
   }, [tooltips.title]);
 
@@ -277,19 +250,24 @@ export default function ExpenseCard() {
   const BudgetInfo = () => (
     <span style={{ fontSize: "smaller" }}>
       {commaNumber(totalExpenses)}
-      {!data.datasets[0].hidden && <> / {commaNumber(budget.all.total)}</>}
+      {!(budgetDisplay === 0) && <> / {commaNumber(budgetDisplay)}</>}
     </span>
   );
 
   return (
     <BaseCard
       allowHeader
-      title={data.datasets[0].hidden ? "All Expenses" : "All Budget Used"}
+      title={budgetDisplay === 0 ? "All Expenses" : "All Budget Used"}
       otherHeader={<BudgetInfo />}
       allowFilter
       filters={[0, 1]}
       filterDisplay={filterDisplay}
       setFilterDisplay={setFilterDisplay}
+      allowSelector
+      selectorName="budget_selector"
+      selectorOptions={selectorOptions}
+      selectorDisplay={selectorDisplay}
+      setSelectorDisplay={setSelectorDisplay}
     >
       <BaseChart
         Chart={HorizontalBar}

@@ -14,6 +14,7 @@ const PercentInput = styled.input`
   border-radius: 0;
   color: black;
   padding: 0 !important;
+  width: ${({ value }) => (value < 10 ? 1.5 : value >= 100 ? 4.5 : 3)}ch;
 
   :focus {
     border: none;
@@ -55,6 +56,27 @@ export default function EditProfile() {
     const result = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
     return result;
   };
+
+  const updater = (formKey, all, value) => {
+    if (typeof value !== "number") return all;
+    if (formKey[3] === "user0") {
+      all.defaultExpenseAllocation.details.percentage.user1 = 100 - value;
+    } else {
+      all.defaultExpenseAllocation.details.percentage.user0 = 100 - value;
+    }
+    return all;
+  };
+
+  const allUpdater = [
+    {
+      depend: ["defaultExpenseAllocation", "details", "percentage", "user0"],
+      update: updater,
+    },
+    {
+      depend: ["defaultExpenseAllocation", "details", "percentage", "user1"],
+      update: updater,
+    },
+  ];
 
   const handleEditProfile = (formValues) => {
     const { username: _, ...restValues } = formValues;
@@ -101,6 +123,7 @@ export default function EditProfile() {
       <BaseForm
         formId="edit_profile_form"
         initialValues={initialProfile}
+        updater={allUpdater}
         allowSubmit
         submitText="Update Profile"
         onSubmit={handleEditProfile}

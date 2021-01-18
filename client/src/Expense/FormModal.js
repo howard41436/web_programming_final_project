@@ -1,6 +1,7 @@
 /* eslint-disable dot-notation */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
@@ -19,18 +20,42 @@ import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
 import { INSTANCE } from "../constants";
 
+const PercentInput = styled.input`
+  border-radius: 0;
+  color: black;
+  padding: 0 !important;
+  width: ${({ maxLength, value }) =>
+    maxLength ? (value < 10 ? 1.5 : value >= 100 ? 4.5 : 3) : null}ch;
+
+  :focus {
+    border: none;
+    box-shadow: none;
+    color: gray;
+  }
+`;
+
 export default function FormModal(props) {
   const dispatch = useDispatch();
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const categoryList = Object.keys(categoryInfo);
   const { expenses, debt } = useSelector(selectExpenses);
-  const { pairId } = useSelector(selectUser);
+  const {
+    pairId,
+    defaultExpenseAllocation: {
+      details: { percentage },
+    },
+  } = useSelector(selectUser);
 
   const { info, setInfo } = props;
   const handleSetShow = (type) => (show) => {
     setInfo((inf) => {
       inf.show[type] = show;
     });
+  };
+
+  const [switchCheck, setSwitchCheck] = useState(false);
+  const handleSetSwitchCheck = () => {
+    setSwitchCheck((check) => !check);
   };
 
   const initialExpenses = {
@@ -42,6 +67,7 @@ export default function FormModal(props) {
     date: "",
     paid: { user0: 0, user1: 0 },
     owed: { user0: 0, user1: 0 },
+    owedPercent: { user0: percentage.user0, user1: percentage.user1 },
   };
 
   const validator = (value) => {
@@ -50,24 +76,50 @@ export default function FormModal(props) {
     return result;
   };
 
-  const updater = (formKey, all) => {
+  const updater = (formKey, all, value) => {
+    if (Number.isNaN(value)) return all;
     if (Array.isArray(formKey)) {
-      // formKey: owed / paid
-      if (formKey[1] === "user0") {
-        all[formKey[0]].user0 = Math.min(all.price, all[formKey[0]].user0);
-        all[formKey[0]].user1 = all.price - all[formKey[0]].user0;
+      if (formKey[0] === "owedPercent") {
+        if (formKey[1] === "user0") {
+          all[formKey[0]].user1 = 100 - value;
+        } else {
+          all[formKey[0]].user0 = 100 - value;
+        }
+        all.owed.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+        all.owed.user1 = all.price - all.owed.user0;
       } else {
-        all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
-        all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
+        if (formKey[1] === "user0") {
+          // formKey: owed / paid
+          all[formKey[0]].user0 = Math.min(all.price, all[formKey[0]].user0);
+          all[formKey[0]].user1 = all.price - all[formKey[0]].user0;
+        } else {
+          all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
+          all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
+        }
+        all.owedPercent.user0 = Math.floor((all.owed.user0 / all.price) * 100);
+        all.owedPercent.user1 = 100 - all.owedPercent.user0;
       }
 
-      // formKey: owner
+      // formKey: owner / price
     } else if (all.owner === 0) {
       all.owed.user0 = all.price;
       all.owed.user1 = 0;
+      all.paid.user0 = all.price;
+      all.paid.user1 = 0;
     } else if (all.owner === 1) {
       all.owed.user0 = 0;
       all.owed.user1 = all.price;
+      all.paid.user0 = 0;
+      all.paid.user1 = all.price;
+    } else {
+      if (formKey === "owner") {
+        all.owedPercent.user0 = percentage.user0;
+        all.owedPercent.user1 = percentage.user1;
+      }
+      all.owed.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+      all.owed.user1 = all.price - all.owed.user0;
+      all.paid.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+      all.paid.user1 = all.price - all.paid.user0;
     }
     return all;
   };
@@ -79,6 +131,8 @@ export default function FormModal(props) {
     { depend: ["paid", "user1"], update: updater },
     { depend: ["owed", "user0"], update: updater },
     { depend: ["owed", "user1"], update: updater },
+    { depend: ["owedPercent", "user0"], update: updater },
+    { depend: ["owedPercent", "user1"], update: updater },
   ];
 
   useEffect(() => {
@@ -93,11 +147,12 @@ export default function FormModal(props) {
   };
 
   const handleSubmit = (type) => (formValues) => {
+    const { owedPercent, ...restValues } = formValues;
     if (type === "add") {
       INSTANCE.post(
         "/api/newRecord",
         {
-          ...formValues,
+          ...restValues,
           date: new Date().toISOString(),
         },
         { params: { pairId } }
@@ -315,24 +370,82 @@ export default function FormModal(props) {
         </Col>
       </Row>
       <Row>
+        <Col>
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <label>Owed Partition Rules</label>
+            <div className="can-toggle can-toggle--size-small">
+              <input
+                id="switch-unit"
+                type="checkbox"
+                checked={switchCheck}
+                onChange={handleSetSwitchCheck}
+              />
+              <label htmlFor="switch-unit">
+                <div
+                  className="can-toggle__switch"
+                  data-checked="$"
+                  data-unchecked="%"
+                />
+              </label>
+            </div>
+          </BaseFormGroup>
+        </Col>
         <Col size={6} className="pr-1">
-          <BaseFormGroup formId={formId} label="Tom | Owed" hidden={owedHidden}>
-            <BaseFormInput
-              formId={formId}
-              formKey={["owed", "user0"]}
-              type="number"
-              validator={validator}
-            />
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <div className="text-center">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                <img
+                  src={ownerIcon["0"].src}
+                  alt={ownerIcon["0"].alt}
+                  style={{ width: "30%" }}
+                />
+              </a>
+              <p className="unit-chosen">
+                <BaseFormInput
+                  className={
+                    switchCheck
+                      ? "partition-input-dollar"
+                      : "partition-input-percentage"
+                  }
+                  formId={formId}
+                  formKey={[switchCheck ? "owed" : "owedPercent", "user0"]}
+                  validator={validator}
+                  maxLength={switchCheck ? null : "2"}
+                  CustomInput={PercentInput}
+                />
+                {switchCheck ? "$" : "%"}
+              </p>
+            </div>
           </BaseFormGroup>
         </Col>
         <Col size={6} className="pl-1">
-          <BaseFormGroup formId={formId} label="Amy | Owed" hidden={owedHidden}>
-            <BaseFormInput
-              formId={formId}
-              formKey={["owed", "user1"]}
-              type="number"
-              validator={validator}
-            />
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <div className="text-center">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                <img
+                  src={ownerIcon["1"].src}
+                  alt={ownerIcon["1"].alt}
+                  style={{ width: "30%" }}
+                />
+              </a>
+              <p className="unit-chosen">
+                <BaseFormInput
+                  className={
+                    switchCheck
+                      ? "partition-input-dollar"
+                      : "partition-input-percentage"
+                  }
+                  formId={formId}
+                  formKey={[switchCheck ? "owed" : "owedPercent", "user1"]}
+                  validator={validator}
+                  maxLength={switchCheck ? null : "2"}
+                  CustomInput={PercentInput}
+                />
+                {switchCheck ? "$" : "%"}
+              </p>
+            </div>
           </BaseFormGroup>
         </Col>
       </Row>
