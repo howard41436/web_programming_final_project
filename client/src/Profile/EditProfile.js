@@ -13,8 +13,10 @@ import { INSTANCE, AVATAR } from "../constants";
 const PercentInput = styled.input`
   border-radius: 0;
   color: black;
+  margin-top: 5px;
   padding: 0 !important;
-  width: ${({ value }) => (value < 10 ? 1.5 : value >= 100 ? 4.5 : 3)}ch;
+  width: ${({ maxLength, value }) =>
+    maxLength ? (value < 10 ? 1.5 : value >= 100 ? 4.5 : 3) : null}ch;
 
   :focus {
     border: none;
@@ -35,7 +37,7 @@ export default function EditProfile() {
     defaultExpenseAllocation,
     anniversary,
   } = useSelector(selectUser);
-  const { ownerIcon } = useSelector(selectInfo);
+  const { categoryInfo, ownerIcon } = useSelector(selectInfo);
 
   // YYYY-MM-DD
   const formatDate = (date) => {
@@ -57,7 +59,20 @@ export default function EditProfile() {
     return result;
   };
 
-  const updater = (formKey, all, value) => {
+  const budgetUpdater = (formKey, all) => {
+    const tmpBudget = all.budget[formKey[1]];
+    const sumBudget = Object.keys(categoryInfo).reduce(
+      (sum, cur) => sum + (tmpBudget[cur] || 0),
+      0
+    );
+    all.budget[formKey[1]].total = Math.max(
+      all.budget[formKey[1]].total,
+      sumBudget
+    );
+    return all;
+  };
+
+  const allocateUpdater = (formKey, all, value) => {
     if (typeof value !== "number") return all;
     if (formKey[3] === "user0") {
       all.defaultExpenseAllocation.details.percentage.user1 = 100 - value;
@@ -69,12 +84,20 @@ export default function EditProfile() {
 
   const allUpdater = [
     {
+      depend: ["budget", user === "0" ? "user0" : "user1", "total"],
+      update: budgetUpdater,
+    },
+    ...Object.keys(categoryInfo).map((cat) => ({
+      depend: ["budget", user === "0" ? "user0" : "user1", cat],
+      update: budgetUpdater,
+    })),
+    {
       depend: ["defaultExpenseAllocation", "details", "percentage", "user0"],
-      update: updater,
+      update: allocateUpdater,
     },
     {
       depend: ["defaultExpenseAllocation", "details", "percentage", "user1"],
-      update: updater,
+      update: allocateUpdater,
     },
   ];
 
@@ -209,15 +232,40 @@ export default function EditProfile() {
         <Row>
           <Col>
             <BaseFormGroup label="Budget">
+              <br />
+              <span style={{ display: "inline-block" }}>Total</span>
               <BaseFormInput
                 formId="edit_profile_form"
                 formKey={["budget", user === "0" ? "user0" : "user1", "total"]}
-                placeholder="Budget"
                 type="number"
-                validator={validator}
+                style={{
+                  display: "inline-block",
+                  margin: "0 10px",
+                  width: "calc(100% - 65px)",
+                }}
               />
+              $
             </BaseFormGroup>
           </Col>
+        </Row>
+        <Row>
+          {Object.keys(categoryInfo).map((cat) => (
+            <Col size={3} key={cat}>
+              <div className="text-center">
+                <span style={{ textTransform: "capitalize" }}>{cat}</span>
+                <p>
+                  <BaseFormInput
+                    className="partition-input-dollar"
+                    formId="edit_profile_form"
+                    formKey={["budget", user === "0" ? "user0" : "user1", cat]}
+                    validator={validator}
+                    CustomInput={PercentInput}
+                  />
+                  $
+                </p>
+              </div>
+            </Col>
+          ))}
         </Row>
         <Row>
           <Col>

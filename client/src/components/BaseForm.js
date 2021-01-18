@@ -12,7 +12,7 @@ export const baseFormReset = (dispatch, formId, initialValue) => {
 const getFieldValue = (formKey, formValues) => {
   if (Array.isArray(formKey)) {
     return formKey.reduce((obj, cur) => {
-      if (obj) return obj[cur];
+      if (obj) return obj[cur] !== undefined ? obj[cur] : "";
       return undefined;
     }, formValues);
   }
@@ -170,8 +170,8 @@ export const BaseFormInput = (props) => {
       String(inputValue) || String(getFieldValue(formKey, formValues)) || "",
     onChange: handleValidateUpdate,
     style: {
-      ...style,
       display: inputHidden() ? "none" : null,
+      ...style,
     },
   };
 

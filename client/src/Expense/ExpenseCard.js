@@ -142,10 +142,7 @@ export default function ExpenseCard() {
     const expensesHidden =
       newDataset.slice(1).reduce((a, b) => {
         return {
-          data: [
-            0,
-            b.data.length === 2 ? a.data[1] + b.data[1] : a.data[0] + b.data[0],
-          ],
+          data: [0, a.data[0] + a.data[1] + b.data[0] + b.data[1]],
         };
       }).data[1] === 0;
 

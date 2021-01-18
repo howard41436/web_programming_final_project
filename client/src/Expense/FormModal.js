@@ -96,8 +96,12 @@ export default function FormModal(props) {
           all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
           all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
         }
-        all.owedPercent.user0 = Math.floor((all.owed.user0 / all.price) * 100);
-        all.owedPercent.user1 = 100 - all.owedPercent.user0;
+        if (formKey[0] === "owed") {
+          all.owedPercent.user0 = Math.floor(
+            (all.owed.user0 / all.price) * 100
+          );
+          all.owedPercent.user1 = 100 - all.owedPercent.user0;
+        }
       }
 
       // formKey: owner / price
@@ -348,31 +352,9 @@ export default function FormModal(props) {
         </Col>
       </Row>
       <Row>
-        <Col size={6} className="pr-1">
-          <BaseFormGroup formId={formId} label="Tom | Paid">
-            <BaseFormInput
-              formId={formId}
-              formKey={["paid", "user0"]}
-              type="number"
-              validator={validator}
-            />
-          </BaseFormGroup>
-        </Col>
-        <Col size={6} className="pl-1">
-          <BaseFormGroup formId={formId} label="Amy | Paid">
-            <BaseFormInput
-              formId={formId}
-              formKey={["paid", "user1"]}
-              type="number"
-              validator={validator}
-            />
-          </BaseFormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
+        <Col style={{ margin: "0 0 10px 0" }}>
+          <hr className="line-break" />
           <BaseFormGroup formId={formId} hidden={owedHidden}>
-            <label>Owed Partition Rules</label>
             <div className="can-toggle can-toggle--size-small">
               <input
                 id="switch-unit"
@@ -401,6 +383,31 @@ export default function FormModal(props) {
                   style={{ width: "30%" }}
                 />
               </a>
+            </div>
+          </BaseFormGroup>
+        </Col>
+        <Col size={6} className="pl-1">
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <div className="text-center">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                <img
+                  src={ownerIcon["1"].src}
+                  alt={ownerIcon["1"].alt}
+                  style={{ width: "30%" }}
+                />
+              </a>
+            </div>
+          </BaseFormGroup>
+        </Col>
+        <Col>
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <label>Owed Partition Rules</label>
+          </BaseFormGroup>
+        </Col>
+        <Col size={6} className="pr-1">
+          <BaseFormGroup formId={formId} hidden={owedHidden}>
+            <div className="text-center">
               <p className="unit-chosen">
                 <BaseFormInput
                   className={
@@ -422,14 +429,6 @@ export default function FormModal(props) {
         <Col size={6} className="pl-1">
           <BaseFormGroup formId={formId} hidden={owedHidden}>
             <div className="text-center">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <a>
-                <img
-                  src={ownerIcon["1"].src}
-                  alt={ownerIcon["1"].alt}
-                  style={{ width: "30%" }}
-                />
-              </a>
               <p className="unit-chosen">
                 <BaseFormInput
                   className={
@@ -447,6 +446,37 @@ export default function FormModal(props) {
               </p>
             </div>
           </BaseFormGroup>
+        </Col>
+        <Col>
+          <label>Paid</label>
+        </Col>
+        <Col size={6} className="pr-1">
+          <div className="text-center">
+            <p>
+              <BaseFormInput
+                className="partition-input-dollar"
+                formId={formId}
+                formKey={["paid", "user0"]}
+                validator={validator}
+                CustomInput={PercentInput}
+              />
+              $
+            </p>
+          </div>
+        </Col>
+        <Col size={6} className="pl-1">
+          <div className="text-center">
+            <p>
+              <BaseFormInput
+                className="partition-input-dollar"
+                formId={formId}
+                formKey={["paid", "user1"]}
+                validator={validator}
+                CustomInput={PercentInput}
+              />
+              $
+            </p>
+          </div>
         </Col>
       </Row>
       <Row>

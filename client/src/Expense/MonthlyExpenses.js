@@ -26,13 +26,15 @@ export default function MonthlyExpenses(props) {
 
     setModalInfo((info) => {
       info.show[type] = true;
-      info.data = {
-        ...exp,
-        owedPercent: {
-          user0: exp ? Math.floor((exp.owed.user0 / exp.price) * 100) : 0,
-          user1: exp ? 100 - Math.floor((exp.owed.user0 / exp.price) * 100) : 0,
-        },
-      };
+      info.data = exp
+        ? {
+            ...exp,
+            owedPercent: {
+              user0: Math.floor((exp.owed.user0 / exp.price) * 100),
+              user1: 100 - Math.floor((exp.owed.user0 / exp.price) * 100),
+            },
+          }
+        : null;
     });
   };
 
