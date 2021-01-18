@@ -21,7 +21,13 @@ import { getCookie } from "./cookieHelper";
 function App() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { pairId, icon, icon1, matched, login } = useSelector(selectUser);
+  const {
+    pairId,
+    user0: { icon },
+    user1: { icon: icon1 },
+    matched,
+    login,
+  } = useSelector(selectUser);
   const [readyRender, setReadyRender] = useImmer({
     user: false,
     expenses: false,
@@ -59,19 +65,19 @@ function App() {
               user1,
               budget,
               defaultExpenseAllocation,
+              anniversary,
             } = _res.data;
             dispatch(
               setUser({
                 pairId: String(_pairId),
-                name: user0.name,
-                name1: user1.name,
+                user0,
+                user1,
                 username,
-                icon: String(user0.icon),
-                icon1: String(user1.icon),
                 user: user0.username === username ? "0" : "1",
                 matched: true,
                 budget,
                 defaultExpenseAllocation,
+                anniversary,
                 login: true,
               })
             );

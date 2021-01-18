@@ -241,7 +241,6 @@ export const BaseFormSelect = (props) => {
   } = props;
   const { [formId]: formValues } = useSelector(selectForm(formId));
 
-  const [tabIndex, setTabIndex] = useState(null);
   const [active, setActive] = useState(false);
   const selectRef = useRef();
 
@@ -255,10 +254,16 @@ export const BaseFormSelect = (props) => {
   };
 
   const handleClick = (toggle) => () => {
-    setTabIndex(1);
     selectRef.current.focus();
     setActive((a) => !a);
     toggle();
+  };
+
+  const handleBlur = (toggle, progress) => () => {
+    if (progress === 1) {
+      setActive(false);
+      toggle();
+    }
   };
 
   const selectProps = {
@@ -278,14 +283,15 @@ export const BaseFormSelect = (props) => {
 
   return (
     <SlideToggle duration={300} collapsed>
-      {({ toggle, setCollapsibleElement }) => (
+      {({ toggle, setCollapsibleElement, progress }) => (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <div
           {...selectProps}
           role="button"
           onClick={handleClick(toggle)}
+          onBlur={handleBlur(toggle, progress)}
           ref={selectRef}
-          tabIndex={tabIndex}
+          tabIndex={0}
         >
           <div className="select" style={{ padding: "10px" }}>
             <span>{getFieldValue(formKey, formValues) || placeholder}</span>

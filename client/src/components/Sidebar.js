@@ -5,7 +5,11 @@ import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 
 export default function Sidebar() {
-  const { name, name1, user } = useSelector(selectUser);
+  const {
+    user0: { name },
+    user1: { name: name1 },
+    user,
+  } = useSelector(selectUser);
   const { ownerIcon } = useSelector(selectInfo);
   const { pathname } = useLocation();
 

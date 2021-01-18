@@ -41,6 +41,7 @@ export default async function seedProfile() {
             },
           },
         },
+        anniversary: new Date(2019, 0, 2),
       },
     ]);
     debug("Created document:\n%O", doc);

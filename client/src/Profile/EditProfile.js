@@ -1,29 +1,40 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
-import { useSelector } from "react-redux";
-import { selectUser } from "../redux/userSlice";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, selectUser } from "../redux/userSlice";
+import { selectInfo } from "../redux/infoSlice";
 import BaseCard from "../components/BaseCard";
-import BaseForm, {
-  BaseFormGroup,
-  BaseFormInput,
-  BaseFormSelect,
-  BaseFormOption,
-} from "../components/BaseForm";
+import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
+import { baseToast, BaseToastInner } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
-import { AVATAR } from "../constants";
+import { INSTANCE, AVATAR } from "../constants";
+
+const PercentInput = styled.input`
+  border-radius: 0;
+  color: black;
+  padding: 0 !important;
+
+  :focus {
+    border: none;
+    box-shadow: none;
+    color: gray;
+  }
+`;
 
 export default function EditProfile() {
+  const dispatch = useDispatch();
   const {
-    name,
-    name1,
+    pairId,
+    user0,
+    user1,
     username,
-    icon,
-    icon1,
     user,
     budget,
     defaultExpenseAllocation,
+    anniversary,
   } = useSelector(selectUser);
-  console.log(defaultExpenseAllocation);
+  const { ownerIcon } = useSelector(selectInfo);
 
   // YYYY-MM-DD
   const formatDate = (date) => {
@@ -31,19 +42,53 @@ export default function EditProfile() {
   };
 
   const initialProfile = {
-    icon: user === "0" ? icon : icon1,
+    user0,
+    user1,
     username,
-    name: user === "0" ? name : name1,
-    lastName: "Cruise",
-    budget: user === "0" ? budget.user0.total : budget.user1.total,
-    partitionRule: "even split",
-    anniversary: formatDate(new Date(2019, 0, 2)),
+    budget,
+    defaultExpenseAllocation,
+    anniversary: formatDate(anniversary),
   };
 
   const validator = (value) => {
     const tmp = parseInt(value, 10);
     const result = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
     return result;
+  };
+
+  const handleEditProfile = (formValues) => {
+    const { username: _, ...restValues } = formValues;
+    INSTANCE.post("/api/account/editProfile", restValues, {
+      params: { pairId },
+    })
+      .then((res) => {
+        dispatch(setUser({ ...res.data, matched: true, login: true }));
+        baseToast(
+          <BaseToastInner
+            icon="nc-icon nc-check-2"
+            title="Update successfully."
+            message="Your profile has been updated."
+          />,
+          {
+            position: "top-center",
+            autoClose: 6000,
+          }
+        );
+      })
+      .catch((err) =>
+        baseToast(
+          <BaseToastInner
+            icon="nc-icon nc-bell-55"
+            title="Updated failed."
+            message={err.response.data}
+          />,
+          {
+            position: "top-center",
+            autoClose: 6000,
+            type: "alert",
+          }
+        )
+      );
   };
 
   return (
@@ -58,6 +103,7 @@ export default function EditProfile() {
         initialValues={initialProfile}
         allowSubmit
         submitText="Update Profile"
+        onSubmit={handleEditProfile}
       >
         <Row>
           <Col>
@@ -67,7 +113,7 @@ export default function EditProfile() {
                 <BaseFormInput
                   id="icon_radio_boy"
                   formId="edit_profile_form"
-                  formKey="icon"
+                  formKey={[user === "0" ? "user0" : "user1", "icon"]}
                   type="radio"
                   name="icon"
                   inputValue="0"
@@ -79,7 +125,7 @@ export default function EditProfile() {
                 <BaseFormInput
                   id="icon_radio_boy2"
                   formId="edit_profile_form"
-                  formKey="icon"
+                  formKey={[user === "0" ? "user0" : "user1", "icon"]}
                   type="radio"
                   name="icon"
                   inputValue="1"
@@ -91,7 +137,7 @@ export default function EditProfile() {
                 <BaseFormInput
                   id="icon_radio_girl"
                   formId="edit_profile_form"
-                  formKey="icon"
+                  formKey={[user === "0" ? "user0" : "user1", "icon"]}
                   type="radio"
                   name="icon"
                   inputValue="2"
@@ -103,7 +149,7 @@ export default function EditProfile() {
                 <BaseFormInput
                   id="icon_radio_girl2"
                   formId="edit_profile_form"
-                  formKey="icon"
+                  formKey={[user === "0" ? "user0" : "user1", "icon"]}
                   type="radio"
                   name="icon"
                   inputValue="3"
@@ -131,7 +177,7 @@ export default function EditProfile() {
             <BaseFormGroup label="Nickname">
               <BaseFormInput
                 formId="edit_profile_form"
-                formKey="name"
+                formKey={[user === "0" ? "user0" : "user1", "name"]}
                 placeholder="Nickname"
               />
             </BaseFormGroup>
@@ -142,7 +188,7 @@ export default function EditProfile() {
             <BaseFormGroup label="Budget">
               <BaseFormInput
                 formId="edit_profile_form"
-                formKey="budget"
+                formKey={["budget", user === "0" ? "user0" : "user1", "total"]}
                 placeholder="Budget"
                 type="number"
                 validator={validator}
@@ -152,20 +198,63 @@ export default function EditProfile() {
         </Row>
         <Row>
           <Col>
-            <BaseFormGroup label="Partition Rules">
-              <BaseFormSelect
-                formId="edit_profile_form"
-                formKey="partitionRule"
-              >
-                <BaseFormOption
+            <label>Partition Rules</label>
+          </Col>
+          <Col size={6} className="pr-1">
+            <div className="text-center">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                <img
+                  src={ownerIcon["0"].src}
+                  alt={ownerIcon["0"].alt}
+                  style={{ width: "30%" }}
+                />
+              </a>
+              <p>
+                <BaseFormInput
                   formId="edit_profile_form"
-                  formKey="partitionRule"
-                  value="even split"
-                >
-                  even split
-                </BaseFormOption>
-              </BaseFormSelect>
-            </BaseFormGroup>
+                  formKey={[
+                    "defaultExpenseAllocation",
+                    "details",
+                    "percentage",
+                    "user0",
+                  ]}
+                  className="partition-input-percentage"
+                  maxLength="2"
+                  validator={validator}
+                  CustomInput={PercentInput}
+                />
+                %
+              </p>
+            </div>
+          </Col>
+          <Col size={6} className="pl-1">
+            <div className="text-center">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                <img
+                  src={ownerIcon["1"].src}
+                  alt={ownerIcon["1"].alt}
+                  style={{ width: "30%" }}
+                />
+              </a>
+              <p>
+                <BaseFormInput
+                  formId="edit_profile_form"
+                  formKey={[
+                    "defaultExpenseAllocation",
+                    "details",
+                    "percentage",
+                    "user1",
+                  ]}
+                  className="partition-input-percentage"
+                  maxLength="2"
+                  validator={validator}
+                  CustomInput={PercentInput}
+                />
+                %
+              </p>
+            </div>
           </Col>
         </Row>
         <Row>

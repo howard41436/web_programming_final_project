@@ -26,7 +26,11 @@ const Footer = styled.div.attrs({
 
 export default function SettleCards() {
   const dispatch = useDispatch();
-  const { pairId, name, name1 } = useSelector(selectUser);
+  const {
+    pairId,
+    user0: { name },
+    user1: { name: name1 },
+  } = useSelector(selectUser);
   const { ownerIcon } = useSelector(selectInfo);
   const { debt } = useSelector(selectExpenses);
 

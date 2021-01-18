@@ -4,26 +4,23 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     pairId: null,
-    name: null,
-    name1: null,
+    user0: {},
+    user1: {},
     username: null,
-    icon: null,
-    icon1: null,
     user: null,
     matched: false,
     inviteCode: null,
     budget: null,
     defaultExpenseAllocation: null,
+    anniversary: null,
     login: false,
   },
   reducers: {
     setUser: (state, action) => {
       state.pairId = action.payload.pairId || state.pairId;
-      state.name = action.payload.name || state.name;
-      state.name1 = action.payload.name1 || state.name1;
+      state.user0 = action.payload.user0 || state.user0;
+      state.user1 = action.payload.user1 || state.user1;
       state.username = action.payload.username || state.username;
-      state.icon = action.payload.icon || state.icon;
-      state.icon1 = action.payload.icon1 || state.icon1;
       state.user = action.payload.user || state.user;
       state.matched = action.payload.matched || false;
       state.inviteCode = action.payload.inviteCode || state.inviteCode;
@@ -31,6 +28,7 @@ export const userSlice = createSlice({
       state.defaultExpenseAllocation =
         action.payload.defaultExpenseAllocation ||
         state.defaultExpenseAllocation;
+      state.anniversary = action.payload.anniversary || state.anniversary;
       state.login = action.payload.login || false;
     },
   },

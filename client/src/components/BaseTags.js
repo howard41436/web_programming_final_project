@@ -162,7 +162,7 @@ export const IconArrow = styled.input.attrs(() => ({
   display: none;
 
   & + label {
-    color: ${({ inputValue }) => (inputValue === -1 ? "#5A586B" : "#ED7B8F")};
+    color: ${({ value }) => (value === "-1" ? "#ED7B8F" : "#5A586B")};
     display: contents;
     font-size: ${({ checked }) => (checked ? "59px" : "49px")};
     margin-bottom: 8px;

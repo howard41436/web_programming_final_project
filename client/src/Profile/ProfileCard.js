@@ -17,7 +17,26 @@ const PictureCard = styled(BaseCard)`
 `;
 
 export default function ProfileCard() {
-  const { name, name1, username, user, icon, icon1 } = useSelector(selectUser);
+  const {
+    user0: { name, icon },
+    user1: { name: name1, icon: icon1 },
+    username,
+    user,
+    anniversary,
+  } = useSelector(selectUser);
+
+  // YYYY-MM-DD
+  const formatDate = (date) => {
+    return `${new Date(date)
+      .toISOString()
+      .split("T")[0]
+      .replaceAll("-", " / ")}`;
+  };
+
+  const DiffDate = (date) => {
+    const oneDay = 24 * 60 * 60 * 1000;
+    return Math.round(Math.abs((new Date() - new Date(date)) / oneDay));
+  };
 
   const CardHeader = () => (
     <div className="image">
@@ -41,7 +60,7 @@ export default function ProfileCard() {
           className="ml-auto mr-auto"
         >
           <h5>
-            100
+            {DiffDate(anniversary)}
             <br />
             <small>Days</small>
           </h5>
@@ -68,7 +87,7 @@ export default function ProfileCard() {
     >
       <div className="author">
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a href="#">
+        <a style={{ pointerEvents: "none" }}>
           <img
             className="avatar border-gray"
             src={AVATAR[user === "0" ? icon : icon1]}
@@ -85,7 +104,7 @@ export default function ProfileCard() {
             alt="both"
           />
           <br />
-          Since 2019 / 01 / 01
+          Since {formatDate(anniversary)}
         </p>
       </div>
     </PictureCard>

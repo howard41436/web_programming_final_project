@@ -230,10 +230,7 @@ export default function FormModal(props) {
                   value={cat}
                   hidden={(v) => v === cat}
                 >
-                  <span className="icon-big text-center icon-warning">
-                    <i className={categoryInfo[cat].icon} />
-                  </span>{" "}
-                  {cat}
+                  <i className={categoryInfo[cat].icon} /> {cat}
                 </BaseFormOption>
               ))}
             </BaseFormSelect>
@@ -250,7 +247,7 @@ export default function FormModal(props) {
           </BaseFormGroup>
         </Col>
       </Row>
-      <Row>
+      <Row style={{ padding: "5px 0" }}>
         <Col>
           <BaseFormGroup formId={formId} label="Member">
             <span className="logo-list select-logo">

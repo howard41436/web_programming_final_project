@@ -11,6 +11,7 @@ import { setCookie, deleteCookie } from "../cookieHelper";
 import { INSTANCE } from "../constants";
 
 const CodeInput = styled.input`
+  border-radius: 0;
   color: black;
   padding: 0 !important;
 
