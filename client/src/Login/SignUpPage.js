@@ -31,7 +31,7 @@ export default function SignUpPage() {
   const { login } = useSelector(selectUser);
 
   useEffect(() => {
-    document.title = "Sign Up | App's name";
+    document.title = "Sign Up | Together";
   }, []);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function SignUpPage() {
     <div className="wrapper">
       <div className="login-panel">
         <div className="login-container">
-          <h1 className="title">App&apos;s name</h1>
+          <h1 className="title">Together</h1>
           <BaseCard allowHeader title="Sign Up">
             <BaseForm
               formId="sign_up_form"

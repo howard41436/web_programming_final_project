@@ -7,7 +7,7 @@ import EditProfile from "./EditProfile";
 
 export default function ProfilePage() {
   useEffect(() => {
-    document.title = "Profile | App's name";
+    document.title = "Profile | Together";
   }, []);
 
   return (

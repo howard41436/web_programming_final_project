@@ -12,9 +12,9 @@ const generateSeed = () => {
   const cate = ["food", "transportation", "education", "others"];
   const result = [];
   Array.from({ length: 12 }, (_, key) => {
-    Array.from({ length: key === 0 ? 30 : 60 }, (__, k) => {
+    Array.from({ length: key === 0 ? 15 : 30 }, (__, k) => {
       const owner = getRandomInt(3) - 1;
-      const price = getRandomInt(1000, true) + 50;
+      const price = getRandomInt(2000, true) + 50;
       const percent =
         getRandomInt(100) < 85 ? 0.7 : getRandomInt(100) < 50 ? 0.57 : 0.8;
       const owed = Math.floor((price * percent) / 10) * 10;
@@ -29,7 +29,7 @@ const generateSeed = () => {
         date: new Date(
           `${key === 0 ? 2021 : 2020}-${key + 1}-${
             getRandomInt(key === 0 ? 19 : 28) + 1
-          }`
+          }-${getRandomInt(24)}:`
         ),
         paid: {
           user0: owner === 0 ? price : owner === 1 ? 0 : paid,

@@ -1,406 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="assets/img/apple-icon.png"
+    />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Together</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <!--     Fonts and icons     -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
+      rel="stylesheet"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <!-- CSS Files -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link href="assets/demo/demo.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+    />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <title>
-    App's name
-  </title>
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-    name='viewport' />
-  <!--     Fonts and icons     -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-  <!-- CSS Files -->
-  <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
-  <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="assets/demo/demo.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
-</head>
-
-<body class="">
-  <div class="wrapper ">
-    <div class="sidebar" data-color="white" data-active-color="danger">
-      <div class="logo">
-        <a class="simple-text logo-mini" href="./profile.html">
-          <div class="logo-image-small">
-            <img src="assets/img/boy.png">
-          </div>
-        </a>
-        <a class="simple-text logo-normal">
-          Tom & Amy
-        </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li>
-            <a href="./expense.html">
-              <i class="nc-icon nc-money-coins"></i>
-              <p>Our Expenses</p>
-            </a>
-          </li>
-          <li class="active ">
-            <a href="./settle.html">
-              <i class="fas fa-hand-holding-usd"></i>
-              <p>Settle Up</p>
-            </a>
-          </li>
-          <li>
-            <a href="./chart.html">
-              <i class="nc-icon nc-chart-bar-32"></i>
-              <p>Chart</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- settle with amount-->
-    <div class="content modal fade center" id="settleMoney">
-      <div class="row modal-dialog modal-content" role="document">
-        <div class="col-md-12">
-          <div class="card card-user">
-            <div class="card-header">
-              <h5 class="card-title">Settle with amount</h5>
+  <body class="">
+    <div class="wrapper">
+      <div class="sidebar" data-color="white" data-active-color="danger">
+        <div class="logo">
+          <a class="simple-text logo-mini" href="./profile.html">
+            <div class="logo-image-small">
+              <img src="assets/img/boy.png" />
             </div>
-            <div class="close-modal"><a data-dismiss="modal"><i class="fas fa-times"></i></a></div>
-            <div class="card-body">
-              <form>
-                <div class="row">
-                  <div class="col-md-4 pr-1">
-                    <div class="logo logo-form">
-                      <a class="simple-text logo-mini">
-                        <div class="">
-                          <img src="assets/img/girl.png">
-                        </div>
-                      </a>
+          </a>
+          <a class="simple-text logo-normal"> Tom & Amy </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <ul class="nav">
+            <li>
+              <a href="./expense.html">
+                <i class="nc-icon nc-money-coins"></i>
+                <p>Our Expenses</p>
+              </a>
+            </li>
+            <li class="active">
+              <a href="./settle.html">
+                <i class="fas fa-hand-holding-usd"></i>
+                <p>Settle Up</p>
+              </a>
+            </li>
+            <li>
+              <a href="./chart.html">
+                <i class="nc-icon nc-chart-bar-32"></i>
+                <p>Chart</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- settle with amount-->
+      <div class="content modal fade center" id="settleMoney">
+        <div class="row modal-dialog modal-content" role="document">
+          <div class="col-md-12">
+            <div class="card card-user">
+              <div class="card-header">
+                <h5 class="card-title">Settle with amount</h5>
+              </div>
+              <div class="close-modal">
+                <a data-dismiss="modal"><i class="fas fa-times"></i></a>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row">
+                    <div class="col-md-4 pr-1">
+                      <div class="logo logo-form">
+                        <a class="simple-text logo-mini">
+                          <div class="">
+                            <img src="assets/img/girl.png" />
+                          </div>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-4 px-1" style="padding-top: 10px">
-                    <div class="settle-arrow">
-                      <i class="fas fa-long-arrow-alt-right fa-3x"></i>
-                      <!-- <br>
+                    <div class="col-md-4 px-1" style="padding-top: 10px">
+                      <div class="settle-arrow">
+                        <i class="fas fa-long-arrow-alt-right fa-3x"></i>
+                        <!-- <br>
                       <a class="simple-text">
                         <i class="fas fa-long-arrow-alt-left"></i>
                       </a> -->
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-1">
+                      <div class="logo logo-form">
+                        <a class="simple-text logo-mini">
+                          <div class="">
+                            <img src="assets/img/boy.png" />
+                          </div>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-4 pl-1">
-                    <div class="logo logo-form">
-                      <a class="simple-text logo-mini">
-                        <div class="">
-                          <img src="assets/img/boy.png">
-                        </div>
-                      </a>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Amount</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          placeholder="Amount"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <label>Amount</label>
-                      <input type="number" class="form-control" placeholder="Amount">
-                    </div>
-                  </div>
-                </div>
 
-                <div class="row">
-                  <div class="update ml-auto mr-auto">
-                    <button type="submit" class="btn btn-primary btn-round">Settle</button>
+                  <div class="row">
+                    <div class="update ml-auto mr-auto">
+                      <button type="submit" class="btn btn-primary btn-round">
+                        Settle
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-panel">
+        <!-- Navbar -->
+        <nav
+          class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent"
+        >
+          <div class="container-fluid">
+            <div class="navbar-wrapper">
+              <div class="navbar-toggle">
+                <button type="button" class="navbar-toggler">
+                  <span class="navbar-toggler-bar bar1"></span>
+                  <span class="navbar-toggler-bar bar2"></span>
+                  <span class="navbar-toggler-bar bar3"></span>
+                </button>
+              </div>
+              <a class="navbar-brand" href="javascript:;">Settle Up</a>
+            </div>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navigation"
+              aria-controls="navigation-index"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+              <span class="navbar-toggler-bar navbar-kebab"></span>
+            </button>
+            <div
+              class="collapse navbar-collapse justify-content-end"
+              id="navigation"
+            >
+              <form>
+                <div class="input-group no-border">
+                  <input
+                    type="text"
+                    value=""
+                    class="form-control"
+                    placeholder="Search..."
+                  />
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="nc-icon nc-zoom-split"></i>
+                    </div>
                   </div>
                 </div>
               </form>
+              <ul class="navbar-nav">
+                <li class="nav-item btn-rotate dropdown">
+                  <a
+                    class="nav-link btn-rotate dropdown-toggle"
+                    id="accountOption"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <i class="nc-icon nc-single-02"></i>
+                    <span class="d-lg-none d-md-block">Account</span>
+                  </a>
+
+                  <div
+                    class="dropdown-menu dropdown-menu-right mydropdown-menu"
+                    aria-labelledby="accountOption"
+                  >
+                    <a class="dropdown-item" href="./profile.html">Profile</a>
+                    <a class="dropdown-item" href="./login.html">Log Out</a>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="main-panel">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <div class="navbar-toggle">
-              <button type="button" class="navbar-toggler">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </button>
-            </div>
-            <a class="navbar-brand" href="javascript:;">Settle Up</a>
-
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
-            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-            <span class="navbar-toggler-bar navbar-kebab"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <form>
-              <div class="input-group no-border">
-                <input type="text" value="" class="form-control" placeholder="Search...">
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <i class="nc-icon nc-zoom-split"></i>
-                  </div>
-                </div>
-
-              </div>
-            </form>
-            <ul class="navbar-nav">
-              <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link btn-rotate dropdown-toggle" id="accountOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="nc-icon nc-single-02"></i>
-                  <span class="d-lg-none d-md-block">Account</span>
-                </a>
-
-                <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="accountOption">
-                  <a class="dropdown-item" href="./profile.html">Profile</a>
-                  <a class="dropdown-item" href="./login.html">Log Out</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <!-- End Navbar -->
-      <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card card-stats">
-              <div class="card-header" style="text-align: center">
-                <div class="row">
-                  <div class="col-md-4">
-                    <h5 class="card-title settle-arrow">Amy</h5>
-                  </div>
-                  <div class="col-md-4">
-                    <h3 class="card-title">Summary</h3>
-                  </div>
-                  <div class="col-md-4">
-                    <h5 class="card-title settle-arrow">Tom</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body ">
-                <div class="row">
-                  <div class="col-md-4">
-                    <div class="text-center">
-                      <a href="javascript:;"><img src="assets/img/girl.png" style="width:50%"></a>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card card-stats">
+                <div class="card-header" style="text-align: center">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <h5 class="card-title settle-arrow">Amy</h5>
                     </div>
-                  </div>
-                  <div class="col-md-4" style="text-align: center; padding-top: 20px">
-                    <h2 class="settle-arrow girl" style="margin: 0px;">$60</h2>
-                    <h1 class="settle-arrow girl" style="margin: 0px;">
-                      <i class="fas fa-long-arrow-alt-right fa-3x" style="transform: scale(2,1); line-height: 30%">
-                      </i>
-                    </h1>
-                    <a data-toggle="modal" data-target="#settleMoney">
-                      <button class="btn btn-primary">Settle with amount</button>
-                    </a>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="text-center">
-                      <a href="javascript:;"><img src="assets/img/boy.png" style="width:50%"></a>
+                    <div class="col-md-4">
+                      <h3 class="card-title">Summary</h3>
+                    </div>
+                    <div class="col-md-4">
+                      <h5 class="card-title settle-arrow">Tom</h5>
                     </div>
                   </div>
                 </div>
-                
-              </div>
-              <div class="card-footer" style="text-align: center;">
-                
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="text-center">
+                        <a href="javascript:;"
+                          ><img src="assets/img/girl.png" style="width: 50%"
+                        /></a>
+                      </div>
+                    </div>
+                    <div
+                      class="col-md-4"
+                      style="text-align: center; padding-top: 20px"
+                    >
+                      <h2 class="settle-arrow girl" style="margin: 0px">$60</h2>
+                      <h1 class="settle-arrow girl" style="margin: 0px">
+                        <i
+                          class="fas fa-long-arrow-alt-right fa-3x"
+                          style="transform: scale(2, 1); line-height: 30%"
+                        >
+                        </i>
+                      </h1>
+                      <a data-toggle="modal" data-target="#settleMoney">
+                        <button class="btn btn-primary">
+                          Settle with amount
+                        </button>
+                      </a>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="text-center">
+                        <a href="javascript:;"
+                          ><img src="assets/img/boy.png" style="width: 50%"
+                        /></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer" style="text-align: center"></div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Settlement Record
-                  <span class="menu">
-                    <span class="logo-list">
-                      <a href="javascript:;" class="active"><img src="assets/img/boy.png"></a>
-                      <a href="javascript:;"><img src="assets/img/girl.png"></a>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">
+                    Settlement Record
+                    <span class="menu">
+                      <span class="logo-list">
+                        <a href="javascript:;" class="active"
+                          ><img src="assets/img/boy.png"
+                        /></a>
+                        <a href="javascript:;"
+                          ><img src="assets/img/girl.png"
+                        /></a>
+                      </span>
+                      <a
+                        class="dropdown-toggle"
+                        id="chooseBudgeType"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        style="margin: 10px"
+                      >
+                        <i class="fas fa-list"></i>
+                        <span class="d-lg-none d-md-block">Choose Display</span>
+                      </a>
+                      <div
+                        class="dropdown-menu dropdown-menu-right mydropdown-menu"
+                        aria-labelledby="chooseBudgeType"
+                      >
+                        <a class="dropdown-item" href="#">All</a>
+                        <a class="dropdown-item" href="#">Settlements</a>
+                        <a class="dropdown-item" href="#">Expenses</a>
+                      </div>
                     </span>
-                    <a class="dropdown-toggle" id="chooseBudgeType" data-toggle="dropdown" aria-haspopup="true"
-                      aria-expanded="false" style="margin: 10px;">
-                      <i class="fas fa-list"></i>
-                      <span class="d-lg-none d-md-block">Choose Display</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right mydropdown-menu" aria-labelledby="chooseBudgeType">
-                      <a class="dropdown-item" href="#">All</a>
-                      <a class="dropdown-item" href="#">Settlements</a>
-                      <a class="dropdown-item" href="#">Expenses</a>
-                    </div>
-                  </span>
-                </h4>
-              </div>
+                  </h4>
+                </div>
 
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
-                      <th></th>
-                      <th>
-                        Date <i class="fas fa-sort"></i>
-                      </th>
-                      <th>
-                        Category
-                      </th>
-                      <th>
-                        Member
-                      </th>
-                      <th>
-                        Descriptions
-                      </th>
-                      <th>
-                        Creditor
-                      </th>
-                      <th class="text-right">
-                        Owed
-                      </th>
-                      <th></th>
-                    </thead>
-                    <tbody>
-                      <tr class="selected">
-                        <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
-                              class="far fa-trash-alt"></i></a>
-                        </td>
-                        <td>
-                          <span>Oct. 11</span>
-                        </td>
-                        <td>
-                          <span class="icon-big text-center icon-warning">
-                            <i class="nc-icon nc-shop text-warning"></i>
-                          </span>
-                          Food
-                        </td>
-                        <td>
-                          <div class="logo-image-small">
-                            <img src="assets/img/boy_girl.png">
-                          </div>
-                        </td>
-                        <td>
-                          Oud-Turnhout
-                        </td>
-                        <td>
-                          <div class="settle-arrow" style="text-align: left;">
-                            <i class="fas fa-times"></i>
-                          </div>
-                        </td>
-                        <td class="text-right">
-                          $36,738
-                        </td>
-                        <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class="text-primary">
+                        <th></th>
+                        <th>Date <i class="fas fa-sort"></i></th>
+                        <th>Category</th>
+                        <th>Member</th>
+                        <th>Descriptions</th>
+                        <th>Creditor</th>
+                        <th class="text-right">Owed</th>
+                        <th></th>
+                      </thead>
+                      <tbody>
+                        <tr class="selected">
+                          <td class="icon-set">
+                            <a data-toggle="modal" data-target="#newItem"
+                              ><i class="far fa-edit"></i
+                            ></a>
+                            <a
+                              href="javascript:demo.showRemoveNotification('top','center');"
+                              ><i class="far fa-trash-alt"></i
+                            ></a>
+                          </td>
+                          <td>
+                            <span>Oct. 11</span>
+                          </td>
+                          <td>
+                            <span class="icon-big text-center icon-warning">
+                              <i class="nc-icon nc-shop text-warning"></i>
+                            </span>
+                            Food
+                          </td>
+                          <td>
+                            <div class="logo-image-small">
+                              <img src="assets/img/boy_girl.png" />
+                            </div>
+                          </td>
+                          <td>Oud-Turnhout</td>
+                          <td>
+                            <div class="settle-arrow" style="text-align: left">
+                              <i class="fas fa-times"></i>
+                            </div>
+                          </td>
+                          <td class="text-right">$36,738</td>
+                          <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
                             Settle</button></td> -->
-                      </tr>
-                      <tr>
-                        <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
-                              class="far fa-trash-alt"></i></a>
-                        </td>
-                        <td>
-                          Oct. 11
-                        </td>
-                        <td>
-                          <span class="text-center icon-warning">
-                            <i class="nc-icon nc-bus-front-12 text-success"></i>
-                          </span>
-                          Transportation
-                        </td>
-                        <td>
-                          <div class="logo-image-small">
-                            <img src="assets/img/boy.png">
-                          </div>
-                        </td>
-                        <td>
-                          Sinaai-Waas
-                        </td>
-                        <td>
-                          <div class="row">
-                            <div class="col-xs-4">
-                              <div class="text-center logo-image-small">
-                                <img src="assets/img/girl.png">
+                        </tr>
+                        <tr>
+                          <td class="icon-set">
+                            <a data-toggle="modal" data-target="#newItem"
+                              ><i class="far fa-edit"></i
+                            ></a>
+                            <a
+                              href="javascript:demo.showRemoveNotification('top','center');"
+                              ><i class="far fa-trash-alt"></i
+                            ></a>
+                          </td>
+                          <td>Oct. 11</td>
+                          <td>
+                            <span class="text-center icon-warning">
+                              <i
+                                class="nc-icon nc-bus-front-12 text-success"
+                              ></i>
+                            </span>
+                            Transportation
+                          </td>
+                          <td>
+                            <div class="logo-image-small">
+                              <img src="assets/img/boy.png" />
+                            </div>
+                          </td>
+                          <td>Sinaai-Waas</td>
+                          <td>
+                            <div class="row">
+                              <div class="col-xs-4">
+                                <div class="text-center logo-image-small">
+                                  <img src="assets/img/girl.png" />
+                                </div>
+                              </div>
+                              <div class="col-xs-4">
+                                <span class="settle-arrow girl">
+                                  <i
+                                    class="fas fa-long-arrow-alt-right"
+                                    style="
+                                      vertical-align: -webkit-baseline-middle;
+                                      padding: 5px;
+                                    "
+                                  >
+                                  </i>
+                                </span>
+                              </div>
+                              <div class="col-xs-4">
+                                <div class="text-center logo-image-small">
+                                  <img src="assets/img/boy.png" />
+                                </div>
                               </div>
                             </div>
-                            <div class="col-xs-4">
-                              <span class="settle-arrow girl">
-                                <i class="fas fa-long-arrow-alt-right" style="vertical-align: -webkit-baseline-middle;padding: 5px;">
-                                </i>
-                              </span>
-                            </div>
-                            <div class="col-xs-4">
-                              <div class="text-center logo-image-small">
-                                <img src="assets/img/boy.png">
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="text-right">
-                          $23,789
-                        </td>
-                        <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
+                          </td>
+                          <td class="text-right">$23,789</td>
+                          <!-- <td class="text-right"><button class="btn btn-primary"><i class="far fa-check"></i>
                             Settle</button></td> -->
-                      </tr>
-                      <tr class="archived">
-                        <td class="icon-set">
-                          <a data-toggle="modal" data-target="#newItem"><i class="far fa-edit"></i></a>
-                          <a href="javascript:demo.showRemoveNotification('top','center');"><i
-                              class="far fa-trash-alt"></i></a>
-                        </td>
-                        <td>
-                          Oct. 11
-                        </td>
-                        <td>
-                          <span class="text-center icon-warning">
-                            <i class="nc-icon nc-bus-front-12 text-success"></i>
-                          </span>
-                          Transportation
-                        </td>
-                        <td>
-                          <div class="logo-image-small">
-                            <img src="assets/img/boy.png">
-                          </div>
-                        </td>
-                        <td>
-                          Sinaai-Waas
-                        </td>
-                        <td>
-                          <div class="row">
-                            <div class="col-xs-4">
-                              <div class="text-center logo-image-small">
-                                <img src="assets/img/girl.png">
+                        </tr>
+                        <tr class="archived">
+                          <td class="icon-set">
+                            <a data-toggle="modal" data-target="#newItem"
+                              ><i class="far fa-edit"></i
+                            ></a>
+                            <a
+                              href="javascript:demo.showRemoveNotification('top','center');"
+                              ><i class="far fa-trash-alt"></i
+                            ></a>
+                          </td>
+                          <td>Oct. 11</td>
+                          <td>
+                            <span class="text-center icon-warning">
+                              <i
+                                class="nc-icon nc-bus-front-12 text-success"
+                              ></i>
+                            </span>
+                            Transportation
+                          </td>
+                          <td>
+                            <div class="logo-image-small">
+                              <img src="assets/img/boy.png" />
+                            </div>
+                          </td>
+                          <td>Sinaai-Waas</td>
+                          <td>
+                            <div class="row">
+                              <div class="col-xs-4">
+                                <div class="text-center logo-image-small">
+                                  <img src="assets/img/girl.png" />
+                                </div>
+                              </div>
+                              <div class="col-xs-4">
+                                <span class="settle-arrow boy">
+                                  <i
+                                    class="fas fa-long-arrow-alt-left"
+                                    style="padding: 5px"
+                                  >
+                                  </i>
+                                </span>
+                              </div>
+                              <div class="col-xs-4">
+                                <div class="text-center logo-image-small">
+                                  <img src="assets/img/boy.png" />
+                                </div>
                               </div>
                             </div>
-                            <div class="col-xs-4">
-                              <span class="settle-arrow boy">
-                                <i class="fas fa-long-arrow-alt-left" style="padding: 5px;">
-                                </i>
-                              </span>
-                            </div>
-                            <div class="col-xs-4">
-                              <div class="text-center logo-image-small">
-                                <img src="assets/img/boy.png">
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td class="text-right">
-                          $23,789
-                        </td>
-                        <!-- <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td> -->
-                      </tr>
-                    </tbody>
-                  </table>
+                          </td>
+                          <td class="text-right">$23,789</td>
+                          <!-- <td class="text-right"><button disabled class="btn btn-primary">Been Settled</button></td> -->
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -408,29 +471,30 @@
         </div>
       </div>
     </div>
-  </div>
-  <!--   Core JS Files   -->
-  <script src="assets/js/core/jquery.min.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
-  <script src="assets/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
-  <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-  <script src="assets/demo/demo.js"></script>
-  <script>
-    $(document).ready(function () {
-      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-      demo.initSettlePages();
-      demo.showDebtNotification('bottom', 'left');
-    });
-  </script>
-</body>
-
+    <!--   Core JS Files   -->
+    <script src="assets/js/core/jquery.min.js"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!--  Google Maps Plugin    -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+    <!-- Chart JS -->
+    <script src="assets/js/plugins/chartjs.min.js"></script>
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script
+      src="assets/js/paper-dashboard.min.js?v=2.0.1"
+      type="text/javascript"
+    ></script>
+    <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+    <script src="assets/demo/demo.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
+        demo.initSettlePages();
+        demo.showDebtNotification("bottom", "left");
+      });
+    </script>
+  </body>
 </html>

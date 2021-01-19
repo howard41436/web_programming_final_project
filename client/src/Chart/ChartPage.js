@@ -36,7 +36,7 @@ export default function ChartPage() {
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   useEffect(() => {
-    document.title = "Charts | App's name";
+    document.title = "Charts | Together";
   }, []);
 
   const otherHeader = (

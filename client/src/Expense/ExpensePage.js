@@ -16,7 +16,7 @@ export default function ExpensePage() {
   });
 
   useEffect(() => {
-    document.title = "Our Expenses | App's name";
+    document.title = "Our Expenses | Together";
   }, []);
 
   return (

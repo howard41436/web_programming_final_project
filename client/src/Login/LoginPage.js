@@ -13,7 +13,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    document.title = "App's name";
+    document.title = "Together";
   }, []);
 
   const SignUpButton = () => (
@@ -41,7 +41,7 @@ export default function LoginPage() {
     <div className="wrapper">
       <div className="login-panel">
         <div className="login-container">
-          <h1 className="title">App&apos;s name</h1>
+          <h1 className="title">Together</h1>
           <BaseCard allowHeader title="Login">
             <BaseForm
               formId="login_form"

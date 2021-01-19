@@ -8,7 +8,7 @@ import SettlementRecord from "./SettlementRecord";
 
 export default function SettlePage() {
   useEffect(() => {
-    document.title = "Settle Up | App's name";
+    document.title = "Settle Up | Together";
   }, []);
 
   const [modalInfo, setModalInfo] = useImmer({

@@ -28,7 +28,7 @@ export default function InvitationPage() {
   const { username, inviteCode } = useSelector(selectUser);
 
   useEffect(() => {
-    document.title = "Invitation | App's name";
+    document.title = "Invitation | Together";
   }, []);
 
   const handleMatch = ({ inviteCode: code }) => {
@@ -67,7 +67,7 @@ export default function InvitationPage() {
     <div className="wrapper">
       <div className="login-panel">
         <div className="login-container">
-          <h1 className="title">App&apos;s name</h1>
+          <h1 className="title">Together</h1>
           <BaseCard allowHeader title="My Invitation Code">
             <BaseForm
               formId="invitation_form"
