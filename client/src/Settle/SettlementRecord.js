@@ -31,8 +31,8 @@ export default function SettlementRecord(props) {
       info.data = {
         ...exp,
         owedPercent: {
-          user0: Math.floor((exp.owed.user0 / exp.price) * 100),
-          user1: 100 - Math.floor((exp.owed.user0 / exp.price) * 100),
+          user0: (exp.owed.user0 / exp.price) * 100,
+          user1: (exp.owed.user1 / exp.price) * 100,
         },
       };
     });

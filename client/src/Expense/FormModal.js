@@ -71,7 +71,7 @@ export default function FormModal(props) {
   };
 
   const validator = (value) => {
-    const tmp = parseInt(value, 10);
+    const tmp = parseFloat(value);
     const result = Number.isNaN(tmp) || tmp < 0 ? 0 : tmp;
     return result;
   };
@@ -85,21 +85,18 @@ export default function FormModal(props) {
         } else {
           all[formKey[0]].user0 = 100 - value;
         }
-        all.owed.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+        all.owed.user0 = Math.round((all.price * all.owedPercent.user0) / 100);
         all.owed.user1 = all.price - all.owed.user0;
+      } else if (formKey[1] === "user0") {
+        // formKey: owed / paid
+        all[formKey[0]].user0 = Math.min(all.price, all[formKey[0]].user0);
+        all[formKey[0]].user1 = all.price - all[formKey[0]].user0;
       } else {
-        if (formKey[1] === "user0") {
-          // formKey: owed / paid
-          all[formKey[0]].user0 = Math.min(all.price, all[formKey[0]].user0);
-          all[formKey[0]].user1 = all.price - all[formKey[0]].user0;
-        } else {
-          all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
-          all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
-        }
+        all[formKey[0]].user1 = Math.min(all.price, all[formKey[0]].user1);
+        all[formKey[0]].user0 = all.price - all[formKey[0]].user1;
+
         if (formKey[0] === "owed") {
-          all.owedPercent.user0 = Math.floor(
-            (all.owed.user0 / all.price) * 100
-          );
+          all.owedPercent.user0 = (all.owed.user0 / all.price) * 100;
           all.owedPercent.user1 = 100 - all.owedPercent.user0;
         }
       }
@@ -116,13 +113,13 @@ export default function FormModal(props) {
       all.paid.user0 = 0;
       all.paid.user1 = all.price;
     } else {
-      if (formKey === "owner") {
-        all.owedPercent.user0 = percentage.user0;
-        all.owedPercent.user1 = percentage.user1;
-      }
-      all.owed.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+      // if (formKey === "owner") {
+      //   all.owedPercent.user0 = percentage.user0;
+      //   all.owedPercent.user1 = percentage.user1;
+      // }
+      all.owed.user0 = Math.round((all.price * all.owedPercent.user0) / 100);
       all.owed.user1 = all.price - all.owed.user0;
-      all.paid.user0 = Math.floor((all.price * all.owedPercent.user0) / 100);
+      all.paid.user0 = Math.round((all.price * all.owedPercent.user0) / 100);
       all.paid.user1 = all.price - all.paid.user0;
     }
     return all;
