@@ -104,7 +104,13 @@ function App() {
 
   useEffect(() => {
     if (readyRender.user && login && matched) {
-      INSTANCE.get("/api/allRecords", { params: { pairId } })
+      INSTANCE.get("/api/monthlyRecords", {
+        params: {
+          pairId,
+          year: new Date().getFullYear(),
+          month: new Date().getMonth(),
+        },
+      })
         .then((res) => {
           if (res.status === 200)
             dispatch(

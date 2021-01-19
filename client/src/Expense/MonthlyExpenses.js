@@ -69,9 +69,10 @@ export default function MonthlyExpenses(props) {
   );
 
   const formatDate = (date) => {
-    return `${new Date(date).toLocaleString("en", {
+    const month = new Date(date).toLocaleString("en", {
       month: "short",
-    })}. ${new Date(date).getDate()}`;
+    });
+    return `${month}${month !== "May" && "."} ${new Date(date).getDate()}`;
   };
 
   const commaNumber = (num) =>

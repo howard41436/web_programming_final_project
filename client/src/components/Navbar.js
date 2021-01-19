@@ -80,7 +80,7 @@ export default function Navbar(props) {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                <i className="nc-icon nc-single-02" />
+                <i className="nc-icon nc-single-02" />{" "}
                 <span className="d-lg-none d-md-block">Account</span>
               </a>
               <div
