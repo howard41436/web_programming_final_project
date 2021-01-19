@@ -168,7 +168,7 @@ export const errorToast = (err, title) => {
     <BaseToastInner
       icon="nc-icon nc-bell-55"
       title={`${title} failed.`}
-      message={err.response.data || "Network error."}
+      message={(err.response && err.response.data) || "Network error."}
     />,
     {
       position: "top-center",
