@@ -16,6 +16,7 @@ import {
   IconRadioBig,
   IconArrow,
 } from "../components/BaseTags";
+import { errorToast, successToast } from "../components/BaseToast";
 import { INSTANCE } from "../constants";
 
 const Footer = styled.div.attrs({
@@ -42,7 +43,12 @@ export default function SettleCards() {
 
   const validator = (value) => {
     const tmp = parseInt(value, 10);
-    const result = Number.isNaN(tmp) || tmp < 1 ? 1 : tmp;
+    const result =
+      Number.isNaN(tmp) || tmp < 1
+        ? 1
+        : tmp > Math.abs(debt.debtOfUser0)
+        ? Math.abs(debt.debtOfUser0)
+        : tmp;
     return result;
   };
 
@@ -88,7 +94,9 @@ export default function SettleCards() {
             },
           })
         );
+        successToast("Settle", "A settlement has been added.");
       })
+      .catch((err) => errorToast(err, "Settle"))
       .finally(() => setShow(false));
   };
 

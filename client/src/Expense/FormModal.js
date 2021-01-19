@@ -16,7 +16,7 @@ import BaseForm, {
   BaseFormOption,
   baseFormReset,
 } from "../components/BaseForm";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import { errorToast, successToast } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
 import { INSTANCE } from "../constants";
 
@@ -191,21 +191,13 @@ export default function FormModal(props) {
           }
           return res.data;
         })
-        .then((data) => {
-          baseToast(
-            <BaseToastInner
-              icon="nc-icon nc-check-2"
-              title="Add successfully."
-              message={`(${data.name}, $ ${data.price}, ${formatDate(
-                data.date
-              )})`}
-            />,
-            {
-              position: "top-center",
-              autoClose: 6000,
-            }
-          );
-        });
+        .then((data) =>
+          successToast(
+            "Add",
+            `(${data.name}, $ ${data.price}, ${formatDate(data.date)})`
+          )
+        )
+        .catch((err) => errorToast(err, "Add"));
     }
     if (type === "edit") {
       INSTANCE.post("/api/editRecord", formValues, {
@@ -249,21 +241,13 @@ export default function FormModal(props) {
           }
           return res.data;
         })
-        .then((data) => {
-          baseToast(
-            <BaseToastInner
-              icon="nc-icon nc-check-2"
-              title="Edit successfully."
-              message={`(${data.name}, $ ${data.price}, ${formatDate(
-                data.date
-              )})`}
-            />,
-            {
-              position: "top-center",
-              autoClose: 6000,
-            }
-          );
-        });
+        .then((data) =>
+          successToast(
+            "Edit",
+            `(${data.name}, $ ${data.price}, ${formatDate(data.date)})`
+          )
+        )
+        .catch((err) => errorToast(err, "Edit"));
     }
   };
 

@@ -162,3 +162,32 @@ export default function BaseToast() {
     </>
   );
 }
+
+export const errorToast = (err, title) => {
+  baseToast(
+    <BaseToastInner
+      icon="nc-icon nc-bell-55"
+      title={`${title} failed.`}
+      message={err.response.data || "Network error."}
+    />,
+    {
+      position: "top-center",
+      autoClose: 6000,
+      type: "alert",
+    }
+  );
+};
+
+export const successToast = (title, message) => {
+  baseToast(
+    <BaseToastInner
+      icon="nc-icon nc-check-2"
+      title={`${title} successfully.`}
+      message={message}
+    />,
+    {
+      position: "top-center",
+      autoClose: 6000,
+    }
+  );
+};

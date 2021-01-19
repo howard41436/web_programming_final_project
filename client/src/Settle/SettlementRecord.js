@@ -5,7 +5,12 @@ import { selectInfo } from "../redux/infoSlice";
 import { setDebt, setExpenses, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import {
+  baseToast,
+  BaseToastInner,
+  errorToast,
+  successToast,
+} from "../components/BaseToast";
 import { INSTANCE } from "../constants";
 
 export default function SettlementRecord(props) {
@@ -96,47 +101,47 @@ export default function SettlementRecord(props) {
       "/api/deleteSettlement",
       {},
       { params: { _id, pairId } }
-    ).then((res) => {
-      if (res.status === 200) {
-        const { debtOfUser0 } = debt;
-        const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
-        dispatch(
-          setDebt({
-            debt: {
-              debtOfUser0: debtOfUser0 - money,
-              recordsAndSettlements: newRec,
-            },
-          })
-        );
-      }
-    });
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          const { debtOfUser0 } = debt;
+          const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
+          dispatch(
+            setDebt({
+              debt: {
+                debtOfUser0: debtOfUser0 - money,
+                recordsAndSettlements: newRec,
+              },
+            })
+          );
+        }
+      })
+      .catch((err) => errorToast(err, "Delete"));
   };
 
   const handleDeleteRecord = async (_id, pairId, money) => {
-    await INSTANCE.post(
-      "/api/deleteRecord",
-      {},
-      { params: { _id, pairId } }
-    ).then((res) => {
-      if (res.status === 200) {
-        const { debtOfUser0 } = debt;
-        const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
-        dispatch(
-          setDebt({
-            debt: {
-              debtOfUser0: debtOfUser0 - money,
-              recordsAndSettlements: newRec,
-            },
-          })
-        );
-        const { [_id]: __, ...newExpenses } = expenses;
-        dispatch(
-          setExpenses({
-            expenses: newExpenses,
-          })
-        );
-      }
-    });
+    await INSTANCE.post("/api/deleteRecord", {}, { params: { _id, pairId } })
+      .then((res) => {
+        if (res.status === 200) {
+          const { debtOfUser0 } = debt;
+          const { [_id]: _, ...newRec } = debt.recordsAndSettlements;
+          dispatch(
+            setDebt({
+              debt: {
+                debtOfUser0: debtOfUser0 - money,
+                recordsAndSettlements: newRec,
+              },
+            })
+          );
+          const { [_id]: __, ...newExpenses } = expenses;
+          dispatch(
+            setExpenses({
+              expenses: newExpenses,
+            })
+          );
+        }
+      })
+      .catch((err) => errorToast(err, "Delete"));
   };
 
   const DeleteToast = ({
@@ -166,18 +171,7 @@ export default function SettlementRecord(props) {
           exp.owed.user0 - exp.paid.user0
         );
       closeToast();
-
-      baseToast(
-        <BaseToastInner
-          icon="nc-icon nc-check-2"
-          title="Delete successfully."
-          message={message}
-        />,
-        {
-          autoClose: 6000,
-          position: "top-center",
-        }
-      );
+      successToast("Delete", message);
     };
 
     return (

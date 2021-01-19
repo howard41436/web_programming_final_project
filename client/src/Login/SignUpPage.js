@@ -7,7 +7,12 @@ import { setUser, selectUser } from "../redux/userSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
 import { Row, Col, IconRadio } from "../components/BaseTags";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import {
+  baseToast,
+  BaseToastInner,
+  errorToast,
+  successToast,
+} from "../components/BaseToast";
 import { setCookie } from "../cookieHelper";
 import { INSTANCE, AVATAR } from "../constants";
 
@@ -54,22 +59,10 @@ export default function SignUpPage() {
           if (res.status === 200) {
             setCookie("accessToken", res.data.username);
             dispatch(setUser({ ...res.data, login: true }));
+            successToast("Sign up", "Here is your invite code.");
           }
         })
-        .catch((err) => {
-          baseToast(
-            <BaseToastInner
-              icon="nc-icon nc-bell-55"
-              title="Sign up failed."
-              message={err.response.data}
-            />,
-            {
-              position: "top-center",
-              autoClose: 6000,
-              type: "alert",
-            }
-          );
-        });
+        .catch((err) => errorToast(err, "Sign up"));
     }
   };
 

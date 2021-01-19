@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, selectUser } from "../redux/userSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import { errorToast, successToast } from "../components/BaseToast";
 import { Row, Col } from "../components/BaseTags";
-import { setCookie, deleteCookie } from "../cookieHelper";
+import { deleteCookie } from "../cookieHelper";
 import { INSTANCE } from "../constants";
 
 const CodeInput = styled.input`
@@ -37,23 +37,11 @@ export default function InvitationPage() {
       inviteCode: code,
     })
       .then((res) => {
-        setCookie("accessToken", res.data.username);
         dispatch(setUser({ ...res.data, login: true }));
+        successToast("Match", "You have matched with another account.");
+        history.go(0);
       })
-      .catch((err) =>
-        baseToast(
-          <BaseToastInner
-            icon="nc-icon nc-bell-55"
-            title="Match failed."
-            message={err.response.data}
-          />,
-          {
-            position: "top-center",
-            autoClose: 6000,
-            type: "alert",
-          }
-        )
-      );
+      .catch((err) => errorToast(err, "Match"));
   };
 
   const handleLogOut = (e) => {

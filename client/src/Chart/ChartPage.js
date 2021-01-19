@@ -9,6 +9,7 @@ import BaseCard from "../components/BaseCard";
 import BaseChart from "../components/BaseChart";
 import { Col, Row } from "../components/BaseTags";
 import { INSTANCE } from "../constants";
+import { errorToast } from "../components/BaseToast";
 
 const TooltipsRow = styled.div`
   align-items: center;
@@ -132,13 +133,15 @@ export default function ChartPage() {
             ((key + nowMonth + 1) % 12 > nowMonth ? 1 : 0),
           month: (key + nowMonth + 1) % 12,
         },
-      }).then((res) => {
-        setData((d) => {
-          d.datasets[0].data.push(sumExpense(res.data, 0));
-          d.datasets[1].data.push(sumExpense(res.data, 1));
-          d.datasets[2].data.push(sumExpense(res.data, -1));
-        });
-      });
+      })
+        .then((res) => {
+          setData((d) => {
+            d.datasets[0].data.push(sumExpense(res.data, 0));
+            d.datasets[1].data.push(sumExpense(res.data, 1));
+            d.datasets[2].data.push(sumExpense(res.data, -1));
+          });
+        })
+        .catch((err) => errorToast(err, "Loading"));
       return true;
     });
   }, []);
@@ -224,6 +227,7 @@ export default function ChartPage() {
           ticks: {
             fontColor: "#9f9f9f",
             beginAtZero: false,
+            min: 0,
             maxTicksLimit: 5,
           },
           gridLines: {

@@ -13,7 +13,7 @@ import ExpensePage from "./Expense/ExpensePage";
 import SettlePage from "./Settle/SettlePage";
 import ChartPage from "./Chart/ChartPage";
 import ProfilePage from "./Profile/ProfilePage";
-import BaseToast from "./components/BaseToast";
+import BaseToast, { errorToast } from "./components/BaseToast";
 
 import { INSTANCE, AVATAR } from "./constants";
 import { getCookie } from "./cookieHelper";
@@ -59,29 +59,43 @@ function App() {
         } else {
           await INSTANCE.get("/api/account/getProfile", {
             params: { pairId: _pairId },
-          }).then((_res) => {
-            const {
-              user0,
-              user1,
-              budget,
-              defaultExpenseAllocation,
-              anniversary,
-            } = _res.data;
-            dispatch(
-              setUser({
-                pairId: String(_pairId),
+          })
+            .then((_res) => {
+              const {
                 user0,
                 user1,
-                username,
-                user: user0.username === username ? "0" : "1",
-                matched: true,
                 budget,
                 defaultExpenseAllocation,
                 anniversary,
-                login: true,
-              })
-            );
-          });
+              } = _res.data;
+              const today = new Date().toISOString().slice(0, 10);
+              dispatch(
+                setUser({
+                  pairId: String(_pairId),
+                  user0,
+                  user1,
+                  username,
+                  user: user0.username === username ? "0" : "1",
+                  matched: true,
+                  budget: budget || {
+                    user0: { total: 0 },
+                    user1: { total: 0 },
+                  },
+                  defaultExpenseAllocation: {
+                    ...defaultExpenseAllocation,
+                    details: defaultExpenseAllocation.details || {
+                      percentage: {
+                        user0: 50,
+                        user1: 50,
+                      },
+                    },
+                  },
+                  anniversary: anniversary || today,
+                  login: true,
+                })
+              );
+            })
+            .catch((err) => errorToast(err, "Loading"));
         }
       })
       .catch(() => dispatch(setUser({ login: false })))
@@ -123,6 +137,7 @@ function App() {
               })
             );
         })
+        .catch((err) => errorToast(err, "Loading"))
         .finally(() =>
           setReadyRender((ready) => {
             ready.expenses = true;
@@ -147,6 +162,7 @@ function App() {
             );
           }
         })
+        .catch((err) => errorToast(err, "Loading"))
         .finally(() =>
           setReadyRender((ready) => {
             ready.debt = true;

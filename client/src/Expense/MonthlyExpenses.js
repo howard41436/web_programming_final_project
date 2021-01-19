@@ -11,7 +11,12 @@ import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
 import { Button } from "../components/BaseTags";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import {
+  baseToast,
+  BaseToastInner,
+  errorToast,
+  successToast,
+} from "../components/BaseToast";
 import { INSTANCE } from "../constants";
 
 export default function MonthlyExpenses(props) {
@@ -79,20 +84,18 @@ export default function MonthlyExpenses(props) {
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   const handleDeleteExpenses = async (_id, pairId) => {
-    await INSTANCE.post(
-      "/api/deleteRecord",
-      {},
-      { params: { _id, pairId } }
-    ).then((res) => {
-      if (res.status === 200) {
-        const { [_id]: _, ...newExpenses } = expenses;
-        dispatch(
-          setExpenses({
-            expenses: newExpenses,
-          })
-        );
-      }
-    });
+    await INSTANCE.post("/api/deleteRecord", {}, { params: { _id, pairId } })
+      .then((res) => {
+        if (res.status === 200) {
+          const { [_id]: _, ...newExpenses } = expenses;
+          dispatch(
+            setExpenses({
+              expenses: newExpenses,
+            })
+          );
+        }
+      })
+      .catch((err) => errorToast(err, "Delete"));
   };
 
   const DeleteToast = ({
@@ -106,16 +109,9 @@ export default function MonthlyExpenses(props) {
       await handleDeleteExpenses(exp["_id"], exp.pairId);
       closeToast();
 
-      baseToast(
-        <BaseToastInner
-          icon="nc-icon nc-check-2"
-          title="Delete successfully."
-          message={`(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`}
-        />,
-        {
-          autoClose: 6000,
-          position: "top-center",
-        }
+      successToast(
+        "Delete",
+        `(${exp.name}, $ ${exp.price}, ${formatDate(exp.date)})`
       );
     };
 

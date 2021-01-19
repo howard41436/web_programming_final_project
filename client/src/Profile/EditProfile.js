@@ -6,7 +6,7 @@ import { setUser, selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
 import BaseCard from "../components/BaseCard";
 import BaseForm, { BaseFormGroup, BaseFormInput } from "../components/BaseForm";
-import { baseToast, BaseToastInner } from "../components/BaseToast";
+import { errorToast, successToast } from "../components/BaseToast";
 import { Row, Col, IconRadio } from "../components/BaseTags";
 import { INSTANCE, AVATAR } from "../constants";
 
@@ -108,32 +108,9 @@ export default function EditProfile() {
     })
       .then((res) => {
         dispatch(setUser({ ...res.data, matched: true, login: true }));
-        baseToast(
-          <BaseToastInner
-            icon="nc-icon nc-check-2"
-            title="Update successfully."
-            message="Your profile has been updated."
-          />,
-          {
-            position: "top-center",
-            autoClose: 6000,
-          }
-        );
+        successToast("Update", "Your profile has been updated.");
       })
-      .catch((err) =>
-        baseToast(
-          <BaseToastInner
-            icon="nc-icon nc-bell-55"
-            title="Updated failed."
-            message={err.response.data}
-          />,
-          {
-            position: "top-center",
-            autoClose: 6000,
-            type: "alert",
-          }
-        )
-      );
+      .catch((err) => errorToast(err, "Update"));
   };
 
   return (
