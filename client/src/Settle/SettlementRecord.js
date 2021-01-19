@@ -59,7 +59,7 @@ export default function SettlementRecord(props) {
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   const getSettler = (exp) => (exp.receivedMoneyOfUser0 < 0 ? 0 : 1);
-  const getCreditor = (exp) => (exp.paid.user0 < exp.owed.user0 ? 0 : 1);
+  const getCreditor = (exp) => (exp.paid.user0 > exp.owed.user0 ? 0 : 1);
   const getOwed = (exp) => Math.abs(exp.owed.user0 - exp.paid.user0);
 
   useEffect(() => {

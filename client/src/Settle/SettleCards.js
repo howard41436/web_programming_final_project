@@ -124,7 +124,7 @@ export default function SettleCards() {
             <Col size={4} style={{ textAlign: "center", paddingTop: "20px" }}>
               <h2
                 className={`settle-arrow ${
-                  initialSettlement.payer === -1 ? "girl" : "boy"
+                  initialSettlement.payer !== -1 ? "girl" : "boy"
                 }`}
                 style={{ margin: 0 }}
               >
@@ -133,7 +133,7 @@ export default function SettleCards() {
               <h1 className="settle-arrow" style={{ margin: 0 }}>
                 <i
                   className={`fas fa-long-arrow-alt-${
-                    initialSettlement.payer === -1 ? "right girl" : "left boy"
+                    initialSettlement.payer !== -1 ? "right girl" : "left boy"
                   } fa-3x`}
                   style={{
                     display: debt.debtOfUser0 === 0 ? "none" : null,

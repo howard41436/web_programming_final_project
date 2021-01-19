@@ -73,7 +73,7 @@ export default async function seedRecord() {
         owner: 0,
         price: 140,
         name: "taxi back home",
-        date: new Date("2020-12-05"),
+        date: new Date("2021-01-05"),
         paid: {
           user0: 0,
           user1: 140,
