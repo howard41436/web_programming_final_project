@@ -188,12 +188,7 @@ export default function EditProfile() {
         <Row>
           <Col size={6} className="pr-1">
             <BaseFormGroup label="Username (disabled)">
-              <BaseFormInput
-                formId="edit_profile_form"
-                formKey="username"
-                placeholder="Username"
-                disabled
-              />
+              <input className="form-control" value={username} disabled />
             </BaseFormGroup>
           </Col>
           <Col size={6} className="pl-1">
