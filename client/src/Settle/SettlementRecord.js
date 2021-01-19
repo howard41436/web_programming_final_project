@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectInfo } from "../redux/infoSlice";
+import { selectForm } from "../redux/formSlice";
 import { setDebt, setExpenses, selectExpenses } from "../redux/expenseSlice";
 import BaseCard from "../components/BaseCard";
 import BaseTable from "../components/BaseTable";
@@ -18,6 +19,9 @@ export default function SettlementRecord(props) {
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const { expenses, debt } = useSelector(selectExpenses);
   const { setModalInfo } = props;
+  const {
+    navbar_search: { search },
+  } = useSelector(selectForm("navbar_search"));
 
   const handleSetModalInfo = (exp) => (e) => {
     if (e.type === "keydown" && e.key !== "Enter") return;
@@ -204,6 +208,21 @@ export default function SettlementRecord(props) {
     });
   };
 
+  const handleSearch = (row) => {
+    if (!search) return true;
+    row[6] = `$ ${row[6]}`;
+    row[1] = formatDate(row[1]);
+    row[3] = null;
+    row[5] = null;
+    let flag = false;
+    row.forEach((r) => {
+      if (typeof r === "string") {
+        flag = flag || r.toLowerCase().includes(search.toLowerCase());
+      }
+    });
+    return flag;
+  };
+
   const renderRow = (row) => {
     const creditor = row[5];
     const exp = row[7];
@@ -213,6 +232,7 @@ export default function SettlementRecord(props) {
     return (
       filterDisplay[creditor] &&
       selectorDisplay[type] &&
+      handleSearch(row.slice(0, 7)) &&
       row[6] !== 0 && (
         <tr
           // eslint-disable-next-line dot-notation

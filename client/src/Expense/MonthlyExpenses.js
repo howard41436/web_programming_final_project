@@ -6,6 +6,7 @@ import { useImmer } from "use-immer";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/userSlice";
 import { selectInfo } from "../redux/infoSlice";
+import { selectForm } from "../redux/formSlice";
 import { setExpenses, selectExpenses } from "../redux/expenseSlice";
 
 import BaseCard from "../components/BaseCard";
@@ -24,6 +25,9 @@ export default function MonthlyExpenses(props) {
   const { user } = useSelector(selectUser);
   const { categoryInfo, ownerIcon } = useSelector(selectInfo);
   const { expenses } = useSelector(selectExpenses);
+  const {
+    navbar_search: { search },
+  } = useSelector(selectForm("navbar_search"));
 
   const { setModalInfo } = props;
   const handleSetModalInfo = (type, exp) => (e) => {
@@ -45,6 +49,13 @@ export default function MonthlyExpenses(props) {
 
   const columns = ["", "date", "category", "member", "descriptions", "amount"];
   const [data, setData] = useImmer([]);
+
+  const formatDate = (date) => {
+    const month = new Date(date).toLocaleString("en", {
+      month: "short",
+    });
+    return `${month}${month !== "May" && "."} ${new Date(date).getDate()}`;
+  };
 
   useEffect(() => {
     setData(() =>
@@ -72,13 +83,6 @@ export default function MonthlyExpenses(props) {
       {}
     )
   );
-
-  const formatDate = (date) => {
-    const month = new Date(date).toLocaleString("en", {
-      month: "short",
-    });
-    return `${month}${month !== "May" && "."} ${new Date(date).getDate()}`;
-  };
 
   const commaNumber = (num) =>
     String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -145,11 +149,26 @@ export default function MonthlyExpenses(props) {
     });
   };
 
+  const handleSearch = (row) => {
+    if (!search) return true;
+    row[5] = `$ ${row[5]}`;
+    row[1] = formatDate(row[1]);
+    row[3] = null;
+    let flag = false;
+    row.forEach((r) => {
+      if (typeof r === "string") {
+        flag = flag || r.toLowerCase().includes(search.toLowerCase());
+      }
+    });
+    return flag;
+  };
+
   const renderRow = (row) => {
     const exp = row[6];
     return (
       filterDisplay[exp.owner] &&
-      selectorDisplay[exp.category] && (
+      selectorDisplay[exp.category] &&
+      handleSearch(row.slice(0, 6)) && (
         <tr
           // eslint-disable-next-line dot-notation
           key={exp["_id"]}

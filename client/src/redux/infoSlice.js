@@ -39,14 +39,6 @@ export const infoSlice = createSlice({
         src: PUBLIC_URL("/img/girl.png"),
         alt: "girl",
       },
-      2: {
-        src: PUBLIC_URL("/img/boy2.png"),
-        alt: "boy2",
-      },
-      3: {
-        src: PUBLIC_URL("/img/girl2.png"),
-        alt: "girl2",
-      },
     },
   },
   reducers: {
